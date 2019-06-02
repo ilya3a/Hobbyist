@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "268959065050",
+    "firebase_url": "https://hobbybuddy-e41bc.firebaseio.com",
+    "project_id": "hobbybuddy-e41bc",
+    "storage_bucket": "hobbybuddy-e41bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268959065050:android:f3545952170033b9",
+        "android_client_info": {
+          "package_name": "com.yoyo.hobbyist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268959065050-c95cn2adlufqcu9j8ksc3tbik5132ht7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yoyo.hobbyist",
+            "certificate_hash": "34913cac1d7d79a74afec3a53f488ea6f0780ae8"
+          }
+        },
+        {
+          "client_id": "268959065050-fkik70teheii34lbougg4v6kvl6kdkg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiEREBisDh2vIcDh4PJWM3MgBcRoPDFfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268959065050-fkik70teheii34lbougg4v6kvl6kdkg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

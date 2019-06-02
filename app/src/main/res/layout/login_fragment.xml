@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_centerInParent="true"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp"
+    android:background="@color/design_default_color_primary">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/design_default_color_primary">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:id="@+id/login_text_headline"
+        android:textColor="@color/cardview_light_background"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/email_input_et_wraper"
+        android:layout_below="@+id/login_text_headline"
+        android:hint="Enter Email"
+        android:textColorHint="#fff">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Email"
+            android:id="@+id/email_ET"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_input_et_wraper"
+        android:id="@+id/password_input_et_wraper"
+        android:hint="Enter Password"
+        android:textColorHint="#fff">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Password"
+            android:id="@+id/password_ET"
+            android:inputType="textPassword"/>
+    </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password_input_et_wraper"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login"
+            android:id="@+id/login_fragment_btn"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+
+</RelativeLayout>
+</android.support.v7.widget.CardView>
