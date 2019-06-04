@@ -11,9 +11,8 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        app:tabSelectedTextColor="@color/colorPrimaryDark"
-        app:tabTextColor="@color/colorPrimary">
+        android:background="@color/white_color"
+        app:tabTextColor="@color/tab_color">
 
         <android.support.design.widget.TabItem
             android:id="@+id/dashboard"
