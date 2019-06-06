@@ -6,6 +6,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     TabItem tabItem2;
     TabItem tabItem3;
     TabItem tabItem4;
+    FirebaseAuth mFirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //        mToolbar.setTitle( R.string.app_name );
 //        setSupportActionBar( mToolbar );
 
+
         mTabLayout = findViewById( R.id.tab_layout );
         tabItem1 = findViewById( R.id.dashboard );
         tabItem2 = findViewById( R.id.search );
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
         mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount() );
         mPager.setAdapter( mAdapter );
-
+        Toast.makeText(this, mFirebaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
         mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -90,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    interface MainActivityDashboardFragmentDataPass{
+        void setData (String data);
     }
 }
 //                    mToolbar.setBackgroundColor( ContextCompat.getColor( MainActivity.this, android.R.color.holo_blue_dark) );

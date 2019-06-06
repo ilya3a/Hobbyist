@@ -1,6 +1,7 @@
 package com.yoyo.hobbyist;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -20,11 +21,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class LoginFragment extends Fragment {
 
     FirebaseAuth mFireBaseAuth;
     FragmentManager mFragmentManager;
     LoginFragmentListener mListener;
+    SharedPreferences mSp;
+    SharedPreferences.Editor mSpEditor;
+    String mEmail;
+    String mPassword;
+
 
     interface LoginFragmentListener {
         void userUpdate(FirebaseUser user);
@@ -33,29 +41,38 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.login_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.sign_in_fragment, container, false);
         mFireBaseAuth = FirebaseAuth.getInstance();
-        final TextInputLayout username_et_wraper = rootView.findViewById(R.id.email_input_et_wraper);
+        final TextInputLayout email_et_wraper = rootView.findViewById(R.id.email_input_et_wraper);
         final TextInputLayout password_et_wraper = rootView.findViewById(R.id.password_input_et_wraper);
         Button login_fragment_btn = rootView.findViewById(R.id.login_fragment_btn);
         mFragmentManager =getFragmentManager();
-
+        mSp = getContext().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
+        mSpEditor = mSp.edit();
+        mEmail = mSp.getString("userEmail", "noEmail");
+        mPassword = mSp.getString("userPassword", "noPassword");
+        if (!mEmail.equals("noEmail") && !mPassword.equals("noPassword")) {
+            email_et_wraper.getEditText().setText(mEmail);
+            password_et_wraper.getEditText().setText(mPassword);
+        }
         login_fragment_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rootView.clearFocus();
-                String username = username_et_wraper.getEditText().getText().toString();
-                String password = password_et_wraper.getEditText().getText().toString();
-                if (username.equals("") || password.equals("")) {
+                final String useremail = email_et_wraper.getEditText().getText().toString();
+                final String password = password_et_wraper.getEditText().getText().toString();
+                if (useremail.equals("") || password.equals("")) {
                     Snackbar.make(rootView, "Email or Password are incorrect", Snackbar.LENGTH_SHORT);
                 } else {
-                    mFireBaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mFireBaseAuth.signInWithEmailAndPassword(useremail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Snackbar.make(rootView, "you are now lobed in", Snackbar.LENGTH_SHORT);
                                 FirebaseUser user= mFireBaseAuth.getCurrentUser();
                                 mListener.userUpdate(user);
+                                mSpEditor.putString("userEmail",useremail).commit();
+                                mSpEditor.putString("userPassword",password).commit();
                                 removePhoneKeypad(rootView);
 
                             } else {
