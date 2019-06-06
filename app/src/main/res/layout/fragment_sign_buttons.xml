@@ -17,7 +17,7 @@
         <android.support.design.button.MaterialButton
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:text="Sign in"
+            android:text="Sign up"
             android:id="@+id/sign_up_btn"
             android:layout_below="@id/sign_in_btn"
             android:layout_centerHorizontal="true"

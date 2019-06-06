@@ -5,13 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,21 +19,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
-        SignButtonsFragment.OnFragmentInteractionListener, LoginFragment.LoginFragmentListener {
+        SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener {
 
     final String LOGIN_FRAGMENT_TAG = "sign_in_fragment";
     final String SIGN_UP_FRAGMENT_TAG = "sign_up_fragment";
-    final String SING_BUTTONS_FRAGMENT_TAM = "sign_buttons_fragment";
+    final String SING_BUTTONS_FRAGMENT_TAG = "sign_buttons_fragment";
+    final String UPDATE_USER_FRAGMENT_TAG="update_user_fragment";
 
     FirebaseAuth mFireBaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mCurrentUser;
 
     FragmentManager mFragmentManager;
-    LoginFragment mLoginFragment;
+    SigninFragment mLoginFragment;
     SignUpFragment mSignUpFragment;
     LottieAnimationView mLottieAnimationView;
     SignButtonsFragment mSignBottnsFragment;
+    UpdateUserProfileFragment mUpdateUserProfileFragment;
 
     SharedPreferences mSp;
     SharedPreferences.Editor mSpEditor;
@@ -67,16 +67,16 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             goToMainActivity();
 
         } else {
-
+            mUpdateUserProfileFragment =new UpdateUserProfileFragment();
             mLottieAnimationView = findViewById(R.id.lottie_animation);
             mLottieAnimationView.setAnimation(R.raw.animation_test);
             mFragmentManager = getSupportFragmentManager();
-            mLoginFragment = new LoginFragment();
+            mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
             //mCurrentUser = mFireBaseAuth.getCurrentUser();
             mSignBottnsFragment = new SignButtonsFragment();
 
-            mFragmentManager.beginTransaction().add(R.id.main_container, mSignBottnsFragment, SING_BUTTONS_FRAGMENT_TAM)
+            mFragmentManager.beginTransaction().add(R.id.main_container, mSignBottnsFragment, SING_BUTTONS_FRAGMENT_TAG)
                     .addToBackStack(null).commit();
 
         }
@@ -108,7 +108,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     }
 
     @Override
-    public void userUpdate(final FirebaseUser user) {
+    public void afterSignInUserUpdate(final FirebaseUser user) {
         mCurrentUser = user;
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.playAnimation();
@@ -126,8 +126,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     }
 
     @Override
-    public void registerdUser(FirebaseUser user) {
+    public void afterSignUpUserUpdate(FirebaseUser user) {
         mCurrentUser = user;
+        goToMainActivity();
         mFragmentManager.beginTransaction().remove(mSignUpFragment).commit();
     }
 
@@ -154,6 +155,10 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             case R.id.sign_up_btn: {
                 mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
                         .addToBackStack(null).commit();
+//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
+//                        UPDATE_USER_FRAGMENT_TAG)
+//                        .addToBackStack(null).commit();
+                //FOR TEST
                 break;
             }
         }

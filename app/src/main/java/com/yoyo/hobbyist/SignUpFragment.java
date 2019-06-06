@@ -31,7 +31,7 @@ public class SignUpFragment extends Fragment {
     SignUpFragmentListener signUpFragmentListener;
 
     interface SignUpFragmentListener {
-        void registerdUser(FirebaseUser user);
+        void afterSignUpUserUpdate(FirebaseUser user);
     }
     @Override
     public void onAttach(Context context) {
@@ -107,7 +107,7 @@ public class SignUpFragment extends Fragment {
                             {
                                 Snackbar.make(rootView,"Registerd succecful", Snackbar.LENGTH_SHORT).show();
                                 FirebaseUser user=firebaseAuth.getCurrentUser();
-                                signUpFragmentListener.registerdUser(user);
+                                signUpFragmentListener.afterSignUpUserUpdate(user);
                                 removePhoneKeypad(rootView);
                             }
                             else

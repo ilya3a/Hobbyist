@@ -1,0 +1,168 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_centerInParent="true"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp"
+    android:background="@color/design_default_color_primary">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/design_default_color_primary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update Profile"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:id="@+id/updateUser_text_headline"
+            android:textColor="@color/cardview_light_background"/>
+
+        <com.nex3z.flowlayout.FlowLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:flChildSpacing="auto"
+            app:flRowSpacing="4dp"
+            app:flFlow="true"
+            android:layout_below="@+id/gender_tv"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Football" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tennis"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gym"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Running"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drawing" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Football"/>
+
+        </com.nex3z.flowlayout.FlowLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_input_et_wrapper"
+            android:layout_below="@+id/updateUser_text_headline"
+            android:hint="Enter name"
+            android:textColorHint="#fff"
+            app:helperText="Required*">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter name"
+                android:id="@+id/name_input_et"
+                android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name_input_et_wrapper"
+            android:id="@+id/last_name_input_et_wrapper"
+            android:hint="Enter Last name"
+            android:textColorHint="#fff"
+            app:helperText="Required*">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Last name"
+                android:id="@+id/last_name_input_et"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/last_name_input_et_wrapper"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:text="Date of birth :"
+            android:id="@+id/date_of_birth_tv" />
+        
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/last_name_input_et_wrapper"
+            android:layout_toEndOf="@+id/date_of_birth_tv"
+            android:layout_marginTop="5dp"
+            android:id="@+id/date_of_birth_et"
+            android:contextClickable="true" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date_of_birth_tv"
+            android:id="@+id/city_name_et_wrapper"
+            android:hint="Enter your city name"
+            android:textColorHint="#fff"
+            app:helperText="Required*">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your city name"
+                android:id="@+id/city_name_et"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/city_name_et_wrapper"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:text="Gender :"
+            android:id="@+id/gender_tv" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/city_name_et_wrapper"
+            android:layout_toEndOf="@+id/gender_tv"
+            android:inputType="none"
+            android:layout_marginTop="5dp"
+            android:id="@+id/gender_et" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp">
+            <android.support.design.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Accept"
+                android:id="@+id/accept_btn"
+                android:layout_margin="10dp"
+                style="@style/AppTheme"
+                android:textSize="50sp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

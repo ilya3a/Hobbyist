@@ -4,23 +4,30 @@ import java.util.ArrayList;
 
 public class UserProfile {
 
-    String mName;
-    String mAge;
-    String mLastName;
-    String mEmail;
-    String mPictureUrl;
-    String mUserAboutMe;
-    String mCityName;
-    ArrayList<String> mHobbylist;
+    private String mName;
+    private String mEmail;
+    private String mLastName;
 
-    public UserProfile(String mName, String mAge, String mLastName, String mEmail, String mPictureUrl, String mCityName, ArrayList<String> mHobbylist) {
+    private  String mYear;
+    private  String mMonth;
+    private  String mDay;
+
+    private String mAge;
+
+    private  String mPictureUrl;
+    private  String mUserAboutMe;
+    private  String mCityName;
+    private  String mGender;
+    private  ArrayList<String> mHobbylist;
+
+    public UserProfile(String mName, String mAge,String mGender, String mLastName, String mEmail, String mCityName, ArrayList<String> mHobbylist) {
         this.mName = mName;
         this.mAge = mAge;
         this.mLastName = mLastName;
         this.mEmail = mEmail;
-        this.mPictureUrl = mPictureUrl;
         this.mCityName = mCityName;
         this.mHobbylist = mHobbylist;
+        this.mGender = mGender;
     }
 
     public String getmName() {
@@ -85,5 +92,37 @@ public class UserProfile {
 
     public void setmHobbylist(ArrayList<String> mHobbylist) {
         this.mHobbylist = mHobbylist;
+    }
+
+    public String getmGender() {
+        return mGender;
+    }
+
+    public void setmGender(String mGender) {
+        this.mGender = mGender;
+    }
+
+    public void setmYear(String mYear) {
+        this.mYear = mYear;
+    }
+
+    public void setmMonth(String mMonth) {
+        this.mMonth = mMonth;
+    }
+
+    public void setmDay(String mDay) {
+        this.mDay = mDay;
+    }
+
+    public String getmYear() {
+        return mYear;
+    }
+
+    public String getmMonth() {
+        return mMonth;
+    }
+
+    public String getmDay() {
+        return mDay;
     }
 }

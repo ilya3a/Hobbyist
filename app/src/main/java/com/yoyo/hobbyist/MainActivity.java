@@ -1,6 +1,7 @@
 package com.yoyo.hobbyist;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -22,17 +23,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     TabItem tabItem2;
     TabItem tabItem3;
     TabItem tabItem4;
-    FirebaseAuth mFirebaseAuth;
-
+    FirebaseAuth mFireBaseAuth;
+    FirebaseAuth.AuthStateListener mAuthStateListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-
-//        mToolbar = findViewById( R.id.toolbar );
-//        mToolbar.setTitle( R.string.app_name );
-//        setSupportActionBar( mToolbar );
-
 
         mTabLayout = findViewById( R.id.tab_layout );
         tabItem1 = findViewById( R.id.dashboard );
@@ -40,10 +36,16 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         tabItem3 = findViewById( R.id.chat );
         tabItem4 = findViewById( R.id.menu );
         mPager = findViewById( R.id.pager );
-
+        mFireBaseAuth = FirebaseAuth.getInstance();
         mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount() );
         mPager.setAdapter( mAdapter );
-        Toast.makeText(this, mFirebaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+        mAuthStateListener= new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+            }
+        };
+        Toast.makeText(this, mFireBaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
         mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -99,6 +101,17 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     interface MainActivityDashboardFragmentDataPass{
         void setData (String data);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mFireBaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 }
 //                    mToolbar.setBackgroundColor( ContextCompat.getColor( MainActivity.this, android.R.color.holo_blue_dark) );

@@ -39,5 +39,8 @@ dependencies {
 
     //loti
     implementation 'com.airbnb.android:lottie:2.7.0'
+
+    //flow layout
+    implementation 'com.nex3z:flow-layout:1.2.4'
 }
 apply plugin: 'com.google.gms.google-services'

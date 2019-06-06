@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class LoginFragment extends Fragment {
+public class SigninFragment extends Fragment {
 
     FirebaseAuth mFireBaseAuth;
     FragmentManager mFragmentManager;
@@ -35,7 +35,7 @@ public class LoginFragment extends Fragment {
 
 
     interface LoginFragmentListener {
-        void userUpdate(FirebaseUser user);
+        void afterSignInUserUpdate(FirebaseUser user);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class LoginFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 Snackbar.make(rootView, "you are now lobed in", Snackbar.LENGTH_SHORT);
                                 FirebaseUser user= mFireBaseAuth.getCurrentUser();
-                                mListener.userUpdate(user);
+                                mListener.afterSignInUserUpdate(user);
                                 mSpEditor.putString("userEmail",useremail).commit();
                                 mSpEditor.putString("userPassword",password).commit();
                                 removePhoneKeypad(rootView);
