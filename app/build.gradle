@@ -42,5 +42,6 @@ dependencies {
 
     //flow layout
     implementation 'com.nex3z:flow-layout:1.2.4'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

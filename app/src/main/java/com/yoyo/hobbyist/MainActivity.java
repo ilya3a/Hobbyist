@@ -7,8 +7,16 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
@@ -25,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     TabItem tabItem4;
     FirebaseAuth mFireBaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    LottieAnimationView mSwipeLeftLottie,mSwipeRihgtLottie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -36,6 +45,24 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         tabItem3 = findViewById( R.id.chat );
         tabItem4 = findViewById( R.id.menu );
         mPager = findViewById( R.id.pager );
+        mSwipeLeftLottie = findViewById(R.id.swipe_left);
+        mSwipeLeftLottie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mPager.setCurrentItem(mTabLayout.getSelectedTabPosition()-1);
+            }
+        });
+        mSwipeRihgtLottie = findViewById(R.id.swipe_right);
+        mSwipeRihgtLottie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(mTabLayout.getSelectedTabPosition()+1);
+            }
+        });
+
+
+
         mFireBaseAuth = FirebaseAuth.getInstance();
         mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount() );
         mPager.setAdapter( mAdapter );
@@ -49,29 +76,38 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mPager.setCurrentItem( tab.getPosition() );
+                int itemPos = tab.getPosition();
+                mPager.setCurrentItem( itemPos );
 
-                if (tab.getPosition() == 0) {
+
+                if (itemPos == 0) {
+                    mSwipeLeftLottie.setVisibility(View.GONE);
+                    mSwipeRihgtLottie.setVisibility(View.VISIBLE);
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon_selected );
                     mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
 
 
-                } else if (tab.getPosition() == 1) {
+                } else if (itemPos == 1) {
+                    mSwipeLeftLottie.setVisibility(View.VISIBLE);
+                    mSwipeRihgtLottie.setVisibility(View.VISIBLE);
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
                     mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon_selected );
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
 
-                } else if (tab.getPosition() == 2) {
+                } else if (itemPos == 2) {
+                    mSwipeLeftLottie.setVisibility(View.VISIBLE);
+                    mSwipeRihgtLottie.setVisibility(View.VISIBLE);
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
                     mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
 
                 } else {
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
+                    mSwipeLeftLottie.setVisibility(View.VISIBLE);
+                    mSwipeRihgtLottie.setVisibility(View.GONE);                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
                     mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon_selected );
@@ -96,6 +132,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onMapCreate() {
 
     }
 
