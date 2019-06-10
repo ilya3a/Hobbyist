@@ -11,13 +11,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.yoyo.hobbyist.Adapters.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,

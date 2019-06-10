@@ -58,6 +58,7 @@
 
     </LinearLayout>
 
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/swipe_left"
         android:layout_width="40dp"
@@ -84,4 +85,6 @@
         app:lottie_rawRes="@raw/swipe_indicator"
         app:lottie_repeatMode="restart"
         app:lottie_repeatCount="@android:integer/config_longAnimTime"/>
+
+
 </RelativeLayout>

@@ -1,10 +1,14 @@
-package com.yoyo.hobbyist;
+package com.yoyo.hobbyist.Adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.yoyo.hobbyist.ChatFragment;
+import com.yoyo.hobbyist.DashboardFragment;
+import com.yoyo.hobbyist.MenuFragment;
+import com.yoyo.hobbyist.SearchFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
