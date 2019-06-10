@@ -157,12 +157,11 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 break;
             }
             case R.id.sign_up_btn: {
-                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
-                        .addToBackStack(null).commit();
-//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
-//                        UPDATE_USER_FRAGMENT_TAG)
+//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
 //                        .addToBackStack(null).commit();
-                //FOR TEST
+                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
+                        UPDATE_USER_FRAGMENT_TAG)
+                        .addToBackStack(null).commit();
                 break;
             }
         }

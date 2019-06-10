@@ -21,44 +21,6 @@
             android:id="@+id/updateUser_text_headline"
             android:textColor="@color/cardview_light_background"/>
 
-        <com.nex3z.flowlayout.FlowLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            app:flChildSpacing="auto"
-            app:flRowSpacing="4dp"
-            app:flFlow="true"
-            android:layout_below="@+id/gender_tv"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Football" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tennis"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gym"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Running"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Drawing" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Football"/>
-
-        </com.nex3z.flowlayout.FlowLayout>
-
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,17 +43,17 @@
             android:layout_below="@+id/name_input_et_wrapper"
             android:id="@+id/last_name_input_et_wrapper"
             android:hint="Enter Last name"
+            android:layout_marginTop="5dp"
             android:textColorHint="#fff"
             app:helperText="Required*">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Last name"
-                android:id="@+id/last_name_input_et"
-                android:inputType="textPassword"/>
+                android:id="@+id/last_name_input_et"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/last_name_input_et_wrapper"
@@ -100,16 +62,26 @@
             android:textColor="#fff"
             android:textSize="18sp"
             android:text="Date of birth :"
-            android:id="@+id/date_of_birth_tv" />
-        
-        <EditText
+            android:id="@+id/date_of_birth_tv"
+            />
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/last_name_input_et_wrapper"
-            android:layout_toEndOf="@+id/date_of_birth_tv"
-            android:layout_marginTop="5dp"
-            android:id="@+id/date_of_birth_et"
-            android:contextClickable="true" />
+            android:layout_toEndOf="@+id/date_of_birth_tv">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:id="@+id/date_of_birth_et"
+                android:enabled="false"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/fake_date_of_birth_clicker"
+                android:clickable="true"
+                />
+        </RelativeLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -118,7 +90,8 @@
             android:id="@+id/city_name_et_wrapper"
             android:hint="Enter your city name"
             android:textColorHint="#fff"
-            app:helperText="Required*">
+            app:helperText="Required*"
+            android:layout_marginTop="5dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,7 +100,7 @@
                 android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/city_name_et_wrapper"
@@ -138,14 +111,26 @@
             android:text="Gender :"
             android:id="@+id/gender_tv" />
 
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/city_name_et_wrapper"
-            android:layout_toEndOf="@+id/gender_tv"
-            android:inputType="none"
-            android:layout_marginTop="5dp"
-            android:id="@+id/gender_et" />
+            android:layout_toEndOf="@+id/gender_tv">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:layout_marginTop="5dp"
+                android:id="@+id/gender_et"
+                android:enabled="false"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/fake_gender_clicker"
+                android:clickable="true"
+                />
+        </RelativeLayout>
+
 
 
         <LinearLayout
