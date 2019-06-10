@@ -2,13 +2,13 @@ package com.yoyo.hobbyist;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -132,8 +132,11 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     @Override
     public void afterSignUpUserUpdate(FirebaseUser user) {
         mCurrentUser = user;
-        goToMainActivity();
-        mFragmentManager.beginTransaction().remove(mSignUpFragment).commit();
+        //goToMainActivity();
+        mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
+                UPDATE_USER_FRAGMENT_TAG)
+                .addToBackStack(null).commit();
+        //mFragmentManager.beginTransaction().remove(mSignUpFragment).commit();
     }
 
     @Override
@@ -157,10 +160,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 break;
             }
             case R.id.sign_up_btn: {
-//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
-//                        .addToBackStack(null).commit();
-                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
-                        UPDATE_USER_FRAGMENT_TAG)
+                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
                         .addToBackStack(null).commit();
                 break;
             }

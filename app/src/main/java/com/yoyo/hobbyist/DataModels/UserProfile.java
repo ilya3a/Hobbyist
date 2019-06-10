@@ -19,99 +19,113 @@ public class UserProfile {
     private  String mCityName;
     private  String mGender;
     private  ArrayList<String> mHobbylist;
+    private String mUserToken;
 
-    public UserProfile(String mName, String mAge,String mGender, String mLastName, String mEmail, String mCityName, ArrayList<String> mHobbylist) {
-        this.mName = mName;
-        this.mAge = mAge;
-        this.mLastName = mLastName;
-        this.mEmail = mEmail;
-        this.mCityName = mCityName;
-        this.mHobbylist = mHobbylist;
-        this.mGender = mGender;
+    public String getmUserToken() {
+        return mUserToken;
+    }
+
+    public void setmUserToken(String mUserToken) {
+        this.mUserToken = mUserToken;
+    }
+
+    public UserProfile() {
     }
 
     public String getmName() {
         return mName;
     }
 
-    public void setmName(String mName) {
-        this.mName = mName;
+    public UserProfile setmName(String mName) {
+        this.mName = mName;        return this;
+
     }
 
     public String getmAge() {
         return mAge;
     }
 
-    public void setmAge(String mAge) {
-        this.mAge = mAge;
+    public UserProfile setmAge(String mAge) {
+        this.mAge = mAge;        return this;
+
     }
 
     public String getmLastName() {
         return mLastName;
     }
 
-    public void setmLastName(String mLastName) {
-        this.mLastName = mLastName;
+    public UserProfile setmLastName(String mLastName) {
+        this.mLastName = mLastName;        return this;
+
     }
 
     public String getmEmail() {
         return mEmail;
     }
 
-    public void setmEmail(String mEmail) {
-        this.mEmail = mEmail;
+    public UserProfile setmEmail(String mEmail) {
+        this.mEmail = mEmail;        return this;
+
     }
 
     public String getmPictureUrl() {
         return mPictureUrl;
     }
 
-    public void setmPictureUrl(String mPictureUrl) {
-        this.mPictureUrl = mPictureUrl;
+    public UserProfile setmPictureUrl(String mPictureUrl) {
+        this.mPictureUrl = mPictureUrl;        return this;
+
     }
 
     public String getmUserAboutMe() {
         return mUserAboutMe;
     }
 
-    public void setmUserAboutMe(String mUserAboutMe) {
-        this.mUserAboutMe = mUserAboutMe;
+    public UserProfile setmUserAboutMe(String mUserAboutMe) {
+        this.mUserAboutMe = mUserAboutMe;        return this;
+
     }
 
     public String getmCityName() {
         return mCityName;
     }
 
-    public void setmCityName(String mCityName) {
-        this.mCityName = mCityName;
+    public UserProfile setmCityName(String mCityName) {
+        this.mCityName = mCityName;        return this;
+
     }
 
     public ArrayList<String> getmHobbylist() {
         return mHobbylist;
     }
 
-    public void setmHobbylist(ArrayList<String> mHobbylist) {
-        this.mHobbylist = mHobbylist;
+    public UserProfile setmHobbylist(ArrayList<String> mHobbylist) {
+        this.mHobbylist = mHobbylist;        return this;
+
     }
 
     public String getmGender() {
         return mGender;
     }
 
-    public void setmGender(String mGender) {
-        this.mGender = mGender;
+    public UserProfile setmGender(String mGender) {
+        this.mGender = mGender;        return this;
+
     }
 
-    public void setmYear(String mYear) {
-        this.mYear = mYear;
+    public UserProfile setmYear(String mYear) {
+        this.mYear = mYear;        return this;
+
     }
 
-    public void setmMonth(String mMonth) {
-        this.mMonth = mMonth;
+    public UserProfile setmMonth(String mMonth) {
+        this.mMonth = mMonth;        return this;
+
     }
 
-    public void setmDay(String mDay) {
+    public UserProfile setmDay(String mDay) {
         this.mDay = mDay;
+        return this;
     }
 
     public String getmYear() {

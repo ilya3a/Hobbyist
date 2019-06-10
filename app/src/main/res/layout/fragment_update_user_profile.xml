@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter your city name"
                 android:id="@+id/city_name_et"
-                android:inputType="textPassword"/>
+                android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
 
         <TextView
