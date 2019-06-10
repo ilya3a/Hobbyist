@@ -1,4 +1,4 @@
-package com.yoyo.hobbyist;
+package com.yoyo.hobbyist.SignFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.yoyo.hobbyist.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -34,7 +35,7 @@ public class SigninFragment extends Fragment {
     String mPassword;
 
 
-    interface LoginFragmentListener {
+    public interface LoginFragmentListener {
         void afterSignInUserUpdate(FirebaseUser user);
     }
 

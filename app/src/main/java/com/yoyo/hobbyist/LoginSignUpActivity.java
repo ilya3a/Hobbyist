@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.yoyo.hobbyist.SignFragments.SignButtonsFragment;
+import com.yoyo.hobbyist.SignFragments.SignUpFragment;
+import com.yoyo.hobbyist.SignFragments.SigninFragment;
+import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
         SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener {

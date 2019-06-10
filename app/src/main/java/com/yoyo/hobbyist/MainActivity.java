@@ -13,6 +13,10 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
+import com.yoyo.hobbyist.Fragments.ChatFragment;
+import com.yoyo.hobbyist.Fragments.DashboardFragment;
+import com.yoyo.hobbyist.Fragments.MenuFragment;
+import com.yoyo.hobbyist.Fragments.SearchFragment;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,

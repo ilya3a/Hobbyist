@@ -1,4 +1,4 @@
-package com.yoyo.hobbyist;
+package com.yoyo.hobbyist.SignFragments;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+
+import com.yoyo.hobbyist.R;
 
 import java.util.Calendar;
 

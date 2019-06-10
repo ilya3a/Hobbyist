@@ -1,4 +1,4 @@
-package com.yoyo.hobbyist;
+package com.yoyo.hobbyist.SignFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.yoyo.hobbyist.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +31,7 @@ public class SignUpFragment extends Fragment {
 
     SignUpFragmentListener signUpFragmentListener;
 
-    interface SignUpFragmentListener {
+    public interface SignUpFragmentListener {
         void afterSignUpUserUpdate(FirebaseUser user);
     }
     @Override
