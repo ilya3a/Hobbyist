@@ -15,9 +15,9 @@
     <string name="menu_send">Send</string>
 
     <string-array name="dialog_single_choice_array">
+        <item>Other</item>
         <item>Male</item>
         <item>Female</item>
-        <item>Other</item>
     </string-array>
 
     <string name="this_field_required">this field required</string>

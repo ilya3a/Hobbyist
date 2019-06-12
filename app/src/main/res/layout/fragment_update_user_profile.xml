@@ -4,17 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_centerInParent="true"
     app:cardCornerRadius="10dp"
-    android:layout_margin="10dp"
     android:background="@color/design_default_color_primary">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/design_default_color_primary">
+        android:orientation="vertical"
+        android:background="@color/design_default_color_primary"
+        android:layout_margin="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Update Profile"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:textStyle="bold"
             android:textSize="30sp"
@@ -25,129 +26,117 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/name_input_et_wrapper"
-            android:layout_below="@+id/updateUser_text_headline"
             android:hint="Enter name"
             android:textColorHint="#fff"
-            app:helperText="Required*">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_weight="1"
+            android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter name"
                 android:id="@+id/name_input_et"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:textColor="#fff"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/name_input_et_wrapper"
             android:id="@+id/last_name_input_et_wrapper"
             android:hint="Enter Last name"
             android:layout_marginTop="5dp"
             android:textColorHint="#fff"
-            app:helperText="Required*">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_weight="1"
+            android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Last name"
-                android:id="@+id/last_name_input_et"/>
+                android:id="@+id/last_name_input_et"
+                android:textColor="#fff"/>
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/last_name_input_et_wrapper"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="15dp"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:text="Date of birth :"
-            android:id="@+id/date_of_birth_tv"
-            />
-        <RelativeLayout
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/last_name_input_et_wrapper"
-            android:layout_toEndOf="@+id/date_of_birth_tv">
+            android:hint="Chose your birth day"
+            android:id="@+id/date_of_birth_et_wrapper"
+            android:textColorHint="#fff"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:id="@+id/date_of_birth_et"
-                android:enabled="false"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/fake_date_of_birth_clicker"
-                android:clickable="true"
+                android:clickable="false"
+                android:textColor="#fff"
                 />
-        </RelativeLayout>
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date_of_birth_tv"
             android:id="@+id/city_name_et_wrapper"
             android:hint="Enter your city name"
             android:textColorHint="#fff"
-            app:helperText="Required*"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_weight="1"
+            android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your city name"
                 android:id="@+id/city_name_et"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:textColor="#fff"/>
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/city_name_et_wrapper"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="15dp"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:text="Gender :"
-            android:id="@+id/gender_tv" />
-
-        <RelativeLayout
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/city_name_et_wrapper"
-            android:layout_toEndOf="@+id/gender_tv">
+            android:textColorHint="#fff"
+            android:hint="Gender"
+            android:id="@+id/gender_et_wrapper"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_weight="1"
+            android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:layout_marginTop="5dp"
                 android:id="@+id/gender_et"
-                android:enabled="false"/>
+                android:textColor="#fff"/>
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/fake_gender_clicker"
-                android:clickable="true"
-                />
-        </RelativeLayout>
-
-
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*all fields required"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/Red"/>
+        </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="15dp">
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:layout_weight="2">
             <android.support.design.button.MaterialButton
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
+                app:cornerRadius="10dp"
+                android:shadowColor="@color/cardview_light_background"
                 android:layout_height="wrap_content"
                 android:text="Accept"
                 android:id="@+id/accept_btn"
                 android:layout_margin="10dp"
-                style="@style/AppTheme"
-                android:textSize="50sp"/>
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:textSize="20sp"/>
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

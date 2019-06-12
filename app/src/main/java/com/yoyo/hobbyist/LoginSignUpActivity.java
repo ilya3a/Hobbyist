@@ -23,7 +23,7 @@ import com.yoyo.hobbyist.SignFragments.SigninFragment;
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
-        SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener {
+        SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener,UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
 
     final String LOGIN_FRAGMENT_TAG = "sign_in_fragment";
     final String SIGN_UP_FRAGMENT_TAG = "sign_up_fragment";
@@ -59,15 +59,15 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mFireBaseAuth = FirebaseAuth.getInstance();
         mEmail = mSp.getString("userEmail", "noEmail");
         mPassword = mSp.getString("userPassword", "noPassword");
-
+        mCurrentUser = mFireBaseAuth.getCurrentUser();
+        mFireBaseAuth.signOut();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             }
         };
 
-        if (!mEmail.equals("noEmail") && !mPassword.equals("noPassword")) {
-            logIn();
+        if (mCurrentUser!=null) {
             goToMainActivity();
 
         } else {
@@ -77,7 +77,6 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             mFragmentManager = getSupportFragmentManager();
             mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
-            //mCurrentUser = mFireBaseAuth.getCurrentUser();
             mSignBottnsFragment = new SignButtonsFragment();
 
             mFragmentManager.beginTransaction().add(R.id.main_container, mSignBottnsFragment, SING_BUTTONS_FRAGMENT_TAG)
@@ -164,6 +163,17 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                         .addToBackStack(null).commit();
                 break;
             }
+        }
+    }
+    //TODO: FIX IF PRESSED BACK AND DIDNT UPDATE PROFILE!
+    @Override
+    public void afterUpdateUserUpdate(FirebaseUser user) {
+        if (user.getDisplayName().equals("")){
+
+        }
+        else
+        {
+            goToMainActivity();
         }
     }
 }

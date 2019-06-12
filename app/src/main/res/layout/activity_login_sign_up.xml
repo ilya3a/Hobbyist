@@ -9,7 +9,7 @@
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000">
+        android:background="@drawable/login_background">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_animation"
