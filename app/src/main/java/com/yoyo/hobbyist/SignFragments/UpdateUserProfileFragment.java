@@ -182,7 +182,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
 
     // Returns age given the date of birth
-    public static int getAge(int year, int month, int dayOfMonth) {
+    public static Integer getAge(int year, int month, int dayOfMonth) {
         Calendar today = Calendar.getInstance();
 
         int curYear = today.get(Calendar.YEAR);
