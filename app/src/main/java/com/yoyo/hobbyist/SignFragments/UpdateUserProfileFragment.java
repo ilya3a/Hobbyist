@@ -34,7 +34,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
     UpdateUserProfileFragmentListener updateUserProfileFragmentListener;
     public interface UpdateUserProfileFragmentListener{
-        void afterUpdateUserUpdate(FirebaseUser user);
+        void afterUpdateUserUpdate(Boolean isUserUpdated);
     }
     String mName, mLastName, mAge, mCityName, mGender;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper,mGenderEtWrapper;
@@ -189,8 +189,8 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 .setmLastName(mLastNameEtWrapper.getEditText().getText().toString())
                                 .setmAge(mAge).setmGender(mGenderEtWrapper.getEditText().getText().toString()).setmUserToken(mFirebaseUser.getUid());
                         mDatabaseReference.child("appUsers").child(userProfile.getmUserToken()).setValue(userProfile);
-                        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mName + mLastName).build());
-                        updateUserProfileFragmentListener.afterUpdateUserUpdate(mFirebaseUser);
+                        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mNameEtWrapper.getEditText().getText().toString() + mLastNameEtWrapper.getEditText().getText().toString()).build());
+                        updateUserProfileFragmentListener.afterUpdateUserUpdate(true);
                     }
                 }
             }

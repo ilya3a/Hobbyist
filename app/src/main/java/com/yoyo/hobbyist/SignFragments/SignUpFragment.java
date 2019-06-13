@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.yoyo.hobbyist.R;
 
 import java.util.regex.Matcher;
@@ -106,13 +107,14 @@ public class SignUpFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful())
                             {
-                                Snackbar.make(rootView,"Registerd succecful", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(rootView,"Registered successfully", Snackbar.LENGTH_SHORT).show();
                                 FirebaseUser user=firebaseAuth.getCurrentUser();
+                                user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName("null").build());
                                 signUpFragmentListener.afterSignUpUserUpdate(user);
                                 removePhoneKeypad(rootView);
                             }
                             else
-                                Snackbar.make(rootView,"Registerd Faild", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(rootView,"Register Failed", Snackbar.LENGTH_SHORT).show();
                         }
                     });
                 }

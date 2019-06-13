@@ -32,7 +32,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Choose Email"
+                android:inputType="textEmailAddress"
                 android:id="@+id/username_ET"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -46,7 +46,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Choose Password"
                 android:id="@+id/password_ET"
                 android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
@@ -61,7 +60,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Re-enter Password"
             android:id="@+id/password_verify_ET"
             android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>

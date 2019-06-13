@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             }
         };
-        Toast.makeText(this, mFireBaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, mFireBaseAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_LONG).show();
         mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

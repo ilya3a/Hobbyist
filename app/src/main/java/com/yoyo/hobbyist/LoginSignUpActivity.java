@@ -23,12 +23,12 @@ import com.yoyo.hobbyist.SignFragments.SigninFragment;
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
-        SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener,UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
+        SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener, UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
 
     final String LOGIN_FRAGMENT_TAG = "sign_in_fragment";
     final String SIGN_UP_FRAGMENT_TAG = "sign_up_fragment";
     final String SING_BUTTONS_FRAGMENT_TAG = "sign_buttons_fragment";
-    final String UPDATE_USER_FRAGMENT_TAG="update_user_fragment";
+    final String UPDATE_USER_FRAGMENT_TAG = "update_user_fragment";
 
     FirebaseAuth mFireBaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -60,18 +60,19 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mEmail = mSp.getString("userEmail", "noEmail");
         mPassword = mSp.getString("userPassword", "noPassword");
         mCurrentUser = mFireBaseAuth.getCurrentUser();
-        mFireBaseAuth.signOut();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             }
         };
 
-        if (mCurrentUser!=null) {
+        if (mCurrentUser != null && !(mCurrentUser.getDisplayName().equals("null"))){
             goToMainActivity();
-
-        } else {
-            mUpdateUserProfileFragment =new UpdateUserProfileFragment();
+        }
+         else {
+             mFireBaseAuth.signOut();
+             mCurrentUser=mFireBaseAuth.getCurrentUser();
+            mUpdateUserProfileFragment = new UpdateUserProfileFragment();
             mLottieAnimationView = findViewById(R.id.lottie_animation);
             mLottieAnimationView.setAnimation(R.raw.animation_test);
             mFragmentManager = getSupportFragmentManager();
@@ -80,8 +81,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             mSignBottnsFragment = new SignButtonsFragment();
 
             mFragmentManager.beginTransaction().add(R.id.main_container, mSignBottnsFragment, SING_BUTTONS_FRAGMENT_TAG)
-                    .addToBackStack(null).commit();
-
+                    .commit();
         }
     }
 
@@ -112,20 +112,25 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     public void afterSignInUserUpdate(final FirebaseUser user) {
-        mCurrentUser = user;
-        mLottieAnimationView.setVisibility(View.VISIBLE);
-        mLottieAnimationView.playAnimation();
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        if (mCurrentUser.getDisplayName().equals("null")){
+            callUpdateUser();
+        }
+        else {
+            mCurrentUser = user;
+            mLottieAnimationView.setVisibility(View.VISIBLE);
+            mLottieAnimationView.playAnimation();
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
 
-                mFragmentManager.beginTransaction().remove(mLoginFragment).commit();
-                mLottieAnimationView.setVisibility(View.GONE);
-                goToMainActivity();
-            }
-        };
-        handler.postDelayed(runnable, 3100);
+                    mFragmentManager.beginTransaction().remove(mLoginFragment).commit();
+                    mLottieAnimationView.setVisibility(View.GONE);
+                    goToMainActivity();
+                }
+            };
+            handler.postDelayed(runnable, 3100);
+        }
     }
 
     @Override
@@ -165,15 +170,18 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             }
         }
     }
+
     //TODO: FIX IF PRESSED BACK AND DIDNT UPDATE PROFILE!
     @Override
-    public void afterUpdateUserUpdate(FirebaseUser user) {
-        if (user.getDisplayName().equals("")){
-
-        }
-        else
+    public void afterUpdateUserUpdate(Boolean isUserUpdated) {
+        if (isUserUpdated)
         {
             goToMainActivity();
         }
+    }
+    void callUpdateUser(){
+        mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
+                UPDATE_USER_FRAGMENT_TAG)
+                .addToBackStack(null).commit();
     }
 }
