@@ -4,11 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.yoyo.hobbyist.Adapters.RecyclerViewAdapter;
+import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -66,7 +76,19 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate( R.layout.dashboard_fragment, container, false );
+        View rootView = inflater.inflate( R.layout.dashboard_fragment, container, false );
+
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.dash_recycler);
+        ArrayList<UserPost> userPosts = new ArrayList<>();
+        for (int i =0;i<100;++i){
+            userPosts.add(new UserPost());
+        }
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(userPosts,getContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.setAdapter(adapter);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

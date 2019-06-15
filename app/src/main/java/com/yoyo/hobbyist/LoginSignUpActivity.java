@@ -1,29 +1,55 @@
 package com.yoyo.hobbyist;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import com.himanshurawat.imageworker.Extension;
+import com.himanshurawat.imageworker.ImageWorker;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.SignFragments.SignButtonsFragment;
 import com.yoyo.hobbyist.SignFragments.SignUpFragment;
 import com.yoyo.hobbyist.SignFragments.SigninFragment;
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import static java.security.AccessController.getContext;
+
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
         SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener, UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
+
+    final int CAMERA_REQUEST = 1;
+    final int WRITE_TO_EXTERNAL_PERMISSION_REQUEST = 2;
+    private final int SELECT_IMAGE_REQ = 3;
 
     final String LOGIN_FRAGMENT_TAG = "sign_in_fragment";
     final String SIGN_UP_FRAGMENT_TAG = "sign_up_fragment";
@@ -66,12 +92,11 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             }
         };
 
-        if (mCurrentUser != null && !(mCurrentUser.getDisplayName().equals("null"))){
+        if (mCurrentUser != null && !(mCurrentUser.getDisplayName().equals("null"))) {
             goToMainActivity();
-        }
-         else {
-             mFireBaseAuth.signOut();
-             mCurrentUser=mFireBaseAuth.getCurrentUser();
+        } else {
+            mFireBaseAuth.signOut();
+            mCurrentUser = mFireBaseAuth.getCurrentUser();
             mUpdateUserProfileFragment = new UpdateUserProfileFragment();
             mLottieAnimationView = findViewById(R.id.lottie_animation);
             mLottieAnimationView.setAnimation(R.raw.animation_test);
@@ -112,10 +137,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     public void afterSignInUserUpdate(final FirebaseUser user) {
-        if (mCurrentUser.getDisplayName().equals("null")){
+        if (user.getDisplayName().equals("null")) {
             callUpdateUser();
-        }
-        else {
+        } else {
             mCurrentUser = user;
             mLottieAnimationView.setVisibility(View.VISIBLE);
             mLottieAnimationView.playAnimation();
@@ -171,17 +195,63 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         }
     }
 
-    //TODO: FIX IF PRESSED BACK AND DIDNT UPDATE PROFILE!
     @Override
     public void afterUpdateUserUpdate(Boolean isUserUpdated) {
-        if (isUserUpdated)
-        {
+        if (isUserUpdated) {
             goToMainActivity();
         }
+        if (!isUserUpdated) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, 1);
+            }
+
+        }
     }
-    void callUpdateUser(){
+
+    void callUpdateUser() {
         mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
                 UPDATE_USER_FRAGMENT_TAG)
                 .addToBackStack(null).commit();
     }
+
+    @Override
+    public void updateImage(Intent intent, View view) {
+        if(Build.VERSION.SDK_INT>=23) {
+                callPermissions(intent);
+        }
+        else {
+            startActivityForResult(intent, CAMERA_REQUEST);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Fragment fragment =mFragmentManager.findFragmentByTag(UPDATE_USER_FRAGMENT_TAG);
+        assert fragment != null;
+        ((UpdateUserProfileFragment) fragment).updateUserImage();
+    }
+    public void callPermissions(final Intent intent) {
+        String[] string = { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Permissions.Options options = new Permissions.Options()
+                .setRationaleDialogTitle("Info")
+                .setSettingsDialogTitle("Warning");
+        PermissionHandler permissionHandler = new PermissionHandler() {
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                callPermissions(intent);
+            }
+
+            @Override
+            public void onGranted() {
+                startActivityForResult(intent, 1);
+            }
+        };
+        Permissions.check(this, string, "you must give those permissions to take a photo",options, permissionHandler);
+
+
+    }
+
 }

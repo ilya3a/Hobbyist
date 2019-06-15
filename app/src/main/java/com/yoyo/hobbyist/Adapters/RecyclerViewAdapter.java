@@ -36,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(ArrayList<UserPost> userPosts, Context mContext) {
         this.userPosts = userPosts;
         this.mContext = mContext;
-        recyclerCallBack = (RecyclerCallBack) mContext;
+//        recyclerCallBack = (RecyclerCallBack) mContext;
     }
 
 
