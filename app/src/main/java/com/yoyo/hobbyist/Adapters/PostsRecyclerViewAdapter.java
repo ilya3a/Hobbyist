@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.R;
 
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder> {
 
     interface RecyclerCallBack {
         void onItemClicked(UserPost article);
@@ -33,7 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ArrayList<UserPost> userPosts;
     Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<UserPost> userPosts, Context mContext) {
+    public PostsRecyclerViewAdapter(ArrayList<UserPost> userPosts, Context mContext) {
         this.userPosts = userPosts;
         this.mContext = mContext;
 //        recyclerCallBack = (RecyclerCallBack) mContext;

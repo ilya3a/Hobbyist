@@ -5,6 +5,9 @@
     android:layout_centerInParent="true"
     app:cardCornerRadius="10dp"
     android:background="@color/design_default_color_primary">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,8 +26,8 @@
             android:textColor="@color/cardview_light_background"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher"
             android:id="@+id/photoCiv"/>
@@ -36,7 +39,6 @@
             android:hint="Enter name"
             android:textColorHint="#fff"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_weight="1"
             android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
@@ -55,7 +57,6 @@
             android:layout_marginTop="5dp"
             android:textColorHint="#fff"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_weight="1"
             android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
@@ -71,7 +72,6 @@
             android:hint="Chose your birth day"
             android:id="@+id/date_of_birth_et_wrapper"
             android:textColorHint="#fff"
-            android:layout_weight="1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_margin="5dp">
             <EditText
@@ -92,7 +92,6 @@
             android:textColorHint="#fff"
             android:layout_marginTop="5dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_weight="1"
             android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
@@ -111,7 +110,6 @@
             android:hint="Gender"
             android:id="@+id/gender_et_wrapper"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_weight="1"
             android:layout_margin="5dp">
             <EditText
                 android:layout_width="match_parent"
@@ -127,12 +125,25 @@
                 android:layout_marginTop="5dp"
                 android:textColor="@color/red"/>
         </android.support.design.widget.TextInputLayout>
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:layout_weight="2">
+            android:text="Chose all your hobbys"
+            android:layout_marginStart="5dp"
+            />
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/auto_complete_tv"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|bottom"
+            android:gravity="bottom"
+            android:layout_margin="15dp">
             <android.support.design.button.MaterialButton
                 android:layout_width="200dp"
                 app:cornerRadius="10dp"
@@ -146,4 +157,5 @@
         </LinearLayout>
 
     </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.v7.widget.CardView>
