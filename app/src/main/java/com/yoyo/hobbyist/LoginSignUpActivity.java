@@ -32,6 +32,7 @@ import com.himanshurawat.imageworker.Extension;
 import com.himanshurawat.imageworker.ImageWorker;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.yoyo.hobbyist.SignFragments.NewSignInScreenFragment;
 import com.yoyo.hobbyist.SignFragments.SignButtonsFragment;
 import com.yoyo.hobbyist.SignFragments.SignUpFragment;
 import com.yoyo.hobbyist.SignFragments.SigninFragment;
@@ -45,11 +46,13 @@ import java.util.Date;
 import static java.security.AccessController.getContext;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
-        SignButtonsFragment.OnFragmentInteractionListener, SigninFragment.LoginFragmentListener, UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
+        NewSignInScreenFragment.LoginFragmentListener, UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
 
     final int CAMERA_REQUEST = 1;
     final int WRITE_TO_EXTERNAL_PERMISSION_REQUEST = 2;
     private final int SELECT_IMAGE_REQ = 3;
+
+    final String NEW_LOGIN_FRAGMENT_TAG = "new_sign_in_fragment";
 
     final String LOGIN_FRAGMENT_TAG = "sign_in_fragment";
     final String SIGN_UP_FRAGMENT_TAG = "sign_up_fragment";
@@ -64,7 +67,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     SigninFragment mLoginFragment;
     SignUpFragment mSignUpFragment;
     LottieAnimationView mLottieAnimationView;
-    SignButtonsFragment mSignBottnsFragment;
+    NewSignInScreenFragment mNewSignInScreenFragment;
     UpdateUserProfileFragment mUpdateUserProfileFragment;
 
     SharedPreferences mSp;
@@ -578,9 +581,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             mFragmentManager = getSupportFragmentManager();
             mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
-            mSignBottnsFragment = new SignButtonsFragment();
-
-            mFragmentManager.beginTransaction().add(R.id.main_container, mSignBottnsFragment, SING_BUTTONS_FRAGMENT_TAG)
+            mNewSignInScreenFragment=new NewSignInScreenFragment();
+            //add the new mainlogin
+            mFragmentManager.beginTransaction().add(R.id.main_container, mNewSignInScreenFragment, NEW_LOGIN_FRAGMENT_TAG)
                     .commit();
         }
     }
@@ -623,7 +626,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 @Override
                 public void run() {
 
-                    mFragmentManager.beginTransaction().remove(mLoginFragment).commit();
+                    mFragmentManager.beginTransaction().commit();
                     mLottieAnimationView.setVisibility(View.GONE);
                     goToMainActivity();
                 }
@@ -633,12 +636,17 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     }
 
     @Override
+    public void callSignUp() {
+        mFragmentManager.beginTransaction().add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
+                       .addToBackStack(null).commit();
+    }
+
+    @Override
     public void afterSignUpUserUpdate(FirebaseUser user) {
         mCurrentUser = user;
         //goToMainActivity();
-        mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
-                UPDATE_USER_FRAGMENT_TAG)
-                .addToBackStack(null).commit();
+        mFragmentManager.beginTransaction().add(R.id.main_container, mUpdateUserProfileFragment,
+                UPDATE_USER_FRAGMENT_TAG).addToBackStack(null).commit();
         //mFragmentManager.beginTransaction().remove(mSignUpFragment).commit();
     }
 
@@ -654,21 +662,21 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-    @Override
-    public void SignButtonsOnClick(int btnId) {
-        switch (btnId) {
-            case R.id.sign_in_btn: {
-                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mLoginFragment, LOGIN_FRAGMENT_TAG)
-                        .addToBackStack(null).commit();
-                break;
-            }
-            case R.id.sign_up_btn: {
-                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
-                        .addToBackStack(null).commit();
-                break;
-            }
-        }
-    }
+//    @Override
+//    public void SignButtonsOnClick(int btnId) {
+//        switch (btnId) {
+//            case R.id.sign_in_btn: {
+//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mLoginFragment, LOGIN_FRAGMENT_TAG)
+//                        .addToBackStack(null).commit();
+//                break;
+//            }
+//            case R.id.sign_up_btn: {
+//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
+//                        .addToBackStack(null).commit();
+//                break;
+//            }
+//        }
+//    }
 
     @Override
     public void afterUpdateUserUpdate(Boolean isUserUpdated) {
@@ -686,7 +694,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     }
 
     void callUpdateUser() {
-        mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mUpdateUserProfileFragment,
+        mFragmentManager.beginTransaction().add(R.id.main_container, mUpdateUserProfileFragment,
                 UPDATE_USER_FRAGMENT_TAG)
                 .addToBackStack(null).commit();
     }
