@@ -1,11 +1,53 @@
 package com.yoyo.hobbyist.DataModels;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class UserPost {
     String userName;
     String userProfilePicUrl;
     String userToken;
     String birthDate;
     String age;
+    boolean isOnline;
+    String content;
+    double latitude;
+    double longitude;
+
+
+    public UserPost() {
+    }
+
+    ;
+
+    public UserPost(String userName, String userProfilePicUrl, String userToken, String birthDate, String age, boolean isOnline, String content, double latitude, double longitude) {
+        this.userName = userName;
+        this.userProfilePicUrl = userProfilePicUrl;
+        this.userToken = userToken;
+        this.birthDate = birthDate;
+        this.age = age;
+        this.isOnline = isOnline;
+        this.content = content;
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     public String getAge() {
         return age;
@@ -15,9 +57,6 @@ public class UserPost {
         this.age = age;
     }
 
-    boolean isOnline;
-    String content;
-    String place;
 
     public String getUserName() {
         return userName;
@@ -65,13 +104,5 @@ public class UserPost {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
     }
 }

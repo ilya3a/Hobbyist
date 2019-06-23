@@ -55,7 +55,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         viewHolder.userDescriptionTV.setText(post.getContent());
         viewHolder.userNameTV.setText(post.getUserName());
         viewHolder.userAgeTV.setText(post.getAge());
-        viewHolder.userCityTV.setText(post.getPlace());
+//        viewHolder.userCityTV.setText(post.getPlace().toString());
         viewHolder.userDescriptionTV.setText(post.getContent());
 
         viewHolder.parentLayout.setTag(i);
