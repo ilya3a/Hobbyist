@@ -6,6 +6,9 @@ public class UserPost {
     String userToken;
     String birthDate;
     String age;
+    boolean isOnline;
+    String content;
+    String place;
 
     public String getAge() {
         return age;
@@ -15,9 +18,7 @@ public class UserPost {
         this.age = age;
     }
 
-    boolean isOnline;
-    String content;
-    String place;
+
 
     public String getUserName() {
         return userName;
