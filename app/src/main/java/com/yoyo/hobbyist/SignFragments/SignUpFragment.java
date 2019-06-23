@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.yoyo.hobbyist.R;
 
 import java.util.regex.Matcher;
@@ -31,6 +33,10 @@ public class SignUpFragment extends Fragment {
     FirebaseAuth.AuthStateListener authStateListener;
 
     SignUpFragmentListener signUpFragmentListener;
+
+    // Get a reference to our posts
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("");
 
     public interface SignUpFragmentListener {
         void afterSignUpUserUpdate(FirebaseUser user);
@@ -44,6 +50,7 @@ public class SignUpFragment extends Fragment {
             throw new ClassCastException("Activity must implement the interface : loginFragmentListener");
         }
     }
+
 
     public SignUpFragment(){
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -30,11 +29,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SearchFragment extends Fragment {
@@ -50,6 +55,11 @@ public class SearchFragment extends Fragment {
     private SearchView searchView;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationCallback mLocationCallback;
+    private List<UserPost> mPostsAroundMeList = new ArrayList<>();
+
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mDatabaseReference;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,8 +69,8 @@ public class SearchFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main,menu);
+        super.onCreateOptionsMenu( menu, inflater );
+        inflater.inflate( R.menu.main, menu );
     }
 
     // TODO: Rename and change types and number of parameters
@@ -83,49 +93,62 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate( R.layout.search_fragment, container, false );
 
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference();
+
+        UserPost userPost = new UserPost( "A", "B", "C", "D", "E", true, "F", 37.0667, 38.7667 );
+        UserPost userPost1 = new UserPost( "AA", "B", "C", "D", "E", true, "F", 31.0667, 39.7667 );
+        UserPost userPost2 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 32.0667, 37.7667 );
+        UserPost userPost3 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 33.0667, 35.7667 );
+        UserPost userPost4 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 34.0667, 33.7667 );
+        UserPost userPost5 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 35.0667, 31.7667 );
+
+        mPostsAroundMeList.add( userPost );
+        mPostsAroundMeList.add( userPost1 );
+        mPostsAroundMeList.add( userPost2 );
+        mPostsAroundMeList.add( userPost3 );
+        mPostsAroundMeList.add( userPost4 );
+        mPostsAroundMeList.add( userPost5 );
 
 
-        FragmentManager fragmentManager  = getChildFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment)fragmentManager.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById( R.id.map );
+        mapFragment.getMapAsync( new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-                    mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+                if (ContextCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) == PermissionChecker.PERMISSION_GRANTED) {
+                    mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
                     requestLocationUpdates();
                 } else {
                     callPermissions();
                 }
-                // Add a marker in Sydney and move the camera
-                LatLng sydney = new LatLng(32.0667, 34.7667);
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                loadPostsAroundMe( mPostsAroundMeList );
             }
-        });
+        } );
         mListener.onMapCreate();
         return rootView;
 
     }
 
     private void callPermissions() {
-        Permissions.check(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required to get the Weather", new PermissionHandler() {
+        Permissions.check( getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required to get the Weather", new PermissionHandler() {
             @Override
             public void onGranted() {
-                mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+                mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
                 requestLocationUpdates();
             }
 
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
+                super.onDenied( context, deniedPermissions );
                 callPermissions();
             }
 
-        });
+        } );
     }
 
     private void requestLocationUpdates() {
@@ -134,16 +157,12 @@ public class SearchFragment extends Fragment {
             @Override
             public void onLocationResult(final LocationResult locationResult) {
 
-
                 Location lastLocation = locationResult.getLastLocation();
-
                 LatLng location = new LatLng( lastLocation.getLatitude(), lastLocation.getLongitude() );
-
                 mMap.addMarker( new MarkerOptions().position( location ).title( "current location" ) );
-
-
             }
         };
+
         LocationRequest request = LocationRequest.create();
         // get accuracy level
         request.setPriority( LocationRequest.PRIORITY_HIGH_ACCURACY );
@@ -151,13 +170,29 @@ public class SearchFragment extends Fragment {
         request.setInterval( 1000 );
         // the fastest update...
         request.setFastestInterval( 500 );
-        request.setNumUpdates(1);
+        request.setNumUpdates( 1 );
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
             callPermissions();
         }
-        mFusedLocationProviderClient.requestLocationUpdates(request, mLocationCallback, null);
+        mFusedLocationProviderClient.requestLocationUpdates( request, mLocationCallback, null );
+        loadPostsAroundMe( mPostsAroundMeList );
     }
+
+
+    public void loadPostsAroundMe(List<UserPost> postsAroundMe) {
+
+        for (int i = 0; i < postsAroundMe.size(); i++) {
+
+        }
+        for (UserPost userPost : postsAroundMe) {
+
+            mDatabaseReference.child( "usersPost" ).child( userPost.getUserToken() ).setValue( userPost );
+
+            mMap.addMarker( new MarkerOptions().position( new LatLng( userPost.getLatitude(), userPost.getLongitude() ) ).title( "Marker in Sydney" ) );
+        }
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
