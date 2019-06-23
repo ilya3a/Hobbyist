@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         });
 
 
-
         mFireBaseAuth = FirebaseAuth.getInstance();
         mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount() );
         mPager.setAdapter( mAdapter );

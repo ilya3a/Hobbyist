@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,14 +25,11 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nabinbhandari.android.permissions.PermissionHandler;
@@ -45,7 +44,7 @@ import java.util.List;
 public class SearchFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String LIST_FRAGMENT_TAG = "list";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
@@ -56,6 +55,14 @@ public class SearchFragment extends Fragment {
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationCallback mLocationCallback;
     private List<UserPost> mPostsAroundMeList = new ArrayList<>();
+    TabItem tabItem1;
+    TabItem tabItem2;
+    TabLayout mTabLayout;
+
+
+    FragmentManager mFragmentManager;
+    SupportMapFragment mMapFragment;
+    DashboardFragment mDashboardFragment;
 
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabaseReference;
@@ -77,7 +84,6 @@ public class SearchFragment extends Fragment {
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-        args.putString( ARG_PARAM1, param1 );
         args.putString( ARG_PARAM2, param2 );
         fragment.setArguments( args );
         return fragment;
@@ -87,17 +93,70 @@ public class SearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         if (getArguments() != null) {
-            mParam1 = getArguments().getString( ARG_PARAM1 );
             mParam2 = getArguments().getString( ARG_PARAM2 );
         }
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getChildFragmentManager().beginTransaction().remove(mDashboardFragment).commit();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate( R.layout.search_fragment, container, false );
+       mFragmentManager = getChildFragmentManager();
+       mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById( R.id.map );
+       mDashboardFragment = new DashboardFragment();
+        mFragmentManager.beginTransaction().hide(mMapFragment).add(R.id.search_fragment_child_container, mDashboardFragment,LIST_FRAGMENT_TAG).commit();
+
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
+
+
+
+
+        mTabLayout =rootView.findViewById( R.id.search_tab_layout);
+        tabItem1 = rootView.findViewById( R.id.dashboard );
+        tabItem2 = rootView.findViewById( R.id.search );
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+              switch (tab.getPosition()){
+                  case 0:
+                      mFragmentManager.beginTransaction().hide(mMapFragment).show(mDashboardFragment).commit();
+                      break;
+                  case 1:
+                      mFragmentManager.beginTransaction().hide(mDashboardFragment).show(mMapFragment).commit();
+                      break;
+              }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         UserPost userPost = new UserPost( "A", "B", "C", "D", "E", true, "F", 37.0667, 38.7667 );
         UserPost userPost1 = new UserPost( "AA", "B", "C", "D", "E", true, "F", 31.0667, 39.7667 );
@@ -114,9 +173,8 @@ public class SearchFragment extends Fragment {
         mPostsAroundMeList.add( userPost5 );
 
 
-        FragmentManager fragmentManager = getChildFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById( R.id.map );
-        mapFragment.getMapAsync( new OnMapReadyCallback() {
+
+        mMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;

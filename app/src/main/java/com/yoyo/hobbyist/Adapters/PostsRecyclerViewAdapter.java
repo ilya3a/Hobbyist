@@ -62,7 +62,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerCallBack.onItemClicked(post);
+//                recyclerCallBack.onItemClicked(post);
             }
         });
     }
