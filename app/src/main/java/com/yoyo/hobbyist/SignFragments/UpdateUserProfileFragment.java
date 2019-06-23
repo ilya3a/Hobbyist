@@ -12,20 +12,25 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -571,10 +576,10 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             "Ziplining",
             "Zumba"
     };
-    String mName, mLastName, mAge, mCityName, mGender, mPictureUrl;
+    String mName, mLastName, mAge, mCityName, mGender, mPictureUrl,mUid;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
     EditText mName_et, mLastNameEt, mCityNameEt, mGenderEt, mDateOfBirthEt;
-    MaterialButton accept_btn;
+    Button accept_btn;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView gender_click, birth_day_click;
     CircleImageView mPhotoCiv;
@@ -599,18 +604,18 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mNameEtWrapper = rootView.findViewById(R.id.name_input_et_wrapper);
         mLastNameEtWrapper = rootView.findViewById(R.id.last_name_input_et_wrapper);
         mCityNameEtWrapper = rootView.findViewById(R.id.city_name_et_wrapper);
-        mGenderEtWrapper = rootView.findViewById(R.id.gender_et_wrapper);
-        mDateOfBirthEtWrapper = rootView.findViewById(R.id.date_of_birth_et_wrapper);
+        mDateOfBirthEt = rootView.findViewById(R.id.date_of_birth_et);
 
         mName_et = rootView.findViewById(R.id.name_input_et);
         mLastNameEt = rootView.findViewById(R.id.last_name_input_et);
         mCityNameEt = rootView.findViewById(R.id.city_name_et);
-        mGenderEt = rootView.findViewById(R.id.gender_et);
         mDateOfBirthEt = rootView.findViewById(R.id.date_of_birth_et);
+        mDateOfBirthEt.setInputType(InputType.TYPE_NULL);
 
         accept_btn = rootView.findViewById(R.id.accept_btn);
 
         mFirebaseUser = mFireBaseAuth.getCurrentUser();
+        mUid=mFirebaseUser.getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
         mPhotoCiv = rootView.findViewById(R.id.photoCiv);
@@ -619,9 +624,19 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_dropdown_item_1line,hobbys);
         mAutoCompleteTextView.setAdapter(adapter);
+        mGender="Male";
+        final Spinner spinner = rootView.findViewById(R.id.spinner);
+        final String[] gender = new String[]{
+                "Male","Female","Other"
+        };
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
+                getContext(),R.layout.spinner_item,gender
+        );
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner.setAdapter(spinnerArrayAdapter);
 
-        final String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_single_choice_array);
-        final TextInputLayout[] allFields = {mGenderEtWrapper, mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper};
+        final String[] singleChoiceItems = getResources().getStringArray(R.array.gender_array);
+        final TextInputLayout[] allFields = {mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper};
         final int itemSelected = -1;
 
         mPhotoCiv.setOnClickListener(new View.OnClickListener() {
@@ -650,7 +665,6 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         final DialogInterface.OnDismissListener onDismissListener = new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mDateOfBirthEtWrapper.clearFocus();
                 mDateOfBirthEt.clearFocus();
                 if (removeErrors_flag) {
                     clearErrors(allFields);
@@ -660,8 +674,8 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mNameEtWrapper.setOnTouchListener(errorCancel);
         mLastNameEtWrapper.setOnTouchListener(errorCancel);
         mCityNameEtWrapper.setOnTouchListener(errorCancel);
-        mDateOfBirthEtWrapper.setOnTouchListener(errorCancel);
-        mGenderEtWrapper.setOnTouchListener(errorCancel);
+
+
         mDateOfBirthEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -676,7 +690,6 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 Calendar.getInstance().get(Calendar.YEAR),
                                 Calendar.getInstance().get(Calendar.MONTH),
                                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-                        datePickerDialog.setOnDismissListener(onDismissListener);
                         datePickerDialog.show();
                         //}
                         break;
@@ -688,46 +701,63 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                 return false;
             }
         });
-        mGenderEt.setOnTouchListener(new View.OnTouchListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        lastTouchDown = System.currentTimeMillis();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        new AlertDialog.Builder(rootView.getContext())
-                                .setTitle("Select your gender")
-                                .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                                        mGender = singleChoiceItems[selectedIndex];
-                                    }
-                                })
-                                .setPositiveButton("Ok", null).setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                mGenderEtWrapper.getEditText().setText(mGender);
-                                mGenderEtWrapper.clearFocus();
-                                mGenderEt.clearFocus();
-                            }
-                        })
-                                .setNegativeButton("Cancel", null)
-                                .show();
-                        break;
-                    }
-                }
-                if (removeErrors_flag) {
-                    clearErrors(allFields);
-                }
-                return false;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mGender=gender[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
+//        mGenderEt.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN: {
+//                        lastTouchDown = System.currentTimeMillis();
+//                        break;
+//                    }
+//                    case MotionEvent.ACTION_UP: {
+//                        new AlertDialog.Builder(rootView.getContext())
+//                                .setTitle("Select your gender")
+//                                .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+//                                        mGender = singleChoiceItems[selectedIndex];
+//                                    }
+//                                })
+//                                .setPositiveButton("Ok", null).setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                            @Override
+//                            public void onDismiss(DialogInterface dialog) {
+//                                mGenderEtWrapper.getEditText().setText(mGender);
+//                                mGenderEtWrapper.clearFocus();
+//                                mGenderEt.clearFocus();
+//                            }
+//                        })
+//                                .setNegativeButton("Cancel", null)
+//                                .show();
+//                        break;
+//                    }
+//                }
+//                if (removeErrors_flag) {
+//                    clearErrors(allFields);
+//                }
+//                return false;
+//            }
+//        });
         accept_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Boolean continue_flag = true;
+                if (mDateOfBirthEt.getText().equals("Birthday"))
+                {
+                    continue_flag=false;
+                    Snackbar.make(rootView,"Pick a Birthday", Snackbar.LENGTH_SHORT).show();
+                }
                 ArrayList<TextInputLayout> ErrorFields = new ArrayList<>();
                 for (TextInputLayout edit : allFields) {
                     if (TextUtils.isEmpty(edit.getEditText().getText().toString())) {
@@ -747,7 +777,8 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 .setmCityName(mCityNameEtWrapper.getEditText().getText().toString())
                                 .setmLastName(mLastNameEtWrapper.getEditText().getText().toString())
                                 .setmAge(mAge).setmPictureUrl("")
-                                .setmGender(mGenderEtWrapper.getEditText().getText().toString()).setmUserToken(mFirebaseUser.getUid());
+                                .setmGender(mGender)
+                                .setmUserToken(mUid);
                         if (isPhotoExists) {
                             userProfile.setmPictureUrl(mPictureUrl);
                         }
@@ -784,12 +815,10 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month++;
         String date = dayOfMonth + "/" + month + "/" + year;
-        mDateOfBirthEtWrapper.getEditText().setText(date);
+        mDateOfBirthEt.setText(date);
         Integer tempAge;
         tempAge = (getAge(year, month, dayOfMonth));
         mAge = tempAge.toString();
-        //mDateOfBirthEtWrapper.clearFocus();
-        //mDateOfBirthEt.clearFocus();
     }
 
 

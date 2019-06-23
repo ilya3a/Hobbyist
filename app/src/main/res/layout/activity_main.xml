@@ -1,95 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
+
+        <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white_color"
+                app:tabIndicatorHeight="2dp"
+                app:tabTextColor="@color/tab_color">
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/dashboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_dashboard_icon_selected"
+
+                    />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_loupe_icon" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_chat_icon" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_menu_icon" />
+
+            </android.support.design.widget.TabLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            </android.support.v4.view.ViewPager>
+
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white_color"
-            app:tabTextColor="@color/tab_color">
+            android:layout_centerInParent="true"
+            android:text="LOGOUT" />
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/dashboard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_dashboard_icon_selected"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/swipe_left"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="3dp"
+            android:alpha="0.2"
+            android:rotation="180"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/swipe_indicator"
+            app:lottie_repeatCount="@android:integer/config_longAnimTime"
+            app:lottie_repeatMode="restart" />
 
-                />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_loupe_icon" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/chat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_chat_icon" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_menu_icon" />
-
-        </android.support.design.widget.TabLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v4.view.ViewPager>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/swipe_right"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="3dp"
+            android:alpha="0.2"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/swipe_indicator"
+            app:lottie_repeatCount="@android:integer/config_longAnimTime"
+            app:lottie_repeatMode="restart" />
 
 
-    </LinearLayout>
-
-    <Button
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="LOGOUT"
-        android:id="@+id/logout"/>
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/swipe_left"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="3dp"
-        android:visibility="gone"
-        android:rotation="180"
-        android:alpha="0.2"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/swipe_indicator"
-        app:lottie_repeatMode="restart"
-        app:lottie_repeatCount="@android:integer/config_longAnimTime"/>
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/swipe_right"
-        android:layout_width="40dp"
-        android:alpha="0.2"
-        android:layout_height="20dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="3dp"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/swipe_indicator"
-        app:lottie_repeatMode="restart"
-        app:lottie_repeatCount="@android:integer/config_longAnimTime"/>
-
-
-</RelativeLayout>
+        android:layout_marginBottom="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/ic_location_on_black_24dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="normal"
+        app:rippleColor="@color/cardview_dark_background"
+        app:layout_anchor="@id/pager"
+        app:layout_anchorGravity="bottom|right" />
+</android.support.design.widget.CoordinatorLayout>

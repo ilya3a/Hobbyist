@@ -49,6 +49,8 @@ public class UserPost {
         this.longitude = longitude;
     }
 
+
+
     public String getAge() {
         return age;
     }
@@ -56,6 +58,7 @@ public class UserPost {
     public void setAge(String age) {
         this.age = age;
     }
+
 
 
     public String getUserName() {
