@@ -47,6 +47,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
+import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,40 +69,41 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
     public void updateUserImage() {
         final StorageReference mStorageRef;
-        mStorageRef = FirebaseStorage.getInstance().getReference("images/river.jpg");
+        mStorageRef = FirebaseStorage.getInstance().getReference( "images/river.jpg" );
         isPhotoExists = true;
-        mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
-        Uri uri = Uri.fromFile(mFile);
-        mStorageRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        mPhotoCiv.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
+        Uri uri = Uri.fromFile( mFile );
+        mStorageRef.putFile( uri ).addOnSuccessListener( new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                mStorageRef.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         mPictureUrl = uri.toString();
                     }
-                });
-                mStorageRef.child("images/river.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                } );
+                mStorageRef.child( "images/river.jpg" ).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_LONG).show();
-                        Glide.with(getContext()).load(uri).into(mPhotoCiv);
+                        Toast.makeText( getContext(), uri.toString(), Toast.LENGTH_LONG ).show();
+                        Glide.with( getContext() ).load( uri ).into( mPhotoCiv );
 
                     }
-                });
+                } );
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        } ).addOnFailureListener( new OnFailureListener() {
 
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "sdfsdfsdfsdf", Toast.LENGTH_SHORT).show();
+                Toast.makeText( getContext(), "sdfsdfsdfsdf", Toast.LENGTH_SHORT ).show();
             }
-        });
+        } );
 
 //        mFireBaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build());
 
     }
-    String[] hobbys ={
+
+    String[] hobbys = {
             "3D printing",
             "Acting",
             "Aeromodeling",
@@ -576,7 +578,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             "Ziplining",
             "Zumba"
     };
-    String mName, mLastName, mAge, mCityName, mGender, mPictureUrl,mUid;
+    String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
     EditText mName_et, mLastNameEt, mCityNameEt, mGenderEt, mDateOfBirthEt;
     Button accept_btn;
@@ -598,66 +600,66 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_update_user_profile, container, false);
+        final View rootView = inflater.inflate( R.layout.fragment_update_user_profile, container, false );
         mFireBaseAuth = FirebaseAuth.getInstance();
 
-        mNameEtWrapper = rootView.findViewById(R.id.name_input_et_wrapper);
-        mLastNameEtWrapper = rootView.findViewById(R.id.last_name_input_et_wrapper);
-        mCityNameEtWrapper = rootView.findViewById(R.id.city_name_et_wrapper);
-        mDateOfBirthEt = rootView.findViewById(R.id.date_of_birth_et);
+        mNameEtWrapper = rootView.findViewById( R.id.name_input_et_wrapper );
+        mLastNameEtWrapper = rootView.findViewById( R.id.last_name_input_et_wrapper );
+        mCityNameEtWrapper = rootView.findViewById( R.id.city_name_et_wrapper );
+        mDateOfBirthEt = rootView.findViewById( R.id.date_of_birth_et );
 
-        mName_et = rootView.findViewById(R.id.name_input_et);
-        mLastNameEt = rootView.findViewById(R.id.last_name_input_et);
-        mCityNameEt = rootView.findViewById(R.id.city_name_et);
-        mDateOfBirthEt = rootView.findViewById(R.id.date_of_birth_et);
-        mDateOfBirthEt.setInputType(InputType.TYPE_NULL);
+        mName_et = rootView.findViewById( R.id.name_input_et );
+        mLastNameEt = rootView.findViewById( R.id.last_name_input_et );
+        mCityNameEt = rootView.findViewById( R.id.city_name_et );
+        mDateOfBirthEt = rootView.findViewById( R.id.date_of_birth_et );
+        mDateOfBirthEt.setInputType( InputType.TYPE_NULL );
 
-        accept_btn = rootView.findViewById(R.id.accept_btn);
+        accept_btn = rootView.findViewById( R.id.accept_btn );
 
         mFirebaseUser = mFireBaseAuth.getCurrentUser();
-        mUid=mFirebaseUser.getUid();
+        mUid = mFirebaseUser.getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-        mPhotoCiv = rootView.findViewById(R.id.photoCiv);
+        mPhotoCiv = rootView.findViewById( R.id.photoCiv );
 
-        mAutoCompleteTextView = rootView.findViewById(R.id.auto_complete_tv);
+        mAutoCompleteTextView = rootView.findViewById( R.id.auto_complete_tv );
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_dropdown_item_1line,hobbys);
-        mAutoCompleteTextView.setAdapter(adapter);
-        mGender="Male";
-        final Spinner spinner = rootView.findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_dropdown_item_1line, hobbys );
+        mAutoCompleteTextView.setAdapter( adapter );
+        mGender = "Male";
+        final Spinner spinner = rootView.findViewById( R.id.spinner );
         final String[] gender = new String[]{
-                "Male","Female","Other"
+                "Male", "Female", "Other"
         };
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
-                getContext(),R.layout.spinner_item,gender
+                getContext(), R.layout.spinner_item, gender
         );
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
-        spinner.setAdapter(spinnerArrayAdapter);
+        spinnerArrayAdapter.setDropDownViewResource( R.layout.spinner_item );
+        spinner.setAdapter( spinnerArrayAdapter );
 
-        final String[] singleChoiceItems = getResources().getStringArray(R.array.gender_array);
+        final String[] singleChoiceItems = getResources().getStringArray( R.array.gender_array );
         final TextInputLayout[] allFields = {mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper};
         final int itemSelected = -1;
 
-        mPhotoCiv.setOnClickListener(new View.OnClickListener() {
+        mPhotoCiv.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
-                mFile = new File(Environment.getExternalStorageDirectory(), currentTime + "Hobbyist.jpg");
+                mFile = new File( Environment.getExternalStorageDirectory(), currentTime + "Hobbyist.jpg" );
 
-                imageUri = FileProvider.getUriForFile(getContext(),
+                imageUri = FileProvider.getUriForFile( getContext(),
                         getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
-                        mFile);
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                updateUserProfileFragmentListener.updateImage(intent, mPhotoCiv);
+                        mFile );
+                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
+                intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
+                updateUserProfileFragmentListener.updateImage( intent, mPhotoCiv );
             }
-        });
+        } );
         View.OnTouchListener errorCancel = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 for (TextInputLayout edit : allFields) {
-                    edit.setErrorEnabled(false);
+                    edit.setErrorEnabled( false );
                 }
                 return false;
             }
@@ -667,16 +669,16 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             public void onDismiss(DialogInterface dialog) {
                 mDateOfBirthEt.clearFocus();
                 if (removeErrors_flag) {
-                    clearErrors(allFields);
+                    clearErrors( allFields );
                 }
             }
         };
-        mNameEtWrapper.setOnTouchListener(errorCancel);
-        mLastNameEtWrapper.setOnTouchListener(errorCancel);
-        mCityNameEtWrapper.setOnTouchListener(errorCancel);
+        mNameEtWrapper.setOnTouchListener( errorCancel );
+        mLastNameEtWrapper.setOnTouchListener( errorCancel );
+        mCityNameEtWrapper.setOnTouchListener( errorCancel );
 
 
-        mDateOfBirthEt.setOnTouchListener(new View.OnTouchListener() {
+        mDateOfBirthEt.setOnTouchListener( new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -685,33 +687,33 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         break;
                     case MotionEvent.ACTION_UP:
                         //if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHHOLD) {
-                        Log.w("App", "You clicked!");
-                        DatePickerDialog datePickerDialog = new DatePickerDialog(rootView.getContext(), UpdateUserProfileFragment.this,
-                                Calendar.getInstance().get(Calendar.YEAR),
-                                Calendar.getInstance().get(Calendar.MONTH),
-                                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                        Log.w( "App", "You clicked!" );
+                        DatePickerDialog datePickerDialog = new DatePickerDialog( rootView.getContext(), UpdateUserProfileFragment.this,
+                                Calendar.getInstance().get( Calendar.YEAR ),
+                                Calendar.getInstance().get( Calendar.MONTH ),
+                                Calendar.getInstance().get( Calendar.DAY_OF_MONTH ) );
                         datePickerDialog.show();
                         //}
                         break;
 
                 }
                 if (removeErrors_flag) {
-                    clearErrors(allFields);
+                    clearErrors( allFields );
                 }
                 return false;
             }
-        });
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        } );
+        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mGender=gender[position];
+                mGender = gender[position];
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        } );
 
 //        mGenderEt.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
@@ -749,47 +751,46 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 //                return false;
 //            }
 //        });
-        accept_btn.setOnClickListener(new View.OnClickListener() {
+        accept_btn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Boolean continue_flag = true;
-                if (mDateOfBirthEt.getText().equals("Birthday"))
-                {
-                    continue_flag=false;
-                    Snackbar.make(rootView,"Pick a Birthday", Snackbar.LENGTH_SHORT).show();
+                if (mDateOfBirthEt.getText().equals( "Birthday" )) {
+                    continue_flag = false;
+                    Snackbar.make( rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT ).show();
                 }
                 ArrayList<TextInputLayout> ErrorFields = new ArrayList<>();
                 for (TextInputLayout edit : allFields) {
-                    if (TextUtils.isEmpty(edit.getEditText().getText().toString())) {
+                    if (TextUtils.isEmpty( edit.getEditText().getText().toString() )) {
                         // EditText was empty
                         continue_flag = false;
                         removeErrors_flag = true;
-                        ErrorFields.add(edit);//add empty Edittext only in this ArayList
+                        ErrorFields.add( edit );//add empty Edittext only in this ArayList
                         for (int i = ErrorFields.size() - 1; i >= 0; i--) {
-                            TextInputLayout currentField = ErrorFields.get(i);
-                            currentField.setError(getResources().getString(R.string.this_field_required));
+                            TextInputLayout currentField = ErrorFields.get( i );
+                            currentField.setError( getResources().getString( R.string.this_field_required ) );
                             currentField.requestFocus();
                         }
                     }
                     if (continue_flag) {
                         UserProfile userProfile = new UserProfile();
-                        userProfile.setmName(mNameEtWrapper.getEditText().getText().toString())
-                                .setmCityName(mCityNameEtWrapper.getEditText().getText().toString())
-                                .setmLastName(mLastNameEtWrapper.getEditText().getText().toString())
-                                .setmAge(mAge).setmPictureUrl("")
-                                .setmGender(mGender)
-                                .setmUserToken(mUid);
+                        userProfile.setmName( mNameEtWrapper.getEditText().getText().toString() )
+                                .setmCityName( mCityNameEtWrapper.getEditText().getText().toString() )
+                                .setmLastName( mLastNameEtWrapper.getEditText().getText().toString() )
+                                .setmAge( mAge ).setmPictureUrl( "" )
+                                .setmGender( mGender )
+                                .setmUserToken( mUid );
                         if (isPhotoExists) {
-                            userProfile.setmPictureUrl(mPictureUrl);
+                            userProfile.setmPictureUrl( mPictureUrl );
                         }
-                        mDatabaseReference.child("appUsers").child(userProfile.getmUserToken()).setValue(userProfile);
-                        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mNameEtWrapper.getEditText().getText().toString() + mLastNameEtWrapper.getEditText().getText().toString()).build());
-
-                        updateUserProfileFragmentListener.afterUpdateUserUpdate(true);
+                        mDatabaseReference.child( "appUsers" ).child( userProfile.getmUserToken() ).setValue( userProfile );
+                        mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().setDisplayName( mNameEtWrapper.getEditText().getText().toString() + mLastNameEtWrapper.getEditText().getText().toString() ).build() );
+                        DataStore.getInstance( getContext() ).saveUser( userProfile );
+                        updateUserProfileFragmentListener.afterUpdateUserUpdate( true );
                     }
                 }
             }
-        });
+        } );
 
 
         return rootView;
@@ -798,11 +799,11 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+        super.onAttach( context );
         try {
             updateUserProfileFragmentListener = (UpdateUserProfileFragmentListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement the interface : updateUserProfileFragmentListener");
+            throw new ClassCastException( "Activity must implement the interface : updateUserProfileFragmentListener" );
         }
     }
 
@@ -815,9 +816,9 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month++;
         String date = dayOfMonth + "/" + month + "/" + year;
-        mDateOfBirthEt.setText(date);
+        mDateOfBirthEt.setText( date );
         Integer tempAge;
-        tempAge = (getAge(year, month, dayOfMonth));
+        tempAge = (getAge( year, month, dayOfMonth ));
         mAge = tempAge.toString();
     }
 
@@ -826,19 +827,19 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     public static Integer getAge(int year, int month, int dayOfMonth) {
         Calendar today = Calendar.getInstance();
 
-        int curYear = today.get(Calendar.YEAR);
+        int curYear = today.get( Calendar.YEAR );
         int dobYear = year;
 
         int age = curYear - dobYear;
 
         // if dob is month or day is behind today's month or day
         // reduce age by 1
-        int curMonth = today.get(Calendar.MONTH);
+        int curMonth = today.get( Calendar.MONTH );
         int dobMonth = month;
         if (dobMonth > curMonth) { // this year can't be counted!
             age--;
         } else if (dobMonth == curMonth) { // same month? check for day
-            int curDay = today.get(Calendar.DAY_OF_MONTH);
+            int curDay = today.get( Calendar.DAY_OF_MONTH );
             int dobDay = dayOfMonth;
             if (dobDay > curDay) { // this year can't be counted!
                 age--;
@@ -850,7 +851,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     void clearErrors(TextInputLayout[] allFields) {
         removeErrors_flag = false;
         for (TextInputLayout edit : allFields) {
-            edit.setErrorEnabled(false);
+            edit.setErrorEnabled( false );
         }
     }
 }

@@ -1,111 +1,120 @@
 package com.yoyo.hobbyist.DataModels;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class UserPost {
-    String userName;
+
     String userProfilePicUrl;
-    String userToken;
-    String birthDate;
-    String age;
+    String userName;
+    String cityName;
     boolean isOnline;
-    String content;
+    String date;
+    String hobby;
+    String userToken;
+    String postDescription;
     double latitude;
     double longitude;
 
-
-    public UserPost() {
-    }
-
-    ;
-
-    public UserPost(String userName, String userProfilePicUrl, String userToken, String birthDate, String age, boolean isOnline, String content, double latitude, double longitude) {
-        this.userName = userName;
+    public UserPost(String userProfilePicUrl, String userName, String cityName, boolean isOnline, String date, String hobby, String userToken, String postDescription, double latitude, double longitude) {
         this.userProfilePicUrl = userProfilePicUrl;
-        this.userToken = userToken;
-        this.birthDate = birthDate;
-        this.age = age;
-        this.isOnline = isOnline;
-        this.content = content;
-        this.latitude = latitude;
-        this.longitude = longitude;
-
-
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
         this.userName = userName;
+        this.cityName = cityName;
+        this.isOnline = isOnline;
+        this.date = date;
+        this.hobby = hobby;
+        this.userToken = userToken;
+        this.postDescription = postDescription;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getUserProfilePicUrl() {
         return userProfilePicUrl;
     }
 
-    public void setUserProfilePicUrl(String userProfilePicUrl) {
+    public UserPost setUserProfilePicUrl(String userProfilePicUrl) {
         this.userProfilePicUrl = userProfilePicUrl;
+        return this;
+
     }
 
-    public String getUserToken() {
-        return userToken;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
+    public UserPost setUserName(String userName) {
+        this.userName = userName;
+        return this;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public UserPost setCityName(String cityName) {
+        this.cityName = cityName;
+        return this;
     }
 
     public boolean isOnline() {
         return isOnline;
     }
 
-    public void setOnline(boolean online) {
+    public UserPost setOnline(boolean online) {
         isOnline = online;
+        return this;
     }
 
-    public String getContent() {
-        return content;
+    public String getDate() {
+        return date;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public UserPost setDate(String date) {
+        this.date = date;
+        return this;
+    }
+
+    public String getHobby() {
+        return hobby;
+
+    }
+
+    public UserPost setHobby(String hobby) {
+        this.hobby = hobby;
+        return this;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public UserPost setUserToken(String userToken) {
+        this.userToken = userToken;
+        return this;
+    }
+
+    public String getPostDescription() {
+        return postDescription;
+    }
+
+    public UserPost setPostDescription(String postDescription) {
+        this.postDescription = postDescription;
+        return this;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public UserPost setLatitude(double latitude) {
+        this.latitude = latitude;
+        return this;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public UserPost setLongitude(double longitude) {
+        this.longitude = longitude;
+        return this;
     }
 }

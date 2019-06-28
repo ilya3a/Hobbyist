@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,8 +29,13 @@ import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
-
+    Context context;
+    PostsRecyclerViewAdapter mAdapter;
+    ArrayList<UserPost> userPosts = new ArrayList<>();
+    ArrayList<UserPost> userPostsList = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mDatabaseReference;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -53,20 +60,27 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate( R.layout.dashboard_fragment, container, false );
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference();
+
         RecyclerView recyclerView = rootView.findViewById( R.id.dash_recycler );
+        recyclerView.setHasFixedSize(true);
+        mAdapter = new PostsRecyclerViewAdapter(userPosts, context);
+
 
         ArrayList<UserPost> userPosts = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            userPosts.add(new UserPost( "A","B","C","D","E",true,"F",1,2));
+            userPosts.add( new UserPost( "A", "B", "C", true, "D", "E", "F", "G", 1, 2 ) );
         }
-        PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter(userPosts, getContext());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(adapter);
+
+        PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter( userPosts, getContext() );
+        recyclerView.setHasFixedSize( true );
+        recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
+        recyclerView.setAdapter( adapter );
         return rootView;
     }
 
