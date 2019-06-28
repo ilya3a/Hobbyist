@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -59,14 +60,12 @@ public class SearchFragment extends Fragment {
     TabItem tabItem2;
     TabLayout mTabLayout;
 
-
     FragmentManager mFragmentManager;
     SupportMapFragment mMapFragment;
     DashboardFragment mDashboardFragment;
 
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabaseReference;
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,46 +103,50 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+//        getChildFragmentManager().beginTransaction().add( R.id.search_fragment_child_container, mDashboardFragment, LIST_FRAGMENT_TAG ).commit();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
-        getChildFragmentManager().beginTransaction().remove(mDashboardFragment).commit();
+        getChildFragmentManager().beginTransaction().remove( mDashboardFragment ).commit();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate( R.layout.search_fragment, container, false );
-       mFragmentManager = getChildFragmentManager();
-       mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById( R.id.map );
-       mDashboardFragment = new DashboardFragment();
-        mFragmentManager.beginTransaction().hide(mMapFragment).add(R.id.search_fragment_child_container, mDashboardFragment,LIST_FRAGMENT_TAG).commit();
-
+        mFragmentManager = getChildFragmentManager();
+        mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById( R.id.map );
+        mDashboardFragment = new DashboardFragment();
+        mFragmentManager.beginTransaction().hide( mMapFragment ).add( R.id.search_fragment_child_container, mDashboardFragment, LIST_FRAGMENT_TAG ).commit();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
-
-
-
-        mTabLayout =rootView.findViewById( R.id.search_tab_layout);
+        mTabLayout = rootView.findViewById( R.id.search_tab_layout );
         tabItem1 = rootView.findViewById( R.id.dashboard );
         tabItem2 = rootView.findViewById( R.id.search );
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-              switch (tab.getPosition()){
-                  case 0:
-                      mFragmentManager.beginTransaction().hide(mMapFragment).show(mDashboardFragment).commit();
-                      break;
-                  case 1:
-                      mFragmentManager.beginTransaction().hide(mDashboardFragment).show(mMapFragment).commit();
-                      break;
-              }
+                switch (tab.getPosition()) {
+                    case 0:
+                        mFragmentManager.beginTransaction().hide( mMapFragment ).show( mDashboardFragment ).commit();
+                        break;
+                    case 1:
+                        mFragmentManager.beginTransaction().hide( mDashboardFragment ).show( mMapFragment ).commit();
+                        break;
+                }
 
             }
 
@@ -156,25 +159,9 @@ public class SearchFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        } );
 
-        UserPost userPost = new UserPost( "A", "B", "C", "D", "E", true, "F", 37.0667, 38.7667 );
-        UserPost userPost1 = new UserPost( "AA", "B", "C", "D", "E", true, "F", 31.0667, 39.7667 );
-        UserPost userPost2 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 32.0667, 37.7667 );
-        UserPost userPost3 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 33.0667, 35.7667 );
-        UserPost userPost4 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 34.0667, 33.7667 );
-        UserPost userPost5 = new UserPost( "AAA", "B", "C", "D", "E", true, "F", 35.0667, 31.7667 );
-
-        mPostsAroundMeList.add( userPost );
-        mPostsAroundMeList.add( userPost1 );
-        mPostsAroundMeList.add( userPost2 );
-        mPostsAroundMeList.add( userPost3 );
-        mPostsAroundMeList.add( userPost4 );
-        mPostsAroundMeList.add( userPost5 );
-
-
-
-        mMapFragment.getMapAsync(new OnMapReadyCallback() {
+        mMapFragment.getMapAsync( new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;

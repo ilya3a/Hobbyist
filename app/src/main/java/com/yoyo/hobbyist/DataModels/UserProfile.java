@@ -7,13 +7,10 @@ public class UserProfile {
     private String mName;
     private String mEmail;
     private String mLastName;
-
     private  String mYear;
     private  String mMonth;
     private  String mDay;
-
     private String mAge;
-
     private  String mPictureUrl;
     private  String mUserAboutMe;
     private  String mCityName;

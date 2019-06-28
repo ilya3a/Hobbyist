@@ -6,6 +6,9 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="primaryTextColor">#000000</color>
     <color name="red">#FF0000</color>
+    <color name="grey">#DCDCDC</color>
+    <color name="online">#2FCC1D</color>
+    <color name="offline">#F50000</color>
 
 
 
