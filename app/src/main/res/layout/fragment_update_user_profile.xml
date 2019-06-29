@@ -27,7 +27,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="5dp">
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,13 +67,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="5dp">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
 
             android:id="@+id/date_of_birth_et"
@@ -95,38 +94,69 @@
 
 </LinearLayout>
 
-
-
-        <android.support.design.widget.TextInputLayout
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/city_name_et_wrapper"
+        android:hint="City name"
+        android:textColorHint="#fff"
+        android:layout_marginTop="5dp"
+        android:layout_margin="5dp">
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/city_name_et_wrapper"
-            android:hint="City name"
-            android:textColorHint="#fff"
-            android:layout_marginTop="10dp"
-            android:layout_margin="5dp">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/city_name_et"
-                android:inputType="text"
-                android:textColor="#fff"/>
-        </android.support.design.widget.TextInputLayout>
+            android:id="@+id/city_name_et"
+            android:inputType="text"
+            android:textColor="#fff"/>
+    </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chose all your hobbys"
-            android:textColor="#ffff"
-            android:textSize="20sp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            />
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/auto_complete_tv"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chose all your hobbys"
+        android:textColor="#ffff"
+        android:textSize="20sp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
+        />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_complete_tv"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="3dp"/>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="add"
+        android:padding="10dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:id="@+id/add_btn"
+        />
+</LinearLayout>
+<com.nex3z.flowlayout.FlowLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:id="@+id/flow_box"
+    app:flChildSpacing="15dp"
+    app:flRowSpacing="7dp"
+    app:flMaxRows="4"
+    app:flRowVerticalGravity="center"
+    app:flRtl="false">
+
+</com.nex3z.flowlayout.FlowLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -155,10 +185,7 @@
 
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="50dp"
-                android:background="#009a9a"
-                android:padding="16dp"
-                android:textColor="#d9e5f3"
-                android:textStyle="bold" />
+               style="@style/AppTheme.RoundedCornerMaterialButton" />
         </LinearLayout>
 
     </LinearLayout>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,12 +47,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.nex3z.flowlayout.FlowLayout;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -204,7 +209,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             "Collecting Hats",
             "Collecting Music Albums",
             "Collecting RPM Records",
-            "Collecting Sports Cards (Baseball, Football, Basketball, Hockey)",
+            "Collecting Sports Cards",
             "Collecting Swords",
             "Color guard",
             "Coloring",
@@ -282,7 +287,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             "Frisbee Golf – Frolf",
             "Gambling",
             "Games",
-            "Gaming (tabletop games and role-playing games)",
+            "Gaming ",
             "Garage Saleing",
             "Gardening",
             "Genealogy",
@@ -581,7 +586,9 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
     EditText mName_et, mLastNameEt, mCityNameEt, mGenderEt, mDateOfBirthEt;
-    Button accept_btn;
+    ArrayList<String> hobbyList;
+    Button accept_btn,add_btn;
+    FlowLayout flowLayout;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView gender_click, birth_day_click;
     CircleImageView mPhotoCiv;
@@ -615,6 +622,8 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mDateOfBirthEt.setInputType( InputType.TYPE_NULL );
 
         accept_btn = rootView.findViewById( R.id.accept_btn );
+        add_btn=rootView.findViewById(R.id.add_btn);
+        flowLayout=rootView.findViewById(R.id.flow_box);
 
         mFirebaseUser = mFireBaseAuth.getCurrentUser();
         mUid = mFirebaseUser.getUid();
@@ -623,7 +632,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mPhotoCiv = rootView.findViewById( R.id.photoCiv );
 
         mAutoCompleteTextView = rootView.findViewById( R.id.auto_complete_tv );
-
+        hobbyList = new ArrayList<>();
         ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_dropdown_item_1line, hobbys );
         mAutoCompleteTextView.setAdapter( adapter );
         mGender = "Male";
@@ -631,15 +640,39 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         final String[] gender = new String[]{
                 "Male", "Female", "Other"
         };
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
-                getContext(), R.layout.spinner_item, gender
-        );
-        spinnerArrayAdapter.setDropDownViewResource( R.layout.spinner_item );
-        spinner.setAdapter( spinnerArrayAdapter );
 
-        final String[] singleChoiceItems = getResources().getStringArray( R.array.gender_array );
+        add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String hobby=mAutoCompleteTextView.getEditableText().toString();
+                if (!Arrays.asList(hobbys).contains(hobby)){
+                    Snackbar.make(rootView, "Cant find the hobby", Snackbar.LENGTH_SHORT ).show();
+                    mAutoCompleteTextView.setText("");
+                }
+                else
+                {
+                    if (hobbyList.contains(hobby))
+                    {
+                        Toast.makeText(getContext(), "You already choose this hobby " , Toast.LENGTH_SHORT).show();
+                        mAutoCompleteTextView.setText("");
+                    }
+                    else {
+                        TextView textView = new TextView(getContext());
+                        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        textView.setText(hobby);
+                        textView.setPadding(4, 4, 4, 4);
+                        textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        textView.setTextSize(18);
+                        textView.setBackground(getResources().getDrawable(R.drawable.label_bg2));
+                        flowLayout.addView(textView);
+                        mAutoCompleteTextView.setText("");
+                        hobbyList.add(hobby);
+                    }
+                }
+            }
+        });
+
         final TextInputLayout[] allFields = {mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper};
-        final int itemSelected = -1;
 
         mPhotoCiv.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -715,50 +748,10 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             }
         } );
 
-//        mGenderEt.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN: {
-//                        lastTouchDown = System.currentTimeMillis();
-//                        break;
-//                    }
-//                    case MotionEvent.ACTION_UP: {
-//                        new AlertDialog.Builder(rootView.getContext())
-//                                .setTitle("Select your gender")
-//                                .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-//                                        mGender = singleChoiceItems[selectedIndex];
-//                                    }
-//                                })
-//                                .setPositiveButton("Ok", null).setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                            @Override
-//                            public void onDismiss(DialogInterface dialog) {
-//                                mGenderEtWrapper.getEditText().setText(mGender);
-//                                mGenderEtWrapper.clearFocus();
-//                                mGenderEt.clearFocus();
-//                            }
-//                        })
-//                                .setNegativeButton("Cancel", null)
-//                                .show();
-//                        break;
-//                    }
-//                }
-//                if (removeErrors_flag) {
-//                    clearErrors(allFields);
-//                }
-//                return false;
-//            }
-//        });
         accept_btn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Boolean continue_flag = true;
-                if (mDateOfBirthEt.getText().equals( "Birthday" )) {
-                    continue_flag = false;
-                    Snackbar.make( rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT ).show();
-                }
                 ArrayList<TextInputLayout> ErrorFields = new ArrayList<>();
                 for (TextInputLayout edit : allFields) {
                     if (TextUtils.isEmpty( edit.getEditText().getText().toString() )) {
@@ -772,6 +765,15 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                             currentField.requestFocus();
                         }
                     }
+                    if (mDateOfBirthEt.getText().equals( "Birthday" )) {
+                        continue_flag = false;
+                        Snackbar.make( rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT ).show();
+                    }
+                    if (hobbyList.isEmpty())
+                    {
+                        continue_flag=false;
+                        Toast.makeText(getContext(), "add at least one hobby ", Toast.LENGTH_SHORT).show();
+                    }
                     if (continue_flag) {
                         UserProfile userProfile = new UserProfile();
                         userProfile.setmName( mNameEtWrapper.getEditText().getText().toString() )
@@ -779,6 +781,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 .setmLastName( mLastNameEtWrapper.getEditText().getText().toString() )
                                 .setmAge( mAge ).setmPictureUrl( "" )
                                 .setmGender( mGender )
+                                .setmHobbylist(hobbyList)
                                 .setmUserToken( mUid );
                         if (isPhotoExists) {
                             userProfile.setmPictureUrl( mPictureUrl );

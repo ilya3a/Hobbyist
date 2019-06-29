@@ -33,9 +33,9 @@ import com.himanshurawat.imageworker.ImageWorker;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.SignFragments.NewSignInScreenFragment;
-import com.yoyo.hobbyist.SignFragments.SignButtonsFragment;
+
 import com.yoyo.hobbyist.SignFragments.SignUpFragment;
-import com.yoyo.hobbyist.SignFragments.SigninFragment;
+
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 
 import java.security.Permission;
@@ -64,7 +64,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     FirebaseUser mCurrentUser;
 
     FragmentManager mFragmentManager;
-    SigninFragment mLoginFragment;
+    //SigninFragment mLoginFragment;
     SignUpFragment mSignUpFragment;
     LottieAnimationView mLottieAnimationView;
     NewSignInScreenFragment mNewSignInScreenFragment;
@@ -579,7 +579,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             mLottieAnimationView = findViewById(R.id.lottie_animation);
             mLottieAnimationView.setAnimation(R.raw.animation_test);
             mFragmentManager = getSupportFragmentManager();
-            mLoginFragment = new SigninFragment();
+            //mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
             mNewSignInScreenFragment=new NewSignInScreenFragment();
             //add the new mainlogin

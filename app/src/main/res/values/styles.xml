@@ -10,5 +10,11 @@
 
     </style>
 
+    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="android:color">@color/btn_color</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
 
 </resources>

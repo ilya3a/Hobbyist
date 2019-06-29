@@ -103,7 +103,7 @@ public class SignUpFragment extends Fragment {
                 {
                     password_et_wraper.setError("Passwords dont match");
                 }
-                else if (!isEmailValid(email))
+                if (!isEmailValid(email))
                 {
                     Snackbar.make(rootView,"Enter a valid email", Snackbar.LENGTH_SHORT).show();
                     email_et_wraper.setError("Invalid Email");
