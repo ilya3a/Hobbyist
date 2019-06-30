@@ -783,6 +783,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 .setmGender( mGender )
                                 .setmHobbylist(hobbyList)
                                 .setmUserToken( mUid );
+
                         if (isPhotoExists) {
                             userProfile.setmPictureUrl( mPictureUrl );
                         }

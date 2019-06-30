@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -66,6 +67,7 @@ public class NewSignInScreenFragment extends Fragment {
         mEmail = mSp.getString("userEmail", "noEmail");
         mPassword = mSp.getString("userPassword", "noPassword");
         //final InternetConnection connection = new InternetConnection();
+        final LottieAnimationView mLottieTv=rootView.findViewById(R.id.lottie_tv);
 
         if (!mEmail.equals("noEmail") && !mPassword.equals("noPassword")) {
             email_et_wraper.getEditText().setText(mEmail);
@@ -94,12 +96,15 @@ public class NewSignInScreenFragment extends Fragment {
                         Snackbar.make(rootView, "Email or Password are incorrect", Snackbar.LENGTH_SHORT)
                         .show();
                     } else {
+                        mLottieTv.playAnimation();
+                        mLottieTv.setVisibility(View.VISIBLE);
+                        login_fragment_btn.setVisibility(View.GONE);
                         mFireBaseAuth.signInWithEmailAndPassword(useremail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Snackbar.make(rootView, "you are now lobed in", Snackbar.LENGTH_SHORT);
                                     FirebaseUser user = mFireBaseAuth.getCurrentUser();
+                                    mLottieTv.cancelAnimation();
                                     mListener.afterSignInUserUpdate(user);
                                     mSpEditor.putString("userEmail", useremail).commit();
                                     mSpEditor.putString("userPassword", password).commit();
@@ -107,6 +112,9 @@ public class NewSignInScreenFragment extends Fragment {
 
                                 } else {
                                     Snackbar.make(rootView, "Email or Password are incorrect", Snackbar.LENGTH_SHORT).show();
+                                    mLottieTv.cancelAnimation();
+                                    login_fragment_btn.setVisibility(View.VISIBLE);
+                                    mLottieTv.setVisibility(View.GONE);
                                 }
                             }
                         });

@@ -594,25 +594,6 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         finish();
     }
 
-    private void logIn() {
-        mFireBaseAuth.signInWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    mCurrentUser = mFireBaseAuth.getCurrentUser();
-                } else {
-                    Snackbar.make(mCoordinatorLayout, "Could not auto connect", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    logIn();
-                                }
-                            }).show();
-                }
-            }
-        });
-    }
-
     @Override
     public void afterSignInUserUpdate(final FirebaseUser user) {
         if (user.getDisplayName().equals("null")) {
@@ -662,21 +643,6 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-//    @Override
-//    public void SignButtonsOnClick(int btnId) {
-//        switch (btnId) {
-//            case R.id.sign_in_btn: {
-//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mLoginFragment, LOGIN_FRAGMENT_TAG)
-//                        .addToBackStack(null).commit();
-//                break;
-//            }
-//            case R.id.sign_up_btn: {
-//                mFragmentManager.beginTransaction().remove(mSignBottnsFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
-//                        .addToBackStack(null).commit();
-//                break;
-//            }
-//        }
-//    }
 
     @Override
     public void afterUpdateUserUpdate(Boolean isUserUpdated) {

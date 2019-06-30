@@ -14,15 +14,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
+import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.CreatePostFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
+import com.yoyo.hobbyist.Utilis.DataStore;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
@@ -37,7 +47,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     TabItem tabItem3;
     TabItem tabItem4;
     FirebaseAuth mFireBaseAuth;
+    UserProfile mUserProfile;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseUser mFireBaseUser;
+    DataStore mDataStore;
 //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
@@ -48,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
         mFragmentManager = getSupportFragmentManager();
+        mFireBaseAuth = FirebaseAuth.getInstance();
+        mFireBaseUser = mFireBaseAuth.getCurrentUser();
         mFab = findViewById( R.id.fab );
         mFab.setOnClickListener( new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -99,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //        } );
 
 
-        mFireBaseAuth = FirebaseAuth.getInstance();
+
+
         mAdapter = new
 
                 PagerAdapter( getSupportFragmentManager(), mTabLayout.
@@ -157,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 }
             }
 
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
@@ -169,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         } );
 
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
+        getUserProfiles();
     }
 
 
@@ -198,5 +216,27 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         super.onStop();
         mFireBaseAuth.removeAuthStateListener( mAuthStateListener );
     }
+    public void getUserProfiles() {
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
+        Query usersQuery = mDatabaseReference.orderByKey();
+
+        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+                mDataStore = DataStore.getInstance(getApplicationContext());
+                mDataStore.saveUser(mUserProfile);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 }
 
