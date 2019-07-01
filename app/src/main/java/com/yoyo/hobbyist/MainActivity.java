@@ -1,9 +1,12 @@
 package com.yoyo.hobbyist;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
@@ -12,17 +15,23 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
+import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
+import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.CreatePostFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
+import com.yoyo.hobbyist.ViewModel.PostViewModel;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
@@ -37,8 +46,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     TabItem tabItem3;
     TabItem tabItem4;
     FirebaseAuth mFireBaseAuth;
+
     FirebaseAuth.AuthStateListener mAuthStateListener;
-//    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
+    //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
@@ -99,10 +109,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //        } );
 
 
-        mFireBaseAuth = FirebaseAuth.getInstance();
-        mAdapter = new
 
-                PagerAdapter( getSupportFragmentManager(), mTabLayout.
+
+
+        mFireBaseAuth = FirebaseAuth.getInstance();
+        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.
 
                 getTabCount() );
         mPager.setAdapter( mAdapter );

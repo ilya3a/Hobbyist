@@ -1,18 +1,19 @@
 package com.yoyo.hobbyist.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +24,7 @@ import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
+import com.yoyo.hobbyist.ViewModel.PostViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,6 @@ public class DashboardFragment extends Fragment {
     Context context;
     PostsRecyclerViewAdapter mAdapter;
     ArrayList<UserPost> userPosts = new ArrayList<>();
-    ArrayList<UserPost> userPostsList = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabaseReference;
@@ -67,9 +68,19 @@ public class DashboardFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
-        RecyclerView recyclerView = rootView.findViewById( R.id.dash_recycler );
-        recyclerView.setHasFixedSize(true);
-        mAdapter = new PostsRecyclerViewAdapter(userPosts, context);
+        final RecyclerView recyclerView = rootView.findViewById( R.id.dash_recycler );
+        recyclerView.setHasFixedSize( true );
+        mAdapter = new PostsRecyclerViewAdapter( userPosts, context );
+
+
+        PostViewModel postViewModel = ViewModelProviders.of( this ).get( PostViewModel.class );
+        postViewModel.getPosts().observe( this, new Observer<List<UserPost>>() {
+            @Override
+            public void onChanged(@Nullable List<UserPost> postsList) {
+                mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, context );
+                recyclerView.setAdapter( mAdapter );
+            }
+        } );
 
 
         ArrayList<UserPost> userPosts = new ArrayList<>();
