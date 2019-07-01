@@ -22,14 +22,14 @@ public class DataStore {
 
     public synchronized static DataStore getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new DataStore( context );
+            sInstance = new DataStore(context);
         }
         return sInstance;
     }
 
     @SuppressLint("CommitPrefEdits")
     private DataStore(Context context) {
-        mSharedPref = context.getSharedPreferences( PREFS, context.MODE_PRIVATE );
+        mSharedPref = context.getSharedPreferences(PREFS, context.MODE_PRIVATE);
         mEditor = mSharedPref.edit();
     }
 
@@ -38,26 +38,35 @@ public class DataStore {
     }
 
     public void saveUser(UserProfile user) {
-        String userString = mGson.toJson( user );
-        mEditor.putString( SHARED_KEY_NEW_USER, userString );
+        String userString = mGson.toJson(user);
+        mEditor.putString(SHARED_KEY_NEW_USER, userString);
         mEditor.apply();
     }
 
     public void saveUserPost(UserPost post) {
-        String postString = mGson.toJson( post );
-        mEditor.putString( SHARED_KEY_NEW_POST, postString );
+        String postString = mGson.toJson(post);
+        mEditor.putString(SHARED_KEY_NEW_POST, postString);
         mEditor.apply();
+    }
+
+    public void clearAllData() {
+        mEditor.clear();
+        mEditor.commit();
     }
 
     public UserProfile getUser() {
 
-        String userJson = mSharedPref.getString( SHARED_KEY_NEW_USER, "" );
-        return mGson.fromJson( userJson, UserProfile.class );
+        String userJson = mSharedPref.getString(SHARED_KEY_NEW_USER, "");
+        if (userJson.equals("")) {
+
+            return null;
+        }
+        return mGson.fromJson(userJson, UserProfile.class);
     }
 
     public UserPost getPost() {
 
-        String userPost = mSharedPref.getString( SHARED_KEY_NEW_POST, "" );
-        return mGson.fromJson( userPost, UserPost.class );
+        String userPost = mSharedPref.getString(SHARED_KEY_NEW_POST, "");
+        return mGson.fromJson(userPost, UserPost.class);
     }
 }

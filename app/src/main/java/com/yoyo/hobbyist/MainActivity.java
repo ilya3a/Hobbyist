@@ -50,6 +50,7 @@ import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.ViewModel.PostViewModel;
 
 import java.util.List;
+
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mFireBaseUser;
     DataStore mDataStore;
-//    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
+    //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
     FirebaseMessaging topicMessegingAlert = FirebaseMessaging.getInstance();
@@ -95,9 +96,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         super.onCreate(savedInstanceState);
 
         mUserProfile = DataStore.getInstance(this).getUser();
-        for (String sub : mUserProfile.getmHobbylist()){
-            topicMessegingAlert.subscribeToTopic(sub);
+        if (mUserProfile != null) {
+            for (String sub : mUserProfile.getmHobbylist()) {
+                topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
 
+            }
         }
 
         setContentView(R.layout.activity_main);
@@ -155,8 +158,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //        } );
 
 
-
-
         mAdapter = new
 
                 PagerAdapter(getSupportFragmentManager(), mTabLayout.
@@ -199,10 +200,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
+                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
+                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon_selected);
+                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
                     mFab.setVisibility(View.VISIBLE);
                 } else {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
@@ -246,10 +247,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     @Override
     public void updateImage(Intent intent, View view) {
-        if(Build.VERSION.SDK_INT>=23) {
+        if (Build.VERSION.SDK_INT >= 23) {
             callPermissions(intent);
-        }
-        else {
+        } else {
             startActivityForResult(intent, CAMERA_REQUEST);
         }
     }
@@ -270,7 +270,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         super.onStop();
         mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
     }
-//todo: wtf???
+
+    //todo: wtf???
     public void getUserProfiles() {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers").child(mFireBaseUser.getUid());
@@ -292,18 +293,19 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         });
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode==RESULT_OK) {
-            Fragment fragment =  mAdapter.getItem(mPager.getCurrentItem());
+        if (resultCode == RESULT_OK) {
+            Fragment fragment = mAdapter.getItem(mPager.getCurrentItem());
             ((ProfilePageFragment) fragment).updateUserImage();
-        }
-        else {
+        } else {
 
         }
     }
+
     public void callPermissions(final Intent intent) {
-        String[] string = { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] string = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Permissions.Options options = new Permissions.Options()
                 .setRationaleDialogTitle("Info")
                 .setSettingsDialogTitle("Warning");
@@ -319,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 startActivityForResult(intent, 1);
             }
         };
-        Permissions.check(this, string, "you must give those permissions to take a photo",options, permissionHandler);
+        Permissions.check(this, string, "you must give those permissions to take a photo", options, permissionHandler);
 
 
     }

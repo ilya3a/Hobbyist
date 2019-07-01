@@ -108,7 +108,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             }
         };
 
-        if (mFireBaseUser != null && !(mFireBaseUser.getDisplayName().equals("null"))) {
+        if (mFireBaseUser != null && !mFireBaseUser.getDisplayName().equals("null") && mExistingUser != null) {
 
             goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
         } else {
@@ -121,7 +121,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             mFragmentManager = getSupportFragmentManager();
             //mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
-            mNewSignInScreenFragment=new NewSignInScreenFragment();
+            mNewSignInScreenFragment = new NewSignInScreenFragment();
             //add the new mainlogin
             mFragmentManager.beginTransaction().add(R.id.main_container, mNewSignInScreenFragment, NEW_LOGIN_FRAGMENT_TAG)
                     .commit();
@@ -130,7 +130,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     private void goToMainActivity(String[] hobbies) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("subs",hobbies);
+        intent.putExtra("subs", hobbies);
         startActivity(intent);
         finish();
     }
@@ -160,7 +160,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     @Override
     public void callSignUp() {
         mFragmentManager.beginTransaction().remove(mNewSignInScreenFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
-                       .addToBackStack(null).commit();
+                .addToBackStack(null).commit();
     }
 
     @Override
@@ -208,22 +208,22 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     public void updateImage(Intent intent, View view) {
-        if(Build.VERSION.SDK_INT>=23) {
-                callPermissions(intent);
-        }
-        else {
+        if (Build.VERSION.SDK_INT >= 23) {
+            callPermissions(intent);
+        } else {
             startActivityForResult(intent, CAMERA_REQUEST);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Fragment fragment =mFragmentManager.findFragmentByTag(UPDATE_USER_FRAGMENT_TAG);
+        Fragment fragment = mFragmentManager.findFragmentByTag(UPDATE_USER_FRAGMENT_TAG);
         assert fragment != null;
         ((UpdateUserProfileFragment) fragment).updateUserImage();
     }
+
     public void callPermissions(final Intent intent) {
-        String[] string = { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] string = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Permissions.Options options = new Permissions.Options()
                 .setRationaleDialogTitle("Info")
                 .setSettingsDialogTitle("Warning");
@@ -239,22 +239,23 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 startActivityForResult(intent, 1);
             }
         };
-        Permissions.check(this, string, "you must give those permissions to take a photo",options, permissionHandler);
+        Permissions.check(this, string, "you must give those permissions to take a photo", options, permissionHandler);
 
 
     }
+
     public void getUserProfiles() {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers").child(mFireBaseUser.getUid());
         Query usersQuery = mDatabaseReference.orderByKey();
 
         usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mExistingUser = dataSnapshot.getValue( UserProfile.class );
+                mExistingUser = dataSnapshot.getValue(UserProfile.class);
                 mDataStore = DataStore.getInstance(getApplicationContext());
                 mDataStore.saveUser(mExistingUser);
-                goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()] ));
+                goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
 
             }
 
