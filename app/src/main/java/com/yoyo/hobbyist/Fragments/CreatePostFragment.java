@@ -106,7 +106,7 @@ public class CreatePostFragment extends DialogFragment {
     Boolean isPhotoExists = false;
     PostsRecyclerViewAdapter mAdapter;
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appHobbys");
+    DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
     ArrayList<UserPost> mPostsList = new ArrayList<>();
     ArrayList<String> hobbylist = new ArrayList<>();
     final String API_TOKEN_KEY = "AAAAPp81o9o:APA91bFIxD-hnOSdPhGzCD7wGtE-of6OWANn44pQFapd1xSccxippK9IorvoK3jsGBn9RpMv8P6W44-Mo5X9itXu7Fntu0x3o5L01tsFjRQaNAueI2QFLQPwwxz-naOyXMOYfwSbnRoy";
@@ -131,7 +131,7 @@ public class CreatePostFragment extends DialogFragment {
         requestLocationUpdates();
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFireBaseAuth.getCurrentUser();
-        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.child("appHobbys").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
