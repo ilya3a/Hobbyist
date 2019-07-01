@@ -1,9 +1,12 @@
 package com.yoyo.hobbyist;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
@@ -12,6 +15,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -28,11 +32,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
 import com.yoyo.hobbyist.DataModels.UserProfile;
+import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
+import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.CreatePostFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
+import com.yoyo.hobbyist.ViewModel.PostViewModel;
+
+import java.util.List;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.Arrays;
@@ -58,31 +67,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
-
-    final String API_TOKEN_KEY = "";
-    protected static boolean isVisible = true;
-    FirebaseMessaging topicMessegingAlert = FirebaseMessaging.getInstance();
-
-
-    public static void setIsVisible(boolean isVisible) {
-        MainActivity.isVisible = isVisible;
-    }
-
-    public static boolean isIsVisible() {
-        return isVisible;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        setIsVisible(false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setIsVisible(true);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
