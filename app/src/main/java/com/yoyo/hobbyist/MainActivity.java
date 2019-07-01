@@ -1,7 +1,7 @@
 package com.yoyo.hobbyist;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
+    FirebaseMessaging topicMessegingAlert = FirebaseMessaging.getInstance();
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
 
     @Override

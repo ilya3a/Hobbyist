@@ -67,7 +67,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     FirebaseAuth mFireBaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
-    FirebaseUser mCurrentUser;
+    FirebaseUser mFireBaseUser;
 
     FragmentManager mFragmentManager;
     //SigninFragment mLoginFragment;
@@ -85,6 +85,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     CoordinatorLayout mCoordinatorLayout;
     UserProfile mExistingUser;
 
+    DataStore mDataStore;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +98,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mFireBaseAuth = FirebaseAuth.getInstance();
         mEmail = mSp.getString("userEmail", "noEmail");
         mPassword = mSp.getString("userPassword", "noPassword");
-        mCurrentUser = mFireBaseAuth.getCurrentUser();
+        mFireBaseUser = mFireBaseAuth.getCurrentUser();
 
         mExistingUser = DataStore.getInstance(this).getUser();
 
@@ -137,7 +140,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         if (user.getDisplayName().equals("null")) {
             callUpdateUser();
         } else {
-            mCurrentUser = user;
+            mFireBaseUser = user;
             mLottieAnimationView.setVisibility(View.VISIBLE);
             mLottieAnimationView.playAnimation();
             Handler handler = new Handler();
@@ -147,7 +150,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
                     mFragmentManager.beginTransaction().commit();
                     mLottieAnimationView.setVisibility(View.GONE);
-                    getUserProfiles( mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
+//                    getUserProfiles();
                 }
             };
             handler.postDelayed(runnable, 3100);
@@ -162,7 +165,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     public void afterSignUpUserUpdate(FirebaseUser user) {
-        mCurrentUser = user;
+        mFireBaseUser = user;
         //goToMainActivity();
         mFragmentManager.beginTransaction().add(R.id.main_container, mUpdateUserProfileFragment,
                 UPDATE_USER_FRAGMENT_TAG).addToBackStack(null).commit();
@@ -248,10 +251,10 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+                mExistingUser = dataSnapshot.getValue( UserProfile.class );
                 mDataStore = DataStore.getInstance(getApplicationContext());
-                mDataStore.saveUser(mUserProfile);
-                goToMainActivity();
+                mDataStore.saveUser(mExistingUser);
+                goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()] ));
 
             }
 
