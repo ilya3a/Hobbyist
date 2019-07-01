@@ -1,5 +1,6 @@
 package com.yoyo.hobbyist.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -61,7 +62,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
@@ -545,11 +545,11 @@ public class ProfilePageFragment extends Fragment {
             "Zumba"
     };
     SwitchCompat mNotificationSw;
-    ImageView BlurryImageView;
+    ImageView mBlurryImageView;
     MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView mNameTv,mPostsCount,mHobbysCount;
-    EditText mAge,mCity;
+    EditText mAge,mCity, mGenderEt;
     String mPictureUrl;
     FlowLayout flowLayout;
     CircleImageView mProfilePhoto;
@@ -567,7 +567,7 @@ public class ProfilePageFragment extends Fragment {
     ArrayList<String> mHobbysList;
     ArrayList<TextView> mHobbysTv;
     Uri imageUri;
-    FloatingActionButton mFab;
+    FloatingActionButton mFab,mExitFab;
     Boolean editMode=false;
     private OnFragmentInteractionListener mListener;
 
@@ -575,51 +575,85 @@ public class ProfilePageFragment extends Fragment {
 
     public interface ProfileFragmentListener {
         void updateImage(Intent intent, View view);
+        void logOut();
     }
     public ProfilePageFragment() {
         // Required empty public constructor
     }
-    public void updateUserImage() {
-        mFireBaseStorageRef = FirebaseStorage.getInstance().getReference( "images/"+ mFireBaseUser.getEmail()+".jpg" );
-        mProfilePhoto.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
-        //TODO: WAIT SCREEN BEFORE WHILE UPLOADING TO FIRE BASE.
-        Blurry.with(getContext()).capture(mProfilePhoto).into(BlurryImageView);
+    public void updateUserImage(){
+        final Date currentTime = Calendar.getInstance().getTime();
+        mFireBaseStorageRef=FirebaseStorage.getInstance().getReference("images/"+currentTime.toString()+".jpg");
+        //update photo from storeg
         Uri uri = Uri.fromFile( mFile );
-        mFireBaseStorageRef.putFile( uri ).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
+                "Uploading. Please wait...", true);
+        dialog.show();
+        mFireBaseStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        dialog.cancel();
                         mPictureUrl = uri.toString();
+                        mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
+                        Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
                         mUserProfile.setmPictureUrl(mPictureUrl);
                         updateProfileOnfireBase();
                     }
                 } );
-            }
-        } ).addOnFailureListener( new OnFailureListener() {
 
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText( getContext(), "Update Faild", Toast.LENGTH_SHORT ).show();
-            }
-        } ).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                mFireBaseStorageRef.child( "images/"+ mFireBaseUser.getEmail()+".jpg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Toast.makeText( getContext(), uri.toString(), Toast.LENGTH_LONG ).show();
-                        Glide.with( getContext() ).load( uri ).into( mProfilePhoto );
-                        mUserProfile.setmPictureUrl(mPictureUrl);
-                        mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
-                        mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build());
-                    }
-                } );
+                Toast.makeText(getContext(), "test faild", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
             }
         });
-
     }
+//    public void updateUserImage() {
+//        final Date currentTime = Calendar.getInstance().getTime();
+//        mFireBaseStorageRef = FirebaseStorage.getInstance().getReference( "images/"+ currentTime.toString()+".jpg" );
+//        mProfilePhoto.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
+//       
+//        Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
+//        Uri uri = Uri.fromFile( mFile );
+//        mFireBaseStorageRef.putFile( uri ).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        mPictureUrl = uri.toString();
+//                        mUserProfile.setmPictureUrl(mPictureUrl);
+//                    }
+//                } );
+//            }
+//        } ).addOnFailureListener( new OnFailureListener() {
+//
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText( getContext(), "Update Faild", Toast.LENGTH_SHORT ).show();
+//            }
+//        } ).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                mFireBaseStorageRef.child( "images/"+ currentTime.toString()+".jpg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        Toast.makeText( getContext(), uri.toString(), Toast.LENGTH_LONG ).show();
+//                        Glide.with( getContext() ).load( uri ).into( mProfilePhoto );
+//                        mUserProfile.setmPictureUrl(mPictureUrl);
+//                        mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
+//                        mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build());
+//                        updateProfileOnfireBase();
+//                    }
+//                } );
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -647,17 +681,39 @@ public class ProfilePageFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_dropdown_item_1line, hobbys );
         mAutoCompleteTextView.setAdapter( adapter );
         mNotificationSw=rootView.findViewById(R.id.notif_sw);
-
-
+        mExitFab=rootView.findViewById(R.id.fab_logout);
+        mGenderEt =rootView.findViewById(R.id.gender_et);
         mFireBaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseDatabase=FirebaseDatabase.getInstance();
-
         final Animation shake = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
         final Drawable originalDrawable = mAge.getBackground();
         mAge.setBackgroundColor(Color.TRANSPARENT);
+        mBlurryImageView =rootView.findViewById(R.id.blur_test);
+        mUserProfile=dataStore.getUser();
+        mHobbysList =mUserProfile.getmHobbylist();
 
-        BlurryImageView =rootView.findViewById(R.id.blur_test);
+        mGenderEt.setText(mUserProfile.getmGender());
+
+        mExitFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileFragmentListener.logOut();
+            }
+        });
+
+
+
+
         //mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+
+
+        mHobbysCount.setText(String.valueOf(mHobbysList.size()));
+        mAge.setText(mUserProfile.getmAge());
+        //mPostsCount.setText();
+        mCity.setText(mUserProfile.getmCityName());
+        mNameTv.setText(mUserProfile.getmName()+" "+mUserProfile.getmLastName());
+        updateflow();
+
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -704,6 +760,7 @@ public class ProfilePageFragment extends Fragment {
                        tv.startAnimation(shake);
                    }
                    mEditHobbysLayot.setVisibility(View.VISIBLE);
+                   mProfilePhoto.setClickable(true);
                }
                else{
                    editMode=false;
@@ -734,6 +791,7 @@ public class ProfilePageFragment extends Fragment {
                    mHobbysCount.setText(temp.toString());
                    updateflow();
                    updateProfileOnfireBase();
+                   mProfilePhoto.setClickable(false);
                }
             }
         });
@@ -744,24 +802,15 @@ public class ProfilePageFragment extends Fragment {
                 mFile = new File( Environment.getExternalStorageDirectory(), currentTime + "Hobbyist.jpg" );
 
                 imageUri = FileProvider.getUriForFile( getContext(),
-                        getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
+                        "com.yoyo.hobbyist.provider",
                         mFile );
                 Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
                 intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
                 profileFragmentListener.updateImage( intent, mProfilePhoto );
             }
         });
-        mUserProfile=dataStore.getUser();
-        mHobbysList =mUserProfile.getmHobbylist();
-        Integer temp = mHobbysList.size();
-        mHobbysCount.setText(temp.toString());
-        mAge.setText(mUserProfile.getmAge());
-        //mPostsCount.setText();
-        mCity.setText(mUserProfile.getmCityName());
-        updateflow();
 
 
-        mNameTv.setText(mUserProfile.getmName()+" "+mUserProfile.getmLastName());
         Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).addListener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -771,7 +820,7 @@ public class ProfilePageFragment extends Fragment {
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(resource);
-                Blurry.with(getContext()).radius(10).from(bitmap).into(BlurryImageView);
+                Blurry.with(getContext()).radius(10).from(bitmap).into(mBlurryImageView);
                 return false;
             }
         }).into(mProfilePhoto);

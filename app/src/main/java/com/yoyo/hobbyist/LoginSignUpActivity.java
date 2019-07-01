@@ -28,8 +28,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.himanshurawat.imageworker.Extension;
-import com.himanshurawat.imageworker.ImageWorker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.DataModels.UserProfile;
@@ -40,7 +44,6 @@ import com.yoyo.hobbyist.SignFragments.SignUpFragment;
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -102,15 +105,16 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             }
         };
 
-        if (mCurrentUser != null && !(mCurrentUser.getDisplayName().equals("null"))) {
+        if (mFireBaseUser != null && !(mFireBaseUser.getDisplayName().equals("null"))) {
 
             goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
         } else {
             mFireBaseAuth.signOut();
-            mCurrentUser = mFireBaseAuth.getCurrentUser();
+            mFireBaseUser = mFireBaseAuth.getCurrentUser();
             mUpdateUserProfileFragment = new UpdateUserProfileFragment();
             mLottieAnimationView = findViewById(R.id.lottie_animation);
             mLottieAnimationView.setAnimation(R.raw.animation_test);
+
             mFragmentManager = getSupportFragmentManager();
             //mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
@@ -143,7 +147,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
                     mFragmentManager.beginTransaction().commit();
                     mLottieAnimationView.setVisibility(View.GONE);
-                    goToMainActivity( mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
+                    getUserProfiles( mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
                 }
             };
             handler.postDelayed(runnable, 3100);
@@ -234,6 +238,28 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         };
         Permissions.check(this, string, "you must give those permissions to take a photo",options, permissionHandler);
 
+
+    }
+    public void getUserProfiles() {
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
+        Query usersQuery = mDatabaseReference.orderByKey();
+
+        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+                mDataStore = DataStore.getInstance(getApplicationContext());
+                mDataStore.saveUser(mUserProfile);
+                goToMainActivity();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

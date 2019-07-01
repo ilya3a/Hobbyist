@@ -76,10 +76,18 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mFireBaseUser;
     DataStore mDataStore;
-    //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
+//    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
+
+    @Override
+    public void logOut() {
+        mFireBaseAuth.signOut();
+        Intent intent = new Intent(this, LoginSignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,9 +293,14 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Fragment fragment =mFragmentManager.findFragmentById(R.id.pager);
-        assert fragment != null;
-        ((ProfilePageFragment) fragment).updateUserImage();
+        if (resultCode==RESULT_OK) {
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.pager);
+            assert fragment != null;
+            ((ProfilePageFragment) fragment).updateUserImage();
+        }
+        else {
+
+        }
     }
     public void callPermissions(final Intent intent) {
         String[] string = { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};

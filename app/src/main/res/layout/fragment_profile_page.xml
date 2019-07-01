@@ -11,6 +11,14 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_edit_black_24dp"
         android:id="@+id/fab"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_exit"
+        android:id="@+id/fab_logout"/>
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -33,7 +41,7 @@
             android:id="@+id/blur_test"/>
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePhoto_iv"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/ic_android"
             android:layout_centerInParent="true"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -43,6 +51,7 @@
             android:padding="0.1dp"
             app:civ_border_width="2dp"
             app:civ_border_color="#FFf"
+            android:clickable="false"
             />
 
         <TextView
@@ -192,6 +201,35 @@
             android:background="#7E7E7E"
             android:padding="0.1dp"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:textSize="15dp"
+                android:layout_marginStart="5dp"
+                android:padding="20dp"/>
+
+            <EditText
+                android:id="@+id/gender_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:inputType="textEmailAddress"
+                android:padding="16dp"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7E7E7E"
+            android:padding="0.1dp"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -227,7 +265,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="0.3"
                 android:layout_height="wrap_content"
-                android:text="Hobbys"
+                android:text="Hobby's"
                 android:textSize="18dp"
                 android:layout_gravity="center"
                 android:gravity="center"
