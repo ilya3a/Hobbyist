@@ -8,12 +8,65 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:268959065050:android:b1d42d1bc364c0f1",
+        "android_client_info": {
+          "package_name": "com.example.belalkhan.androidviewmodel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268959065050-t612blp1f4r3qorcgaoerh3tqej6l2ml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.belalkhan.androidviewmodel",
+            "certificate_hash": "6702fcae5f88d7dd4538c6e985ca95ca43c5d180"
+          }
+        },
+        {
+          "client_id": "268959065050-fkik70teheii34lbougg4v6kvl6kdkg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiEREBisDh2vIcDh4PJWM3MgBcRoPDFfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268959065050-fkik70teheii34lbougg4v6kvl6kdkg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:268959065050:android:f3545952170033b9",
         "android_client_info": {
           "package_name": "com.yoyo.hobbyist"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "268959065050-r1k33uinm2evsf3fg8fssrh9kah6c6v6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yoyo.hobbyist",
+            "certificate_hash": "86629a1f7f08498a3f79eb6df48824879e634637"
+          }
+        },
+        {
+          "client_id": "268959065050-efl312uq7voidaffs7bj7u9q7f1ggerf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yoyo.hobbyist",
+            "certificate_hash": "6702fcae5f88d7dd4538c6e985ca95ca43c5d180"
+          }
+        },
         {
           "client_id": "268959065050-c95cn2adlufqcu9j8ksc3tbik5132ht7.apps.googleusercontent.com",
           "client_type": 1,

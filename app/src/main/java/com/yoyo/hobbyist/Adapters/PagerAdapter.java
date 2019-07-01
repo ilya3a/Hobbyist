@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
-import com.yoyo.hobbyist.Fragments.profilePageFragment;
+import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
@@ -29,7 +29,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new ChatFragment();
             case 3:
-                return new profilePageFragment();
+                return new ProfilePageFragment();
             default:
                 return null;
         }

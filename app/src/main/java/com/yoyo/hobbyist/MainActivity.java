@@ -2,6 +2,10 @@ package com.yoyo.hobbyist;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +35,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
@@ -38,18 +45,24 @@ import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.CreatePostFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
+import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.ViewModel.PostViewModel;
 
 import java.util.List;
+import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
+
+import java.util.ArrayList;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
-        MenuFragment.OnFragmentInteractionListener, CreatePostFragment.OnFragmentInteractionListener {
+        MenuFragment.OnFragmentInteractionListener, CreatePostFragment.OnFragmentInteractionListener, ProfilePageFragment.ProfileFragmentListener {
 
+    final int CAMERA_REQUEST = 1;
+    final String UPDATE_USER_FRAGMENT_TAG = "update_user_fragment";
     //    Toolbar mToolbar;
     TabLayout mTabLayout;
     ViewPager mPager;
@@ -133,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //        } );
 
 
+
+
         mAdapter = new
 
                 PagerAdapter(getSupportFragmentManager(), mTabLayout.
@@ -148,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
         ;
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int itemPos = tab.getPosition();
@@ -174,11 +190,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
-                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
-                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon_selected);
-                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
-
+                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
+                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mFab.setVisibility(View.VISIBLE);
                 } else {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.GONE );
@@ -186,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
                     mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
                     mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon_selected);
+                    mFab.setVisibility(View.GONE);
 
                 }
             }
@@ -216,6 +233,16 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     public void onMapCreate() {
 
+    }
+
+    @Override
+    public void updateImage(Intent intent, View view) {
+        if(Build.VERSION.SDK_INT>=23) {
+            callPermissions(intent);
+        }
+        else {
+            startActivityForResult(intent, CAMERA_REQUEST);
+        }
     }
 
     interface MainActivityDashboardFragmentDataPass {
@@ -256,6 +283,34 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         });
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Fragment fragment =mFragmentManager.findFragmentById(R.id.pager);
+        assert fragment != null;
+        ((ProfilePageFragment) fragment).updateUserImage();
+    }
+    public void callPermissions(final Intent intent) {
+        String[] string = { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Permissions.Options options = new Permissions.Options()
+                .setRationaleDialogTitle("Info")
+                .setSettingsDialogTitle("Warning");
+        PermissionHandler permissionHandler = new PermissionHandler() {
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                callPermissions(intent);
+            }
+
+            @Override
+            public void onGranted() {
+                startActivityForResult(intent, 1);
+            }
+        };
+        Permissions.check(this, string, "you must give those permissions to take a photo",options, permissionHandler);
+
+
+    }
+
 
 }
 

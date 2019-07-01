@@ -65,6 +65,10 @@ dependencies {
     implementation 'com.nabinbhandari.android:permissions:3.8'
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    //blur
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'jp.wasabeef:blurry:3.0.0'
 
 }
 apply plugin: 'com.google.gms.google-services'
+
