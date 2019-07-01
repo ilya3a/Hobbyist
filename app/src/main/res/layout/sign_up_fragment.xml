@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradiant"
-   >
+    xmlns:de.hdodenhof.circleimageview.CircleImageViewandroid="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradiant">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -168,11 +168,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="400dp">
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_chat_icon_selected"
-            />
+      <de.hdodenhof.circleimageview.CircleImageView
+          android:layout_width="100dp"
+          android:layout_height="100dp"
+          android:src="@mipmap/ic_logo_round"/>
+
     </LinearLayout>
 
 

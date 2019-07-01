@@ -71,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
 
     @Override
+    public void logOut() {
+        mFireBaseAuth.signOut();
+        Intent intent = new Intent(this, LoginSignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
@@ -202,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         } );
 
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
-        getUserProfiles();
+
     }
 
 
@@ -242,32 +250,37 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         super.onStop();
         mFireBaseAuth.removeAuthStateListener( mAuthStateListener );
     }
-    public void getUserProfiles() {
-        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
-        Query usersQuery = mDatabaseReference.orderByKey();
-
-        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUserProfile = dataSnapshot.getValue( UserProfile.class );
-                mDataStore = DataStore.getInstance(getApplicationContext());
-                mDataStore.saveUser(mUserProfile);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
+//    public void getUserProfiles() {
+//        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+//        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
+//        Query usersQuery = mDatabaseReference.orderByKey();
+//
+//        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+//                mDataStore = DataStore.getInstance(getApplicationContext());
+//                mDataStore.saveUser(mUserProfile);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Fragment fragment =mFragmentManager.findFragmentById(R.id.pager);
-        assert fragment != null;
-        ((ProfilePageFragment) fragment).updateUserImage();
+        if (resultCode==RESULT_OK) {
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.pager);
+            assert fragment != null;
+            ((ProfilePageFragment) fragment).updateUserImage();
+        }
+        else {
+
+        }
     }
     public void callPermissions(final Intent intent) {
         String[] string = { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};

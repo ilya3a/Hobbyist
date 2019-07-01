@@ -1,11 +1,9 @@
 package com.yoyo.hobbyist;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,37 +11,32 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.himanshurawat.imageworker.Extension;
-import com.himanshurawat.imageworker.ImageWorker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.SignFragments.NewSignInScreenFragment;
 
 import com.yoyo.hobbyist.SignFragments.SignUpFragment;
 
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
+import com.yoyo.hobbyist.Utilis.DataStore;
 
-import java.security.Permission;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import static java.security.AccessController.getContext;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
         NewSignInScreenFragment.LoginFragmentListener, UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
@@ -61,7 +54,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     FirebaseAuth mFireBaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
-    FirebaseUser mCurrentUser;
+    FirebaseUser mFireBaseUser;
 
     FragmentManager mFragmentManager;
     //SigninFragment mLoginFragment;
@@ -77,7 +70,8 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     String mPassword;
 
     CoordinatorLayout mCoordinatorLayout;
-
+    DataStore mDataStore;
+    UserProfile mUserProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +82,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mFireBaseAuth = FirebaseAuth.getInstance();
         mEmail = mSp.getString("userEmail", "noEmail");
         mPassword = mSp.getString("userPassword", "noPassword");
-        mCurrentUser = mFireBaseAuth.getCurrentUser();
+        mFireBaseUser = mFireBaseAuth.getCurrentUser();
         String[] hobbys ={
                 "3D printing",
                 "Acting",
@@ -570,14 +564,15 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             }
         };
 
-        if (mCurrentUser != null && !(mCurrentUser.getDisplayName().equals("null"))) {
+        if (mFireBaseUser != null && !(mFireBaseUser.getDisplayName().equals("null"))) {
             goToMainActivity();
         } else {
             mFireBaseAuth.signOut();
-            mCurrentUser = mFireBaseAuth.getCurrentUser();
+            mFireBaseUser = mFireBaseAuth.getCurrentUser();
             mUpdateUserProfileFragment = new UpdateUserProfileFragment();
             mLottieAnimationView = findViewById(R.id.lottie_animation);
             mLottieAnimationView.setAnimation(R.raw.animation_test);
+
             mFragmentManager = getSupportFragmentManager();
             //mLoginFragment = new SigninFragment();
             mSignUpFragment = new SignUpFragment();
@@ -599,7 +594,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         if (user.getDisplayName().equals("null")) {
             callUpdateUser();
         } else {
-            mCurrentUser = user;
+            mFireBaseUser = user;
             mLottieAnimationView.setVisibility(View.VISIBLE);
             mLottieAnimationView.playAnimation();
             Handler handler = new Handler();
@@ -609,7 +604,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
                     mFragmentManager.beginTransaction().commit();
                     mLottieAnimationView.setVisibility(View.GONE);
-                    goToMainActivity();
+                    getUserProfiles();
                 }
             };
             handler.postDelayed(runnable, 3100);
@@ -624,7 +619,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     public void afterSignUpUserUpdate(FirebaseUser user) {
-        mCurrentUser = user;
+        mFireBaseUser = user;
         //goToMainActivity();
         mFragmentManager.beginTransaction().add(R.id.main_container, mUpdateUserProfileFragment,
                 UPDATE_USER_FRAGMENT_TAG).addToBackStack(null).commit();
@@ -700,6 +695,28 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         };
         Permissions.check(this, string, "you must give those permissions to take a photo",options, permissionHandler);
 
+
+    }
+    public void getUserProfiles() {
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
+        Query usersQuery = mDatabaseReference.orderByKey();
+
+        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+                mDataStore = DataStore.getInstance(getApplicationContext());
+                mDataStore.saveUser(mUserProfile);
+                goToMainActivity();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
