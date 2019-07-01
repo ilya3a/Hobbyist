@@ -618,7 +618,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     public void callSignUp() {
-        mFragmentManager.beginTransaction().add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
+        mFragmentManager.beginTransaction().remove(mNewSignInScreenFragment).add(R.id.main_container, mSignUpFragment, SIGN_UP_FRAGMENT_TAG)
                        .addToBackStack(null).commit();
     }
 

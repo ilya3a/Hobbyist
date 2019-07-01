@@ -1,44 +1,46 @@
-package com.yoyo.hobbyist.SignFragments;
+package com.yoyo.hobbyist.Fragments;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -47,67 +49,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import com.himanshurawat.imageworker.ImageWorker;
 import com.nex3z.flowlayout.FlowLayout;
-import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.blurry.Blurry;
 
 
-public class UpdateUserProfileFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
-
-    UpdateUserProfileFragmentListener updateUserProfileFragmentListener;
-
-    public interface UpdateUserProfileFragmentListener {
-        void afterUpdateUserUpdate(Boolean isUserUpdated);
-
-        void updateImage(Intent intent, View view);
-    }
-
-    public void updateUserImage() {
-        final StorageReference mStorageRef;
-        mStorageRef = FirebaseStorage.getInstance().getReference( "images/"+mFirebaseUser.getUid()+".jpg" );
-        isPhotoExists = true;
-        mPhotoCiv.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
-        Uri uri = Uri.fromFile( mFile );
-        mStorageRef.putFile( uri ).addOnSuccessListener( new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mStorageRef.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        mPictureUrl = uri.toString();
-                    }
-                } );
-                mStorageRef.child( "images/"+mFirebaseUser.getUid()+".jpg" ).getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Toast.makeText( getContext(), uri.toString(), Toast.LENGTH_LONG ).show();
-                        Glide.with( getContext() ).load( uri ).into( mPhotoCiv );
-
-                    }
-                } );
-            }
-        } ).addOnFailureListener( new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText( getContext(), "Update Faild", Toast.LENGTH_SHORT ).show();
-            }
-        } );
-
-//        mFireBaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build());
-
-    }
+public class ProfilePageFragment extends Fragment {
 
     String[] hobbys = {
             "3D printing",
@@ -584,66 +544,121 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             "Ziplining",
             "Zumba"
     };
-    String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid,mDay,mMonth,mYear;
-    TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
-    EditText mName_et, mLastNameEt, mCityNameEt, mGenderEt, mDateOfBirthEt;
-    ArrayList<String> hobbyList;
-    Button accept_btn,add_btn;
-    FlowLayout flowLayout;
+    SwitchCompat mNotificationSw;
+    ImageView BlurryImageView;
+    MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
-    TextView gender_click, birth_day_click;
-    CircleImageView mPhotoCiv;
+    TextView mNameTv,mPostsCount,mHobbysCount;
+    EditText mAge,mCity;
+    String mPictureUrl;
+    FlowLayout flowLayout;
+    CircleImageView mProfilePhoto;
+    UserProfile mUserProfile;
+    //fireBase
+    FirebaseUser mFireBaseUser;
     FirebaseAuth mFireBaseAuth;
-    FirebaseUser mFirebaseUser;
+    DatabaseReference mFireBaseDatabaseReference;
     FirebaseDatabase mFirebaseDatabase;
-    DatabaseReference mDatabaseReference;
-    private long lastTouchDown;
-    private static int CLICK_ACTION_THRESHHOLD = 200;
-    Boolean removeErrors_flag = false;
-    File mFile;
-    Uri imageUri;
-    final String UPDATE_USER_FRAGMENT_TAG = "update_user_fragment";
-    Boolean isPhotoExists = false;
+    StorageReference mFireBaseStorageRef;
 
-    @SuppressLint("ClickableViewAccessibility")
+    LinearLayout mEditHobbysLayot;
+    DataStore dataStore;
+    File mFile;
+    ArrayList<String> mHobbysList;
+    ArrayList<TextView> mHobbysTv;
+    Uri imageUri;
+    FloatingActionButton mFab;
+    Boolean editMode=false;
+    private OnFragmentInteractionListener mListener;
+
+    ProfileFragmentListener profileFragmentListener;
+
+    public interface ProfileFragmentListener {
+        void updateImage(Intent intent, View view);
+    }
+    public ProfilePageFragment() {
+        // Required empty public constructor
+    }
+    public void updateUserImage() {
+        mFireBaseStorageRef = FirebaseStorage.getInstance().getReference( "images/"+ mFireBaseUser.getEmail()+".jpg" );
+        mProfilePhoto.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
+        //TODO: WAIT SCREEN BEFORE WHILE UPLOADING TO FIRE BASE.
+        Blurry.with(getContext()).capture(mProfilePhoto).into(BlurryImageView);
+        Uri uri = Uri.fromFile( mFile );
+        mFireBaseStorageRef.putFile( uri ).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        mPictureUrl = uri.toString();
+                        mUserProfile.setmPictureUrl(mPictureUrl);
+                        updateProfileOnfireBase();
+                    }
+                } );
+            }
+        } ).addOnFailureListener( new OnFailureListener() {
+
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText( getContext(), "Update Faild", Toast.LENGTH_SHORT ).show();
+            }
+        } ).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                mFireBaseStorageRef.child( "images/"+ mFireBaseUser.getEmail()+".jpg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Toast.makeText( getContext(), uri.toString(), Toast.LENGTH_LONG ).show();
+                        Glide.with( getContext() ).load( uri ).into( mProfilePhoto );
+                        mUserProfile.setmPictureUrl(mPictureUrl);
+                        mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
+                        mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build());
+                    }
+                } );
+            }
+        });
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate( R.layout.fragment_update_user_profile, container, false );
-        mFireBaseAuth = FirebaseAuth.getInstance();
-
-        mNameEtWrapper = rootView.findViewById( R.id.name_input_et_wrapper );
-        mLastNameEtWrapper = rootView.findViewById( R.id.last_name_input_et_wrapper );
-        mCityNameEtWrapper = rootView.findViewById( R.id.city_name_et_wrapper );
-        mDateOfBirthEt = rootView.findViewById( R.id.date_of_birth_et );
-
-        mName_et = rootView.findViewById( R.id.name_input_et );
-        mLastNameEt = rootView.findViewById( R.id.last_name_input_et );
-        mCityNameEt = rootView.findViewById( R.id.city_name_et );
-        mDateOfBirthEt = rootView.findViewById( R.id.date_of_birth_et );
-        mDateOfBirthEt.setInputType( InputType.TYPE_NULL );
-
-        accept_btn = rootView.findViewById( R.id.accept_btn );
-        add_btn=rootView.findViewById(R.id.add_btn);
-        flowLayout=rootView.findViewById(R.id.flow_box);
-
-        mFirebaseUser = mFireBaseAuth.getCurrentUser();
-        mUid = mFirebaseUser.getUid();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference();
-        mPhotoCiv = rootView.findViewById( R.id.photoCiv );
-
-        mAutoCompleteTextView = rootView.findViewById( R.id.auto_complete_tv );
-        hobbyList = new ArrayList<>();
-
+        final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
+        mProfilePhoto=rootView.findViewById(R.id.profilePhoto_iv);
+        mPostsCount=rootView.findViewById(R.id.number_of_posts);
+        mHobbysCount=rootView.findViewById(R.id.number_of_hobbys);
+        mAutoCompleteTextView=rootView.findViewById(R.id.auto_complete_tv);
+        mAge=rootView.findViewById(R.id.age_et);
+        mCity=rootView.findViewById(R.id.city_et);
+        mNameTv=rootView.findViewById(R.id.name_tv);
+        mFab=rootView.findViewById(R.id.fab);
+        flowLayout=rootView.findViewById(R.id.flow_layout);
+        dataStore=DataStore.getInstance(getContext());
+        mFireBaseAuth= FirebaseAuth.getInstance();
+        mFireBaseUser =mFireBaseAuth.getCurrentUser();
+        mAddBtn=rootView.findViewById(R.id.add_btn);
+        mHobbysTv =new ArrayList<>();
+        mEditHobbysLayot =rootView.findViewById(R.id.add_hobbys_layout);
         ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_dropdown_item_1line, hobbys );
         mAutoCompleteTextView.setAdapter( adapter );
-        mGender = "Male";
-        final Spinner spinner = rootView.findViewById( R.id.spinner );
-        final String[] gender = new String[]{
-                "Male", "Female", "Other"
-        };
+        mNotificationSw=rootView.findViewById(R.id.notif_sw);
 
-        add_btn.setOnClickListener(new View.OnClickListener() {
+
+        mFireBaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseDatabase=FirebaseDatabase.getInstance();
+
+        final Animation shake = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
+        final Drawable originalDrawable = mAge.getBackground();
+        mAge.setBackgroundColor(Color.TRANSPARENT);
+
+        BlurryImageView =rootView.findViewById(R.id.blur_test);
+        //mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+        mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String hobby=mAutoCompleteTextView.getEditableText().toString();
@@ -653,7 +668,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                 }
                 else
                 {
-                    if (hobbyList.contains(hobby))
+                    if (mHobbysList.contains(hobby))
                     {
                         Toast.makeText(getContext(), "You already choose this hobby " , Toast.LENGTH_SHORT).show();
                         mAutoCompleteTextView.setText("");
@@ -662,21 +677,67 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         TextView textView = new TextView(getContext());
                         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         textView.setText(hobby);
-                        textView.setPadding(4, 4, 4, 4);
+                        textView.setPadding(7, 7, 7, 7);
                         textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
                         textView.setTextSize(18);
                         textView.setBackground(getResources().getDrawable(R.drawable.label_bg2));
                         flowLayout.addView(textView);
                         mAutoCompleteTextView.setText("");
-                        hobbyList.add(hobby);
+                        mHobbysList.add(hobby);
                     }
                 }
             }
         });
 
-        final TextInputLayout[] allFields = {mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper};
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if (editMode.equals(false)){
+                   editMode=true;
+                   mFab.setImageResource(R.drawable.ic_check_black_24dp);
+                   mCity.setBackground(originalDrawable);
+                   mCity.setEnabled(true);
+                   mEditHobbysLayot.setVisibility(View.VISIBLE);
+                   for (TextView tv :mHobbysTv){
+                       tv.setLongClickable(true);
+                       tv.setAnimation(shake);
+                       tv.startAnimation(shake);
+                   }
+                   mEditHobbysLayot.setVisibility(View.VISIBLE);
+               }
+               else{
+                   editMode=false;
+                   mFab.setImageResource(R.drawable.ic_edit_black_24dp);
+                   mCity.setBackgroundColor(Color.TRANSPARENT);
+                   mCity.setEnabled(false);
+                   mEditHobbysLayot.setVisibility(View.GONE);
+                   for (TextView tv :mHobbysTv){
+                       tv.setLongClickable(false);
+                       tv.setAnimation(shake);
+                       tv.clearAnimation();
+                   }
+                   mEditHobbysLayot.setVisibility(View.GONE);
 
-        mPhotoCiv.setOnClickListener( new View.OnClickListener() {
+                   if (!mCity.getText().toString().equals("")){
+                       mUserProfile.setmCityName(mCity.getText().toString());
+                   }
+                   else
+                   {
+                       mCity.setText(mUserProfile.getmCityName());
+                   }
+                   if (mHobbysList.isEmpty())
+                   {
+                       mHobbysList=mUserProfile.getmHobbylist();
+                   }
+                   mUserProfile.setmHobbylist(mHobbysList);
+                   Integer temp= mHobbysList.size();
+                   mHobbysCount.setText(temp.toString());
+                   updateflow();
+                   updateProfileOnfireBase();
+               }
+            }
+        });
+        mProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
@@ -687,186 +748,87 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         mFile );
                 Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
                 intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
-                updateUserProfileFragmentListener.updateImage( intent, mPhotoCiv );
+                profileFragmentListener.updateImage( intent, mProfilePhoto );
             }
-        } );
-        View.OnTouchListener errorCancel = new View.OnTouchListener() {
+        });
+        mUserProfile=dataStore.getUser();
+        mHobbysList =mUserProfile.getmHobbylist();
+        Integer temp = mHobbysList.size();
+        mHobbysCount.setText(temp.toString());
+        mAge.setText(mUserProfile.getmAge());
+        //mPostsCount.setText();
+        mCity.setText(mUserProfile.getmCityName());
+        updateflow();
+
+
+        mNameTv.setText(mUserProfile.getmName()+" "+mUserProfile.getmLastName());
+        Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).addListener(new RequestListener<Drawable>() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                for (TextInputLayout edit : allFields) {
-                    edit.setErrorEnabled( false );
-                }
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
             }
-        };
-        final DialogInterface.OnDismissListener onDismissListener = new DialogInterface.OnDismissListener() {
+
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                mDateOfBirthEt.clearFocus();
-                if (removeErrors_flag) {
-                    clearErrors( allFields );
-                }
-            }
-        };
-        mNameEtWrapper.setOnTouchListener( errorCancel );
-        mLastNameEtWrapper.setOnTouchListener( errorCancel );
-        mCityNameEtWrapper.setOnTouchListener( errorCancel );
-
-
-        mDateOfBirthEt.setOnTouchListener( new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastTouchDown = System.currentTimeMillis();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        //if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHHOLD) {
-                        Log.w( "App", "You clicked!" );
-                        DatePickerDialog datePickerDialog = new DatePickerDialog( rootView.getContext(), UpdateUserProfileFragment.this,
-                                Calendar.getInstance().get( Calendar.YEAR ),
-                                Calendar.getInstance().get( Calendar.MONTH ),
-                                Calendar.getInstance().get( Calendar.DAY_OF_MONTH ) );
-                        datePickerDialog.show();
-                        //}
-                        break;
-
-                }
-                if (removeErrors_flag) {
-                    clearErrors( allFields );
-                }
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(resource);
+                Blurry.with(getContext()).radius(10).from(bitmap).into(BlurryImageView);
                 return false;
             }
-        } );
-        spinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mGender = gender[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        } );
-
-        accept_btn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Boolean continue_flag = true;
-                ArrayList<TextInputLayout> ErrorFields = new ArrayList<>();
-                for (TextInputLayout edit : allFields) {
-                    if (TextUtils.isEmpty( edit.getEditText().getText().toString() )) {
-                        // EditText was empty
-                        continue_flag = false;
-                        removeErrors_flag = true;
-                        ErrorFields.add( edit );//add empty Edittext only in this ArayList
-                        for (int i = ErrorFields.size() - 1; i >= 0; i--) {
-                            TextInputLayout currentField = ErrorFields.get( i );
-                            currentField.setError( getResources().getString( R.string.this_field_required ) );
-                            currentField.requestFocus();
-                        }
-                    }
-                    if (mDateOfBirthEt.getText().equals( "Birthday" )) {
-                        continue_flag = false;
-                        Snackbar.make( rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT ).show();
-                    }
-                    if (hobbyList.isEmpty())
-                    {
-                        continue_flag=false;
-                        Toast.makeText(getContext(), "add at least one hobby ", Toast.LENGTH_SHORT).show();
-                    }
-                    if (continue_flag) {
-                        //ArrayList<UserPost> userPosts=new ArrayList<>();
-                        UserProfile userProfile = new UserProfile();
-                        userProfile.setmName( mNameEtWrapper.getEditText().getText().toString() )
-                                .setmCityName( mCityNameEtWrapper.getEditText().getText().toString() )
-                                .setmLastName( mLastNameEtWrapper.getEditText().getText().toString() )
-                                .setmAge( mAge ).setmPictureUrl( "" )
-                                .setmGender( mGender )
-                                .setmHobbylist(hobbyList)
-                                .setmDay(mDay).setmMonth(mMonth).setmYear(mYear)
-                                .setmUserToken( mUid);
-                        //userProfile.setmUserPostList(userPosts);
-
-                        if (isPhotoExists) {
-                            userProfile.setmPictureUrl( mPictureUrl );
-                        }
-                        mDatabaseReference.child( "appUsers" ).child( userProfile.getmUserToken() ).setValue( userProfile );
-                        mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().setDisplayName( mNameEtWrapper.getEditText().getText().toString() + mLastNameEtWrapper.getEditText().getText().toString() ).build() );
-                        DataStore.getInstance( getContext() ).saveUser( userProfile );
-                        updateUserProfileFragmentListener.afterUpdateUserUpdate( true );
-                    }
-                }
-            }
-        } );
+        }).into(mProfilePhoto);
 
 
         return rootView;
     }
 
-
     @Override
     public void onAttach(Context context) {
-        super.onAttach( context );
+        super.onAttach(context);
         try {
-            updateUserProfileFragmentListener = (UpdateUserProfileFragmentListener) context;
+            profileFragmentListener = (ProfilePageFragment.ProfileFragmentListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException( "Activity must implement the interface : updateUserProfileFragmentListener" );
+            throw new ClassCastException( "Activity must implement the interface : profileFragmentListener" );
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Integer day=dayOfMonth;
-        Integer year1=year;
-        Integer month1=month;
-        mDay=day.toString();
-        mYear=year1.toString();
-        mMonth=month1.toString();
-        month++;
-        String date = dayOfMonth + "/" + month + "/" + year;
-        mDateOfBirthEt.setText( date );
-        Integer tempAge;
-        tempAge = (getAge( year, month, dayOfMonth ));
-        mAge = tempAge.toString();
+        mListener = null;
     }
 
 
-    // Returns age given the date of birth
-    public static Integer getAge(int year, int month, int dayOfMonth) {
-        Calendar today = Calendar.getInstance();
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
+    }
+    void updateflow(){
+        flowLayout.removeAllViews();
+        mHobbysTv.clear();
+        for  (final String hobby : mHobbysList){
+            TextView textView = new TextView(getContext());
+            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setText(hobby);
+            textView.setPadding(8, 8, 8, 8);
+            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            textView.setTextSize(18);
+            textView.setTag(hobby);
+            textView.setBackground(getResources().getDrawable(R.drawable.label_bg2));
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mHobbysList.remove(v.getTag());
+                    mUserProfile.setmHobbylist(mHobbysList);
+                    updateflow();
+                }
+            });
+            textView.setLongClickable(false);
+            mHobbysTv.add(textView);
+            flowLayout.addView(textView);
 
-        int curYear = today.get( Calendar.YEAR );
-        int dobYear = year;
-
-        int age = curYear - dobYear;
-
-        // if dob is month or day is behind today's month or day
-        // reduce age by 1
-        int curMonth = today.get( Calendar.MONTH );
-        int dobMonth = month;
-        if (dobMonth > curMonth) { // this year can't be counted!
-            age--;
-        } else if (dobMonth == curMonth) { // same month? check for day
-            int curDay = today.get( Calendar.DAY_OF_MONTH );
-            int dobDay = dayOfMonth;
-            if (dobDay > curDay) { // this year can't be counted!
-                age--;
-            }
         }
-        return age;
     }
-
-    void clearErrors(TextInputLayout[] allFields) {
-        removeErrors_flag = false;
-        for (TextInputLayout edit : allFields) {
-            edit.setErrorEnabled( false );
-        }
+    void updateProfileOnfireBase(){
+        mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
+        mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
+        DataStore.getInstance(getContext()).saveUser(mUserProfile);
     }
 }

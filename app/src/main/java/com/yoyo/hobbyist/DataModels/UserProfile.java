@@ -1,8 +1,10 @@
 package com.yoyo.hobbyist.DataModels;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UserProfile {
+public class UserProfile implements Serializable {
 
     private String mName;
     private String mEmail;
@@ -16,7 +18,19 @@ public class UserProfile {
     private  String mCityName;
     private  String mGender;
     private  ArrayList<String> mHobbylist;
+    //transient private  ArrayList<UserPost> mUserPostList;
     private String mUserToken;
+
+
+    //public ArrayList<UserPost> getmUserPostList() {
+     //   return mUserPostList;
+    //}
+
+    //public void setmUserPostList(ArrayList<UserPost> mUserPostList) {
+      //  this.mUserPostList = mUserPostList;
+    //}
+
+
 
     public String getmUserToken() {
         return mUserToken;
@@ -136,4 +150,5 @@ public class UserProfile {
     public String getmDay() {
         return mDay;
     }
+
 }

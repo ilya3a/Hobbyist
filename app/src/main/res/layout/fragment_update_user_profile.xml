@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/gradiant_v2"
+    android:isScrollContainer="true"
+
 
     xmlns:android="http://schemas.android.com/apk/res/android">
         <TextView
@@ -40,7 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/name_input_et"
-            android:hint="First name"
             android:inputType="text"
             android:textColor="#fff"/>
     </android.support.design.widget.TextInputLayout>
@@ -57,7 +58,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last name"
             android:id="@+id/last_name_input_et"
             android:textColor="#fff"/>
     </android.support.design.widget.TextInputLayout>
@@ -164,10 +164,9 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"
         android:textSize="16sp"
-        android:textColor="@color/red"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:textColor="@color/red"
+        android:visibility="gone"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

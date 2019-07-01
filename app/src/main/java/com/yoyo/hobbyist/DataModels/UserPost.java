@@ -1,5 +1,7 @@
 package com.yoyo.hobbyist.DataModels;
 
+import java.io.Serializable;
+
 public class UserPost {
 
     String userProfilePicUrl;
