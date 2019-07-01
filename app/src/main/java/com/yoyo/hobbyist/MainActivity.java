@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
@@ -33,6 +34,8 @@ import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
@@ -51,32 +54,64 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mFireBaseUser;
     DataStore mDataStore;
-//    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
+    //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
 
+    final String API_TOKEN_KEY = "";
+    protected static boolean isVisible = true;
+    FirebaseMessaging topicMessegingAlert = FirebaseMessaging.getInstance();
+
+
+    public static void setIsVisible(boolean isVisible) {
+        MainActivity.isVisible = isVisible;
+    }
+
+    public static boolean isIsVisible() {
+        return isVisible;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setIsVisible(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setIsVisible(true);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+        super.onCreate(savedInstanceState);
+
+        mUserProfile = DataStore.getInstance(this).getUser();
+        for (String sub : mUserProfile.getmHobbylist()){
+            topicMessegingAlert.subscribeToTopic(sub);
+
+        }
+
+        setContentView(R.layout.activity_main);
         mFragmentManager = getSupportFragmentManager();
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
-        mFab = findViewById( R.id.fab );
-        mFab.setOnClickListener( new View.OnClickListener() {
+        mFab = findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
 
                 mFragmentManager = getSupportFragmentManager();
                 DialogFragment dialogFragment = new CreatePostFragment();
-                dialogFragment.show( mFragmentManager, CREATE_POST_FRAGMENT_TAG );
+                dialogFragment.show(mFragmentManager, CREATE_POST_FRAGMENT_TAG);
 
-                getWindow().setLayout( WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT );
-                dialogFragment.setCancelable( false );
+                getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                dialogFragment.setCancelable(false);
             }
-        } );
+        });
 
 //        Button buttonLogOut = findViewById(R.id.logout);
 //        buttonLogOut.setOnClickListener(new View.OnClickListener() {
@@ -88,13 +123,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //            }
 //        });
 
-        mTabLayout = findViewById( R.id.tab_layout );
+        mTabLayout = findViewById(R.id.tab_layout);
 
-        tabItem1 = findViewById( R.id.dashboard );
-        tabItem2 = findViewById( R.id.search );
-        tabItem3 = findViewById( R.id.chat );
-        tabItem4 = findViewById( R.id.menu );
-        mPager = findViewById( R.id.pager );
+        tabItem1 = findViewById(R.id.dashboard);
+        tabItem2 = findViewById(R.id.search);
+        tabItem3 = findViewById(R.id.chat);
+        tabItem4 = findViewById(R.id.menu);
+        mPager = findViewById(R.id.pager);
 //        mSwipeLeftLottie = findViewById( R.id.swipe_left );
 //        mSwipeLeftLottie.setOnClickListener( new View.OnClickListener() {
 //            @Override
@@ -114,14 +149,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //        } );
 
 
-
-
         mAdapter = new
 
-                PagerAdapter( getSupportFragmentManager(), mTabLayout.
+                PagerAdapter(getSupportFragmentManager(), mTabLayout.
 
-                getTabCount() );
-        mPager.setAdapter( mAdapter );
+                getTabCount());
+        mPager.setAdapter(mAdapter);
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -130,45 +163,45 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         }
 
         ;
-        mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int itemPos = tab.getPosition();
-                mPager.setCurrentItem( itemPos );
+                mPager.setCurrentItem(itemPos);
 
 
                 if (itemPos == 0) {
 //                    mSwipeLeftLottie.setVisibility( View.GONE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon_selected );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon_selected);
+                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
+                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
+                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
 
 
                 } else if (itemPos == 1) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon_selected );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
+                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon_selected);
+                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
+                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
 
                 } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
+                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
+                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon_selected);
+                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
 
                 } else {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.GONE );
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon_selected );
+                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
+                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
+                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
+                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon_selected);
 
                 }
             }
@@ -183,10 +216,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        } );
+        });
 
-        mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
-        getUserProfiles();
+        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        //todo: wtf???? why to get users here???
+//        getUserProfiles();
     }
 
 
@@ -208,23 +242,24 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onStart() {
         super.onStart();
-        mFireBaseAuth.addAuthStateListener( mAuthStateListener );
+        mFireBaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mFireBaseAuth.removeAuthStateListener( mAuthStateListener );
+        mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
     }
+//todo: wtf???
     public void getUserProfiles() {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" ).child(mFireBaseUser.getUid());
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers").child(mFireBaseUser.getUid());
         Query usersQuery = mDatabaseReference.orderByKey();
 
         usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+                mUserProfile = dataSnapshot.getValue(UserProfile.class);
                 mDataStore = DataStore.getInstance(getApplicationContext());
                 mDataStore.saveUser(mUserProfile);
 

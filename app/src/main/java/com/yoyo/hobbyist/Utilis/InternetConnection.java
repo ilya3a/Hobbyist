@@ -12,4 +12,7 @@ public class InternetConnection {
                 || mConnectivityManager.getNetworkInfo( ConnectivityManager.TYPE_WIFI ).getState() == NetworkInfo.State.CONNECTED;
 
     }
+    public static String[] getHobbysFromServer(){
+        return null;
+    }
 }

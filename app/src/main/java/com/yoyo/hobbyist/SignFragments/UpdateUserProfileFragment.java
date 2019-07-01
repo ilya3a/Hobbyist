@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -67,7 +68,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     UpdateUserProfileFragmentListener updateUserProfileFragmentListener;
 
     public interface UpdateUserProfileFragmentListener {
-        void afterUpdateUserUpdate(Boolean isUserUpdated);
+        void afterUpdateUserUpdate(Boolean isUserUpdated, String[] hobbies);
 
         void updateImage(Intent intent, View view);
     }
@@ -790,7 +791,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         mDatabaseReference.child( "appUsers" ).child( userProfile.getmUserToken() ).setValue( userProfile );
                         mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().setDisplayName( mNameEtWrapper.getEditText().getText().toString() + mLastNameEtWrapper.getEditText().getText().toString() ).build() );
                         DataStore.getInstance( getContext() ).saveUser( userProfile );
-                        updateUserProfileFragmentListener.afterUpdateUserUpdate( true );
+                        updateUserProfileFragmentListener.afterUpdateUserUpdate( true,hobbys );
                     }
                 }
             }

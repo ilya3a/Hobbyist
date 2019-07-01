@@ -46,13 +46,13 @@ public class DashboardFragment extends Fragment {
         Bundle args = new Bundle();
 //        args.putString( ARG_PARAM1, param1 );
 //        args.putString( ARG_PARAM2, param2 );
-        fragment.setArguments( args );
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 //            mParam1 = getArguments().getString( ARG_PARAM1 );
 //            mParam2 = getArguments().getString( ARG_PARAM2 );
@@ -62,43 +62,43 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate( R.layout.dashboard_fragment, container, false );
+        View rootView = inflater.inflate(R.layout.dashboard_fragment, container, false);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
-        RecyclerView recyclerView = rootView.findViewById( R.id.dash_recycler );
+        RecyclerView recyclerView = rootView.findViewById(R.id.dash_recycler);
         recyclerView.setHasFixedSize(true);
         mAdapter = new PostsRecyclerViewAdapter(userPosts, context);
 
 
         ArrayList<UserPost> userPosts = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            userPosts.add( new UserPost( "A", "B", "C", true, "D", "E", "F", "G", 1, 2 ) );
+            userPosts.add(new UserPost("A", "B", "C", true, "D", "E", "F", "G", 1, 2));
         }
 
-        PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter( userPosts, getContext() );
-        recyclerView.setHasFixedSize( true );
-        recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
-        recyclerView.setAdapter( adapter );
+        PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter(userPosts, getContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
         return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction( uri );
+            mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach( context );
+        super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException( context.toString()
-                    + " must implement OnFragmentInteractionListener" );
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -116,11 +116,11 @@ public class DashboardFragment extends Fragment {
     public void getUserProfilesByHobbies(final String[] hobbies) {
 
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers");
         Query usersQuery = mDatabaseReference.orderByKey();
 
 
-        usersQuery.addValueEventListener( new ValueEventListener() {
+        usersQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -128,12 +128,12 @@ public class DashboardFragment extends Fragment {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    UserProfile profile = snapshot.getValue( UserProfile.class );
+                    UserProfile profile = snapshot.getValue(UserProfile.class);
 
                     if (profile.getmHobbylist() != null) {
                         for (String hobby : hobbies) {
-                            if (profile.getmHobbylist().contains( hobby )) {
-                                userProfiles.add( profile );
+                            if (profile.getmHobbylist().contains(hobby)) {
+                                userProfiles.add(profile);
                                 break;
                             }
                         }
@@ -147,7 +147,7 @@ public class DashboardFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        } );
+        });
 
 
     }
