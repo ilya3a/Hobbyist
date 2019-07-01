@@ -616,7 +616,6 @@ public class ProfilePageFragment extends Fragment {
 //        final Date currentTime = Calendar.getInstance().getTime();
 //        mFireBaseStorageRef = FirebaseStorage.getInstance().getReference( "images/"+ currentTime.toString()+".jpg" );
 //        mProfilePhoto.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
-//       
 //        Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
 //        Uri uri = Uri.fromFile( mFile );
 //        mFireBaseStorageRef.putFile( uri ).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -869,7 +868,7 @@ public class ProfilePageFragment extends Fragment {
                     updateflow();
                 }
             });
-            textView.setLongClickable(false);
+            textView.setClickable(false);
             mHobbysTv.add(textView);
             flowLayout.addView(textView);
 
