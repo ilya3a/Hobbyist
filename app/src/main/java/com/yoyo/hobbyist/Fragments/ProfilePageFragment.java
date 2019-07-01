@@ -664,6 +664,7 @@ public class ProfilePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto=rootView.findViewById(R.id.profilePhoto_iv);
+        mProfilePhoto.setEnabled(false);
         mPostsCount=rootView.findViewById(R.id.number_of_posts);
         mHobbysCount=rootView.findViewById(R.id.number_of_hobbys);
         mAutoCompleteTextView=rootView.findViewById(R.id.auto_complete_tv);
@@ -760,7 +761,7 @@ public class ProfilePageFragment extends Fragment {
                        tv.startAnimation(shake);
                    }
                    mEditHobbysLayot.setVisibility(View.VISIBLE);
-                   mProfilePhoto.setClickable(true);
+                   mProfilePhoto.setEnabled(true);
                }
                else{
                    editMode=false;
@@ -791,7 +792,7 @@ public class ProfilePageFragment extends Fragment {
                    mHobbysCount.setText(temp.toString());
                    updateflow();
                    updateProfileOnfireBase();
-                   mProfilePhoto.setClickable(false);
+                   mProfilePhoto.setEnabled(false);
                }
             }
         });

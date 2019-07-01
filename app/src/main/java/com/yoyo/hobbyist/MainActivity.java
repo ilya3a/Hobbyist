@@ -295,8 +295,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode==RESULT_OK) {
-            Fragment fragment = mFragmentManager.findFragmentById(R.id.pager);
-            assert fragment != null;
+            Fragment fragment =  mAdapter.getItem(mPager.getCurrentItem());
             ((ProfilePageFragment) fragment).updateUserImage();
         }
         else {
