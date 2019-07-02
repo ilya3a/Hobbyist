@@ -69,6 +69,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
 
 public class UpdateUserProfileFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
@@ -80,12 +81,13 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
         void updateImage(Intent intent, View view);
     }
-        public  void updateUserImage(){
+        public  void updateUserImage(final String filePath){
             final StorageReference mStorageRef;
             final Date currentTime = Calendar.getInstance().getTime();
             mStorageRef = FirebaseStorage.getInstance().getReference("images/" + currentTime + ".jpg");
             isPhotoExists = true;
-            Uri uri = Uri.fromFile(mFile);
+            //Uri uri = Uri.fromFile(mFile);
+            Uri uri = Uri.fromFile(new File(filePath));
             final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
                     "Uploading. Please wait...", true);
             dialog.show();
@@ -97,7 +99,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         public void onSuccess(Uri uri) {
                             mPictureUrl = uri.toString();
                             dialog.cancel();
-                            mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
+                            mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(filePath));
                         }
                     });
 
@@ -106,7 +108,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     dialog.cancel();
-                    Snackbar.make(getView(), "Cant find the hobby", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Something went wrong", Snackbar.LENGTH_SHORT).show();
                 }
             });
         }
@@ -269,13 +271,18 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mPhotoCiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date currentTime = Calendar.getInstance().getTime();
-                mFile = new File(Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg");
-                imageUri = FileProvider.getUriForFile(getContext(),
-                        getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
-                        mFile);
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//                Date currentTime = Calendar.getInstance().getTime();
+//                mFile = new File(Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg");
+//                imageUri = FileProvider.getUriForFile(getContext(),
+//                        getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
+//                        mFile);
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                Intent intent = new Intent(getContext(), ImageSelectActivity.class);
+                intent.putExtra(ImageSelectActivity.FLAG_COMPRESS, false);//default is true
+                intent.putExtra(ImageSelectActivity.FLAG_CAMERA, true);//default is true
+                intent.putExtra(ImageSelectActivity.FLAG_GALLERY, true);//default is true
+                intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
                 updateUserProfileFragmentListener.updateImage(intent, mPhotoCiv);
             }
         });

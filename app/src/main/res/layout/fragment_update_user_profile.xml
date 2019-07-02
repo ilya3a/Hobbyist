@@ -24,7 +24,9 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:src="@mipmap/ic_android"
-            android:id="@+id/photoCiv"/>
+            android:id="@+id/photoCiv"
+            app:civ_border_color="#FFf"
+            app:civ_border_width="2dp"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
