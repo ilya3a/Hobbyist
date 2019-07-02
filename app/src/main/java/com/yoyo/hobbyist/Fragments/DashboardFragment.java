@@ -91,7 +91,7 @@ public class DashboardFragment extends Fragment {
         PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter(userPosts, getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setAdapter(adapter);
         return rootView;
     }
 

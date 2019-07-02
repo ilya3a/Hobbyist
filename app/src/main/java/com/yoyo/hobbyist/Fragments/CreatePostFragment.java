@@ -140,7 +140,7 @@ public class CreatePostFragment extends DialogFragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try {
                             String hobby = (String) snapshot.getValue();
-                            if (hobby.matches("[a-zA-Z0-9-_.~%]{1,900}")) {
+                            if (hobby.replace(" ","").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
                                 hobbylist.add(hobby);
                             }
                             i++;

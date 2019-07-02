@@ -32,6 +32,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -39,13 +40,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/post_online_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="5dp"
-                        android:src="#2FCC1D" />
+                    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                        <!--android:id="@+id/post_online_icon"-->
+                        <!--android:layout_width="15dp"-->
+                        <!--android:layout_height="15dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_marginStart="5dp"-->
+                        <!--android:src="#2FCC1D"/>-->
 
                     <TextView
                         android:id="@+id/post_city"
@@ -56,12 +57,7 @@
                         android:text="Barcelona"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/create_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:text="25/06/19" />
+
 
                 </LinearLayout>
 
@@ -77,6 +73,12 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+            <TextView
+                android:id="@+id/create_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="25/06/19" />
         </LinearLayout>
 
         <LinearLayout
@@ -114,46 +116,30 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="Hi, i'm looknig for challenger player who likes table"
-                android:textSize="15sp" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginBottom="20dp"
+                android:id="@+id/post_description"
                 android:text="tennis as I do.. I've got the all equipment (table balls and bet's) "
                 android:textSize="15sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:gravity="end"
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Comment" />
-
             <Button
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/ic_chat_icon_selected" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ic_chat_icon_selected"
+                android:id="@+id/post_chat_btn"/>
 
         </LinearLayout>
     </LinearLayout>

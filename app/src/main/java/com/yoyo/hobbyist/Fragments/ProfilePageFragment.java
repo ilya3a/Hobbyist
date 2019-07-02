@@ -60,8 +60,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import com.himanshurawat.imageworker.ImageWorker;
-import com.myhexaville.smartimagepicker.ImagePicker;
-import com.myhexaville.smartimagepicker.OnImagePickedListener;
+
 import com.nex3z.flowlayout.FlowLayout;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
@@ -285,7 +284,7 @@ public class ProfilePageFragment extends Fragment {
 
         mHobbysCount.setText(String.valueOf(mHobbysList.size()));
         mAge.setText(mUserProfile.getmAge());
-        //mPostsCount.setText();
+        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
         mCity.setText(mUserProfile.getmCityName());
         mNameTv.setText(mUserProfile.getmName()+"       "+mUserProfile.getmLastName());
         updateflow();

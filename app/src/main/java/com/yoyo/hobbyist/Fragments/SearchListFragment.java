@@ -72,14 +72,14 @@ public class SearchListFragment extends Fragment {
 
         recyclerView = rootView.findViewById( R.id.dash_recycler );
         recyclerView.setHasFixedSize( true );
-        mAdapter = new PostsRecyclerViewAdapter( userPosts, context );
+        mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext() );
 
 
         PostViewModel postViewModel = ViewModelProviders.of( this ).get( PostViewModel.class );
         postViewModel.getPosts().observe( this, new Observer<List<UserPost>>() {
             @Override
             public void onChanged(@Nullable List<UserPost> postsList) {
-                mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, context );
+                mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, getContext() );
                 recyclerView.setAdapter( mAdapter );
             }
         } );
