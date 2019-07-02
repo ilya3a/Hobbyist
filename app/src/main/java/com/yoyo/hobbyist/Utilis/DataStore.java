@@ -69,4 +69,10 @@ public class DataStore {
         String userPost = mSharedPref.getString(SHARED_KEY_NEW_POST, "");
         return mGson.fromJson(userPost, UserPost.class);
     }
+    public boolean isNotifOk(){
+        return  mSharedPref.getBoolean("notif", true);
+    }
+    public void setNotifOk(boolean ok){
+        mEditor.putBoolean("notif",ok).commit();
+    }
 }

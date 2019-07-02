@@ -30,6 +30,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -117,6 +118,7 @@ public class ProfilePageFragment extends Fragment {
     public interface ProfileFragmentListener {
         void updateImage(Intent intent, View view);
         void logOut();
+        void notifCheckChange(boolean isChecked);
     }
     public ProfilePageFragment() {
         // Required empty public constructor
@@ -231,6 +233,12 @@ public class ProfilePageFragment extends Fragment {
         mHobbysTv =new ArrayList<>();
         mEditHobbysLayot =rootView.findViewById(R.id.add_hobbys_layout);
         mNotificationSw=rootView.findViewById(R.id.notif_sw);
+        mNotificationSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+               profileFragmentListener.notifCheckChange(isChecked);
+            }
+        });
         mExitFab=rootView.findViewById(R.id.fab_logout);
         mGenderEt =rootView.findViewById(R.id.gender_et);
         mFireBaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -363,12 +371,14 @@ public class ProfilePageFragment extends Fragment {
                    {
                        mHobbysList=mUserProfile.getmHobbylist();
                    }
+                   profileFragmentListener.notifCheckChange(false);
                    mUserProfile.setmHobbylist(mHobbysList);
                    Integer temp= mHobbysList.size();
                    mHobbysCount.setText(temp.toString());
                    updateflow();
                    updateProfileOnfireBase();
                    mProfilePhoto.setEnabled(false);
+                   profileFragmentListener.notifCheckChange(true);
                }
             }
         });

@@ -1,14 +1,9 @@
 package com.yoyo.hobbyist;
 
-import android.app.Activity;
-import android.arch.lifecycle.Observer;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,43 +18,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
 import com.yoyo.hobbyist.DataModels.UserProfile;
-import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
-import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.Fragments.ChatFragment;
 import com.yoyo.hobbyist.Fragments.CreatePostFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
-import com.yoyo.hobbyist.ViewModel.PostViewModel;
 
-import java.util.List;
-
-import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.ArrayList;
-
-import java.util.Arrays;
 
 import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
@@ -98,14 +75,39 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     }
 
     @Override
+    public void notifCheckChange(boolean isChecked) {
+        DataStore.getInstance(this).setNotifOk(isChecked);
+        if (isChecked) {
+            mUserProfile = DataStore.getInstance(this).getUser();
+            if (mUserProfile != null) {
+                for (String sub : mUserProfile.getmHobbylist()) {
+                    topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
+
+                }
+            }
+        } else {
+            mUserProfile = DataStore.getInstance(this).getUser();
+            if (mUserProfile != null) {
+                for (String sub : mUserProfile.getmHobbylist()) {
+                    topicMessegingAlert.unsubscribeFromTopic(sub.replace(" ", ""));
+
+                }
+            }
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUserProfile = DataStore.getInstance(this).getUser();
-        if (mUserProfile != null) {
-            for (String sub : mUserProfile.getmHobbylist()) {
-                topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
+        if (DataStore.getInstance(this).isNotifOk()) {
+            mUserProfile = DataStore.getInstance(this).getUser();
+            if (mUserProfile != null) {
+                for (String sub : mUserProfile.getmHobbylist()) {
+                    topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
 
+                }
             }
         }
 

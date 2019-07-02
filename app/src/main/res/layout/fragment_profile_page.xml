@@ -283,6 +283,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="80dp"
+                        android:checked="true"
                         android:layout_toEndOf="@+id/notif_tv"
                         android:textColor="@color/tab_color" />
                 </RelativeLayout>
