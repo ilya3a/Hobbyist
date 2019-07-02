@@ -39,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:id="@+id/email_input_et_wraper"
-                android:layout_below="@+id/login_text_headline"
                 android:hint="Email"
                 android:textColorHint="#fff">
                 <EditText
@@ -106,19 +105,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-    <Button
+    <android.support.design.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Login"
         android:id="@+id/login_fragment_btn"
-        android:textAllCaps="false"
 
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         style="@style/AppTheme.RoundedCornerMaterialButton"
         android:gravity="center"
         android:letterSpacing="0.2"
-        android:padding="16dp"
         android:textColor="#d9e5f3"
         android:textStyle="bold"
         />

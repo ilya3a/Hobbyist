@@ -133,17 +133,17 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="3dp"/>
 
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+    <android.support.design.button.MaterialButton
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:text="add"
-        android:padding="10dp"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginEnd="5dp"
         style="@style/AppTheme.RoundedCornerMaterialButton"
         android:id="@+id/add_btn"
+        app:icon="@drawable/ic_add_black_24dp"
         />
 </LinearLayout>
 <com.nex3z.flowlayout.FlowLayout
@@ -176,7 +176,7 @@
             android:gravity="bottom"
             android:layout_margin="15dp">
 
-            <Button
+            <android.support.design.button.MaterialButton
                 android:id="@+id/accept_btn"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"

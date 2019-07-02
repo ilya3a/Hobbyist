@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/email_input_et_wraper"
-                android:layout_below="@+id/login_text_headline"
                 android:hint="Email Address"
                 android:textColorHint="#fff"
                 android:layout_marginStart="5dp">
@@ -144,7 +143,7 @@
     android:gravity="bottom"
     android:layout_marginBottom="20dp"
     >
-        <Button
+        <android.support.design.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SignUp"
