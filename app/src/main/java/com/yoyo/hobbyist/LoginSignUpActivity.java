@@ -141,8 +141,8 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
             callUpdateUser();
         } else {
             mFireBaseUser = user;
-            mLottieAnimationView.setVisibility(View.VISIBLE);
-            mLottieAnimationView.playAnimation();
+            //mLottieAnimationView.setVisibility(View.VISIBLE);
+            //mLottieAnimationView.playAnimation();
             Handler handler = new Handler();
             Runnable runnable = new Runnable() {
                 @Override
@@ -150,7 +150,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
                     mFragmentManager.beginTransaction().commit();
                     mLottieAnimationView.setVisibility(View.GONE);
-//                    getUserProfiles();
+                    getUserProfiles();
                 }
             };
             handler.postDelayed(runnable, 3100);

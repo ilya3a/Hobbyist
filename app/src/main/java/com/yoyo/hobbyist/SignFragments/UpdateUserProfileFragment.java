@@ -2,6 +2,7 @@ package com.yoyo.hobbyist.SignFragments;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,8 +38,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -58,6 +61,7 @@ import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -76,42 +80,71 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
         void updateImage(Intent intent, View view);
     }
+        public  void updateUserImage(){
+            final StorageReference mStorageRef;
+            final Date currentTime = Calendar.getInstance().getTime();
+            mStorageRef = FirebaseStorage.getInstance().getReference("images/" + currentTime + ".jpg");
+            isPhotoExists = true;
+            Uri uri = Uri.fromFile(mFile);
+            final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
+                    "Uploading. Please wait...", true);
+            dialog.show();
+            mStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            mPictureUrl = uri.toString();
+                            dialog.cancel();
+                            mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
+                        }
+                    });
 
-    public void updateUserImage() {
-        final StorageReference mStorageRef;
-        mStorageRef = FirebaseStorage.getInstance().getReference("images/" + mFirebaseUser.getUid() + ".jpg");
-        isPhotoExists = true;
-        mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
-        Uri uri = Uri.fromFile(mFile);
-        mStorageRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        mPictureUrl = uri.toString();
-                    }
-                });
-                mStorageRef.child("images/" + mFirebaseUser.getUid() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_LONG).show();
-                        Glide.with(getContext()).load(uri).into(mPhotoCiv);
-
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "Update Faild", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        mFireBaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build());
-
-    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    dialog.cancel();
+                    Snackbar.make(getView(), "Cant find the hobby", Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        }
+//    public void updateUserImage() {
+//        final StorageReference mStorageRef;
+//        mStorageRef = FirebaseStorage.getInstance().getReference("images/" + mFirebaseUser.getUid() + ".jpg");
+//        isPhotoExists = true;
+//        mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
+//        Uri uri = Uri.fromFile(mFile);
+//        mStorageRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        mPictureUrl = uri.toString();
+//                    }
+//                });
+//                mStorageRef.child("images/" + mFirebaseUser.getUid() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_LONG).show();
+//                        Glide.with(getContext()).load(uri).into(mPhotoCiv);
+//
+//                    }
+//                });
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(getContext(), "Update Faild", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+////        mFireBaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build());
+//
+//    }
 
 
     String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid, mDay, mMonth, mYear;
@@ -238,7 +271,6 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
                 mFile = new File(Environment.getExternalStorageDirectory(), currentTime + "Hobbyist.jpg");
-
                 imageUri = FileProvider.getUriForFile(getContext(),
                         getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
                         mFile);

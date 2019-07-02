@@ -230,8 +230,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         });
 
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        //todo: wtf???? why to get users here???
-//        getUserProfiles();
     }
 
 
@@ -269,29 +267,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onStop() {
         super.onStop();
         mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
-    }
-
-    //todo: wtf???
-    public void getUserProfiles() {
-        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers").child(mFireBaseUser.getUid());
-        Query usersQuery = mDatabaseReference.orderByKey();
-
-        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUserProfile = dataSnapshot.getValue(UserProfile.class);
-                mDataStore = DataStore.getInstance(getApplicationContext());
-                mDataStore.saveUser(mUserProfile);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     @Override

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -104,11 +105,12 @@ public class NewSignInScreenFragment extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     FirebaseUser user = mFireBaseAuth.getCurrentUser();
-                                    mLottieTv.cancelAnimation();
-                                    mListener.afterSignInUserUpdate(user);
+                                    //mLottieTv.cancelAnimation();
                                     mSpEditor.putString("userEmail", useremail).commit();
                                     mSpEditor.putString("userPassword", password).commit();
                                     removePhoneKeypad(rootView);
+                                    mListener.afterSignInUserUpdate(user);
+                                    Toast.makeText(getContext(), "Sign in succsfuly", Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     Snackbar.make(rootView, "Email or Password are incorrect", Snackbar.LENGTH_SHORT).show();

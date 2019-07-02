@@ -112,7 +112,6 @@ public class ProfilePageFragment extends Fragment {
     public void updateUserImage(){
         final Date currentTime = Calendar.getInstance().getTime();
         mFireBaseStorageRef=FirebaseStorage.getInstance().getReference("images/"+currentTime.toString()+".jpg");
-        //update photo from storeg
         Uri uri = Uri.fromFile( mFile );
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
                 "Uploading. Please wait...", true);
@@ -352,10 +351,10 @@ public class ProfilePageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
-                mFile = new File( Environment.getExternalStorageDirectory(), currentTime + "Hobbyist.jpg" );
+                mFile = new File( Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg" );
 
                 imageUri = FileProvider.getUriForFile( getContext(),
-                        "com.yoyo.hobbyist.provider",
+                        getActivity().getPackageName() + ".provider",
                         mFile );
                 Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
                 intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
@@ -363,21 +362,26 @@ public class ProfilePageFragment extends Fragment {
             }
         });
 
+        if (mUserProfile.getmPictureUrl().equals(""))
+        {
+            Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(getResources().getDrawable(R.drawable.ic_android_foreground));
+            mProfilePhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_android_foreground));
+        }
+        else {
+            Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).addListener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
 
-        Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).addListener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(resource);
-                Blurry.with(getContext()).radius(10).from(bitmap).into(mBlurryImageView);
-                return false;
-            }
-        }).into(mProfilePhoto);
-
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(resource);
+                    Blurry.with(getContext()).radius(10).from(bitmap).into(mBlurryImageView);
+                    return false;
+                }
+            }).into(mProfilePhoto);
+        }
 
         return rootView;
     }
