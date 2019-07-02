@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 DialogFragment dialogFragment = new CreatePostFragment();
                 dialogFragment.show(mFragmentManager, CREATE_POST_FRAGMENT_TAG);
 
-                getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                dialogFragment.setCancelable(false);
+//                getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//                dialogFragment.setCancelable(false);
             }
         });
 

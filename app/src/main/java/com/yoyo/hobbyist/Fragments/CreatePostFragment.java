@@ -135,15 +135,16 @@ public class CreatePostFragment extends DialogFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    int i =0;
+                    int i = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try {
                             String hobby = (String) snapshot.getValue();
-                            if (hobby.matches("[a-zA-Z0-9-_.~%]{1,900}")){
-                            hobbylist.add(hobby);}
+                            if (hobby.matches("[a-zA-Z0-9-_.~%]{1,900}")) {
+                                hobbylist.add(hobby);
+                            }
                             i++;
-                        }catch (ClassCastException ex){
-                            Log.d("ilya",i+"");
+                        } catch (ClassCastException ex) {
+                            Log.d("ilya", i + "");
                         }
                     }
                     mAutoCompleteTextView = rootView.findViewById(R.id.chosen_hobby_name);
@@ -158,9 +159,6 @@ public class CreatePostFragment extends DialogFragment {
 
             }
         });
-
-
-
 
 
         mProfilePicture = rootView.findViewById(R.id.post_profile_image);
@@ -178,8 +176,12 @@ public class CreatePostFragment extends DialogFragment {
         mCreatePost.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
-                                               if (!TextUtils.isEmpty(mAutoCompleteTextView.getText().toString())) {
+
+                                               String chosenHobby = mAutoCompleteTextView.getText().toString();
+
+                                               if (!TextUtils.isEmpty(chosenHobby) && hobbylist.contains(chosenHobby)) {
                                                    if (InternetConnection.isNetworkAvailable(getContext())) {
+
 
                                                        UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
 
@@ -220,9 +222,9 @@ public class CreatePostFragment extends DialogFragment {
                                                        String textToSend = "Check out new Activity on" + userPost.getHobby();
                                                        try {
                                                            final JSONObject rootObject = new JSONObject();
-                                                           rootObject.put("to", "/topics/" + userPost.getHobby().replace(" ",""));
-                                                           rootObject.put("notification",new JSONObject().put("title",textToSend));
-                                                           rootObject.put("notification",new JSONObject().put("body",textToSend));
+                                                           rootObject.put("to", "/topics/" + userPost.getHobby().replace(" ", ""));
+                                                           rootObject.put("notification", new JSONObject().put("title", textToSend));
+                                                           rootObject.put("notification", new JSONObject().put("body", textToSend));
 
 
 //                                                           rootObject.put("data", new JSONObject().put("message", textToSend));
@@ -265,11 +267,15 @@ public class CreatePostFragment extends DialogFragment {
 
 
                                                        CreatePostFragment.this.dismiss();
+                                                   } else {
+
+                                                       Toast.makeText(getContext(), "Please check internet connection", Toast.LENGTH_SHORT).show();
                                                    }
 
                                                } else {
-//                                                    Snackbar.make( rootView, "Please check internet connection", Snackbar.LENGTH_SHORT );
-                                                   Toast.makeText(getContext(), "Please check internet connection", Toast.LENGTH_SHORT).show();
+
+                                                   Toast.makeText(getContext(), " Invalid input, Please choose 1 item from list", Toast.LENGTH_SHORT).show();
+
                                                }
                                            }
                                        }
@@ -320,7 +326,7 @@ public class CreatePostFragment extends DialogFragment {
             public void afterTextChanged(Editable s) {
                 int numOfLines;
                 numOfLines = mAutoCompleteTextView.getLineCount();
-                if (numOfLines > 1) {
+                if (numOfLines > 2) {
 
                     mAutoCompleteTextView.getText().delete(mAutoCompleteTextView.getSelectionEnd() - 1, mAutoCompleteTextView.getSelectionStart());
                 }
