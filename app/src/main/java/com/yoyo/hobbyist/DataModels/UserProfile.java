@@ -9,27 +9,26 @@ public class UserProfile implements Serializable {
     private String mName;
     private String mEmail;
     private String mLastName;
-    private  String mYear;
-    private  String mMonth;
-    private  String mDay;
+    private String mYear;
+    private String mMonth;
+    private String mDay;
     private String mAge;
-    private  String mPictureUrl;
-    private  String mUserAboutMe;
-    private  String mCityName;
-    private  String mGender;
-    private  ArrayList<String> mHobbylist;
-    //transient private  ArrayList<UserPost> mUserPostList;
+    private String mPictureUrl;
+    private String mUserAboutMe;
+    private String mCityName;
+    private String mGender;
+    private ArrayList<String> mHobbylist;
+    private ArrayList<UserPost> mUserPostList;
     private String mUserToken;
 
+    public ArrayList<UserPost> getmUserPostList() {
+        return mUserPostList;
+    }
 
-    //public ArrayList<UserPost> getmUserPostList() {
-     //   return mUserPostList;
-    //}
-
-    //public void setmUserPostList(ArrayList<UserPost> mUserPostList) {
-      //  this.mUserPostList = mUserPostList;
-    //}
-
+    public UserProfile setmUserPostList(ArrayList<UserPost> mUserPostList) {
+        this.mUserPostList = mUserPostList;
+        return this;
+    }
 
 
     public String getmUserToken() {
@@ -48,7 +47,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmName(String mName) {
-        this.mName = mName;        return this;
+        this.mName = mName;
+        return this;
 
     }
 
@@ -57,7 +57,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmAge(String mAge) {
-        this.mAge = mAge;        return this;
+        this.mAge = mAge;
+        return this;
 
     }
 
@@ -66,7 +67,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmLastName(String mLastName) {
-        this.mLastName = mLastName;        return this;
+        this.mLastName = mLastName;
+        return this;
 
     }
 
@@ -75,7 +77,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmEmail(String mEmail) {
-        this.mEmail = mEmail;        return this;
+        this.mEmail = mEmail;
+        return this;
 
     }
 
@@ -84,7 +87,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmPictureUrl(String mPictureUrl) {
-        this.mPictureUrl = mPictureUrl;        return this;
+        this.mPictureUrl = mPictureUrl;
+        return this;
 
     }
 
@@ -93,7 +97,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmUserAboutMe(String mUserAboutMe) {
-        this.mUserAboutMe = mUserAboutMe;        return this;
+        this.mUserAboutMe = mUserAboutMe;
+        return this;
 
     }
 
@@ -102,7 +107,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmCityName(String mCityName) {
-        this.mCityName = mCityName;        return this;
+        this.mCityName = mCityName;
+        return this;
 
     }
 
@@ -111,7 +117,8 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmHobbylist(ArrayList<String> mHobbylist) {
-        this.mHobbylist = mHobbylist;        return this;
+        this.mHobbylist = mHobbylist;
+        return this;
 
     }
 
@@ -120,17 +127,20 @@ public class UserProfile implements Serializable {
     }
 
     public UserProfile setmGender(String mGender) {
-        this.mGender = mGender;        return this;
+        this.mGender = mGender;
+        return this;
 
     }
 
     public UserProfile setmYear(String mYear) {
-        this.mYear = mYear;        return this;
+        this.mYear = mYear;
+        return this;
 
     }
 
     public UserProfile setmMonth(String mMonth) {
-        this.mMonth = mMonth;        return this;
+        this.mMonth = mMonth;
+        return this;
 
     }
 

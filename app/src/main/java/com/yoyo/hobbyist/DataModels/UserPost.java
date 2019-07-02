@@ -28,6 +28,9 @@ public class UserPost {
         this.longitude = longitude;
     }
 
+    public UserPost() {
+    }
+
     public String getUserProfilePicUrl() {
         return userProfilePicUrl;
     }

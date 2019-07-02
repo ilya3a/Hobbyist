@@ -46,6 +46,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -198,6 +199,9 @@ public class CreatePostFragment extends DialogFragment {
                                                                userToken, mPostDescriptionEt.getText().toString(), mLatitude, mLongitude);
 
                                                        mDatabaseReference.child("usersPost").child(userPost.getHobby()).child(userToken).push().setValue(userPost);
+                                                       userProfile.getmUserPostList().add(userPost);
+                                                       DataStore.getInstance(getContext()).saveUser(userProfile);
+                                                       updateUserProfileOnFireBase(userProfile);
                                                        DataStore.getInstance(getContext()).saveUserPost(userPost);
 
                                                        /*
@@ -399,6 +403,11 @@ public class CreatePostFragment extends DialogFragment {
             }
 
         });
+    }
+    public void updateUserProfileOnFireBase(UserProfile userProfile){
+        mDatabaseReference.child( "appUsers" ).child( userProfile.getmUserToken() ).setValue( userProfile );
+        mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
+        DataStore.getInstance(getContext()).saveUser(userProfile);
     }
 
 

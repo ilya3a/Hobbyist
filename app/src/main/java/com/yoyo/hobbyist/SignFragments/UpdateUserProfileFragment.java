@@ -110,42 +110,6 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                 }
             });
         }
-//    public void updateUserImage() {
-//        final StorageReference mStorageRef;
-//        mStorageRef = FirebaseStorage.getInstance().getReference("images/" + mFirebaseUser.getUid() + ".jpg");
-//        isPhotoExists = true;
-//        mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
-//        Uri uri = Uri.fromFile(mFile);
-//        mStorageRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        mPictureUrl = uri.toString();
-//                    }
-//                });
-//                mStorageRef.child("images/" + mFirebaseUser.getUid() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_LONG).show();
-//                        Glide.with(getContext()).load(uri).into(mPhotoCiv);
-//
-//                    }
-//                });
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(getContext(), "Update Faild", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-////        mFireBaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build());
-//
-//    }
-
 
     String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid, mDay, mMonth, mYear;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
@@ -168,6 +132,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     final String UPDATE_USER_FRAGMENT_TAG = "update_user_fragment";
     Boolean isPhotoExists = false;
     ArrayList<String> hobbys = new ArrayList<>();
+    ArrayList<UserPost> userPosts = new ArrayList<>();
 
     @Override
     public void onResume() {
@@ -373,7 +338,9 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 .setmAge(mAge).setmPictureUrl("")
                                 .setmGender(mGender)
                                 .setmHobbylist(hobbyList)
-                                .setmDay(mDay).setmMonth(mMonth).setmYear(mYear)
+                                .setmDay(mDay).setmMonth(mMonth)
+                                .setmYear(mYear)
+                                .setmUserPostList(userPosts)
                                 .setmUserToken(mUid);
                         //userProfile.setmUserPostList(userPosts);
 
