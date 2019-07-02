@@ -67,7 +67,8 @@
                     android:gravity="center"
                     android:text="Thomas Schneider"
                     android:textColor="@color/tab_color"
-                    android:textSize="22dp" />
+                    android:textSize="22dp"
+                    android:fontFamily="@font/acme_regular"/>
 
             </RelativeLayout>
 
@@ -102,7 +103,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Posts"
-                        android:textColor="#000" />
+                        android:textColor="#000"
+                        android:fontFamily="@font/acme_regular"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -136,7 +138,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Hobbys"
-                        android:textColor="#000" />
+                        android:textColor="#000"
+                        android:fontFamily="@font/acme_regular"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -164,7 +167,9 @@
                         android:layout_weight="0.3"
                         android:padding="20dp"
                         android:text="Age"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="italic|bold"/>
 
                     <EditText
                         android:id="@+id/age_et"
@@ -174,7 +179,9 @@
                         android:layout_weight="1"
                         android:enabled="false"
                         android:inputType="textEmailAddress"
-                        android:padding="16dp" />
+                        android:padding="16dp"
+                        android:text="font test"
+                        android:fontFamily="@font/acme_regular"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -195,7 +202,9 @@
                         android:layout_weight="0.3"
                         android:padding="20dp"
                         android:text="City"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="italic|bold"/>
 
                     <EditText
                         android:id="@+id/city_et"
@@ -206,7 +215,9 @@
                         android:background="@android:color/transparent"
                         android:enabled="false"
                         android:inputType="textEmailAddress"
-                        android:padding="16dp" />
+                        android:padding="16dp"
+                        android:fontFamily="@font/acme_regular"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -227,7 +238,9 @@
                         android:layout_weight="0.3"
                         android:padding="20dp"
                         android:text="Gender"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="italic|bold"/>
 
                     <EditText
                         android:id="@+id/gender_et"
@@ -238,7 +251,8 @@
                         android:background="@android:color/transparent"
                         android:enabled="false"
                         android:inputType="textEmailAddress"
-                        android:padding="16dp" />
+                        android:padding="16dp"
+                        android:fontFamily="@font/acme_regular"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -259,7 +273,9 @@
                         android:layout_marginStart="5dp"
                         android:padding="20dp"
                         android:text="Notification"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="italic|bold"/>
 
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/notif_sw"
@@ -290,7 +306,9 @@
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="Hobby's"
-                        android:textSize="18dp" />
+                        android:textSize="18dp"
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="bold|italic" />
 
                     <com.nex3z.flowlayout.FlowLayout
                         android:id="@+id/flow_layout"
@@ -310,6 +328,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone">
+                        <android.support.design.button.MaterialButton
+
+                            android:id="@+id/add_btn"
+                            style="@style/AppTheme.RoundedCornerMaterialButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="3dp"
+                            android:text="Add"
+                            android:textAllCaps="false"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add_black_24dp"
+                            app:iconGravity="textStart" />
 
                         <AutoCompleteTextView
                             android:id="@+id/auto_complete_tv"
@@ -319,18 +350,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_weight="1" />
 
-                        <android.support.design.button.MaterialButton
-                            android:id="@+id/add_btn"
-                            style="@style/AppTheme.RoundedCornerMaterialButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="3dp"
-                            android:text="Add"
-                            android:textAllCaps="false"
-                            app:cornerRadius="10dp"
-                            app:icon="@drawable/ic_add_black_24dp"
-                            app:iconGravity="textStart" />
+
 
                     </LinearLayout>
                 </LinearLayout>

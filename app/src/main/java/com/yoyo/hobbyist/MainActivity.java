@@ -1,11 +1,14 @@
 package com.yoyo.hobbyist;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +60,9 @@ import com.yoyo.hobbyist.Utilis.DataStore;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+
+import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
+
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
@@ -275,8 +281,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode != RESULT_CANCELED) {
             if (requestCode == CAMERA_REQUEST) {
+                String filePath = data.getStringExtra(ImageSelectActivity.RESULT_FILE_PATH);
                 Fragment fragment = mAdapter.getItem(3);
-                ((ProfilePageFragment) fragment).updateUserImage();
+                ((ProfilePageFragment) fragment).updateUserImage(filePath);
             }
         }
 

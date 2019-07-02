@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "268959065050-vgu6lldk3fsf01mrstpqb5hlb9e6aqjg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yoyo.hobbyist",
+            "certificate_hash": "80e476af316f38be9438a42598c275d39256e41e"
+          }
+        },
+        {
           "client_id": "268959065050-r1k33uinm2evsf3fg8fssrh9kah6c6v6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

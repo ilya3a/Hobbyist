@@ -68,6 +68,9 @@ dependencies {
     //blur
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'jp.wasabeef:blurry:3.0.0'
+    //imagepicker
+    implementation 'com.myhexaville:smart-image-picker:1.0.4'
+    implementation 'com.github.maayyaannkk:ImagePicker:1.0.3'
 
 }
 apply plugin: 'com.google.gms.google-services'

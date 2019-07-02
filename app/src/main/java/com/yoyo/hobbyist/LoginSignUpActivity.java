@@ -49,6 +49,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
+
 import static java.security.AccessController.getContext;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
@@ -217,9 +219,14 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Fragment fragment = mFragmentManager.findFragmentByTag(UPDATE_USER_FRAGMENT_TAG);
-        assert fragment != null;
-        ((UpdateUserProfileFragment) fragment).updateUserImage();
+        if (resultCode != RESULT_CANCELED) {
+            if (requestCode == CAMERA_REQUEST) {
+                String filePath = data.getStringExtra(ImageSelectActivity.RESULT_FILE_PATH);
+                Fragment fragment = mFragmentManager.findFragmentByTag(UPDATE_USER_FRAGMENT_TAG);
+                assert fragment != null;
+                ((UpdateUserProfileFragment) fragment).updateUserImage(filePath);
+            }
+        }
     }
 
     public void callPermissions(final Intent intent) {

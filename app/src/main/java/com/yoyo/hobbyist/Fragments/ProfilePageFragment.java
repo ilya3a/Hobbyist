@@ -1,8 +1,10 @@
 package com.yoyo.hobbyist.Fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,6 +42,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +60,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import com.himanshurawat.imageworker.ImageWorker;
+import com.myhexaville.smartimagepicker.ImagePicker;
+import com.myhexaville.smartimagepicker.OnImagePickedListener;
 import com.nex3z.flowlayout.FlowLayout;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
@@ -65,9 +71,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 import jp.wasabeef.blurry.Blurry;
+
+
+
+import static android.support.v4.graphics.TypefaceCompatUtil.getTempFile;
 
 
 public class ProfilePageFragment extends Fragment {
@@ -110,11 +122,13 @@ public class ProfilePageFragment extends Fragment {
     public ProfilePageFragment() {
         // Required empty public constructor
     }
-    public void updateUserImage(){
+    public void updateUserImage(final String filePath){
         final Date currentTime = Calendar.getInstance().getTime();
-        mFireBaseStorageRef=FirebaseStorage.getInstance().getReference("images/"+currentTime.toString()+".jpg");
-        final File file = new File(mFilePath);
-        Uri uri = Uri.fromFile( file );
+        mFireBaseStorageRef=FirebaseStorage.getInstance().getReference("images/"+currentTime.toString()+".png");
+        //final File file=new File(filePath);
+        //Uri uri = Uri.fromFile( file );
+        Uri uri = Uri.fromFile(new File(filePath));
+        //mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
                 "Uploading. Please wait...", true);
         dialog.show();
@@ -126,7 +140,7 @@ public class ProfilePageFragment extends Fragment {
                     public void onSuccess(Uri uri) {
                         dialog.cancel();
                         mPictureUrl = uri.toString();
-                        mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                        mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(filePath));
                         Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
                         mUserProfile.setmPictureUrl(mPictureUrl);
                         updateProfileOnfireBase();
@@ -273,8 +287,10 @@ public class ProfilePageFragment extends Fragment {
         mAge.setText(mUserProfile.getmAge());
         //mPostsCount.setText();
         mCity.setText(mUserProfile.getmCityName());
-        mNameTv.setText(mUserProfile.getmName()+" "+mUserProfile.getmLastName());
+        mNameTv.setText(mUserProfile.getmName()+"       "+mUserProfile.getmLastName());
         updateflow();
+
+
 
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,7 +333,7 @@ public class ProfilePageFragment extends Fragment {
                    mCity.setEnabled(true);
                    mEditHobbysLayot.setVisibility(View.VISIBLE);
                    for (TextView tv :mHobbysTv){
-                       tv.setLongClickable(true);
+                       tv.setClickable(true);
                        tv.setAnimation(shake);
                        tv.startAnimation(shake);
                    }
@@ -331,7 +347,7 @@ public class ProfilePageFragment extends Fragment {
                    mCity.setEnabled(false);
                    mEditHobbysLayot.setVisibility(View.GONE);
                    for (TextView tv :mHobbysTv){
-                       tv.setLongClickable(false);
+                       tv.setClickable(false);
                        tv.setAnimation(shake);
                        tv.clearAnimation();
                    }
@@ -357,20 +373,33 @@ public class ProfilePageFragment extends Fragment {
                }
             }
         });
+
+
         mProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date currentTime = Calendar.getInstance().getTime();
-                mFile = new File( Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg" );
-                mFilePath = mFile.getAbsolutePath();
-                imageUri = FileProvider.getUriForFile( getContext(),
-                        getActivity().getPackageName() + ".provider",
-                        mFile );
-                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
+                Intent intent = new Intent(getContext(), ImageSelectActivity.class);
+                intent.putExtra(ImageSelectActivity.FLAG_COMPRESS, false);//default is true
+                intent.putExtra(ImageSelectActivity.FLAG_CAMERA, true);//default is true
+                intent.putExtra(ImageSelectActivity.FLAG_GALLERY, true);//default is true
                 intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
                 profileFragmentListener.updateImage( intent, mProfilePhoto );
             }
         });
+//        mProfilePhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Date currentTime = Calendar.getInstance().getTime();
+//                mFile = new File( Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg" );
+//                mFilePath = mFile.getAbsolutePath();
+//                imageUri = FileProvider.getUriForFile( getContext(),
+//                        getActivity().getPackageName() + ".provider",
+//                        mFile );
+//                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
+//                intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
+//                profileFragmentListener.updateImage( intent, mProfilePhoto );
+//            }
+//        });
 
         if (mUserProfile.getmPictureUrl().equals(""))
         {
@@ -423,7 +452,7 @@ public class ProfilePageFragment extends Fragment {
             TextView textView = new TextView(getContext());
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setText(hobby);
-            textView.setPadding(8, 8, 8, 8);
+            textView.setPadding(10, 10, 10, 10);
             textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
             textView.setTextSize(18);
             textView.setTag(hobby);
@@ -436,7 +465,7 @@ public class ProfilePageFragment extends Fragment {
                     updateflow();
                 }
             });
-            textView.setLongClickable(false);
+            textView.setClickable(false);
             mHobbysTv.add(textView);
             flowLayout.addView(textView);
 
@@ -447,4 +476,15 @@ public class ProfilePageFragment extends Fragment {
         mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
         DataStore.getInstance(getContext()).saveUser(mUserProfile);
     }
+    private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
+        List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : resInfo) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            Intent targetedIntent = new Intent(intent);
+            targetedIntent.setPackage(packageName);
+            list.add(targetedIntent);
+        }
+        return list;
+    }
+
 }
