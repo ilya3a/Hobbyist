@@ -286,10 +286,6 @@ public class ProfilePageFragment extends Fragment {
         });
 
 
-
-        //mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
-
-
         mHobbysCount.setText(String.valueOf(mHobbysList.size()));
         mAge.setText(mUserProfile.getmAge());
         mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
