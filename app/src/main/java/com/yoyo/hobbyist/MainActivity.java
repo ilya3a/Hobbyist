@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
                     mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
                     mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
+                    mFab.setVisibility(View.VISIBLE);
 
 
                 } else if (itemPos == 1) {
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon_selected);
                     mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
                     mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
+                    mFab.setVisibility(View.VISIBLE);
 
                 } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
@@ -271,12 +273,14 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == RESULT_OK) {
-            Fragment fragment = mAdapter.getItem(mPager.getCurrentItem());
-            ((ProfilePageFragment) fragment).updateUserImage();
-        } else {
-
+        if (resultCode != RESULT_CANCELED) {
+            if (requestCode == CAMERA_REQUEST) {
+                Fragment fragment = mAdapter.getItem(3);
+                ((ProfilePageFragment) fragment).updateUserImage();
+            }
         }
+
+
     }
 
     public void callPermissions(final Intent intent) {

@@ -93,6 +93,7 @@ public class ProfilePageFragment extends Fragment {
     LinearLayout mEditHobbysLayot;
     DataStore dataStore;
     File mFile;
+    String mFilePath;
     ArrayList<String> mHobbysList;
     ArrayList<TextView> mHobbysTv;
     Uri imageUri;
@@ -112,7 +113,8 @@ public class ProfilePageFragment extends Fragment {
     public void updateUserImage(){
         final Date currentTime = Calendar.getInstance().getTime();
         mFireBaseStorageRef=FirebaseStorage.getInstance().getReference("images/"+currentTime.toString()+".jpg");
-        Uri uri = Uri.fromFile( mFile );
+        final File file = new File(mFilePath);
+        Uri uri = Uri.fromFile( file );
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
                 "Uploading. Please wait...", true);
         dialog.show();
@@ -124,7 +126,7 @@ public class ProfilePageFragment extends Fragment {
                     public void onSuccess(Uri uri) {
                         dialog.cancel();
                         mPictureUrl = uri.toString();
-                        mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath()));
+                        mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
                         Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
                         mUserProfile.setmPictureUrl(mPictureUrl);
                         updateProfileOnfireBase();
@@ -186,10 +188,18 @@ public class ProfilePageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("ilya","onCreate");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("ilya","ondestroy");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("ilya","onCreateview");
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto=rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
@@ -352,7 +362,7 @@ public class ProfilePageFragment extends Fragment {
             public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
                 mFile = new File( Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg" );
-
+                mFilePath = mFile.getAbsolutePath();
                 imageUri = FileProvider.getUriForFile( getContext(),
                         getActivity().getPackageName() + ".provider",
                         mFile );

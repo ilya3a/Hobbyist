@@ -270,7 +270,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             @Override
             public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
-                mFile = new File(Environment.getExternalStorageDirectory(), currentTime + "Hobbyist.jpg");
+                mFile = new File(Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg");
                 imageUri = FileProvider.getUriForFile(getContext(),
                         getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
                         mFile);
