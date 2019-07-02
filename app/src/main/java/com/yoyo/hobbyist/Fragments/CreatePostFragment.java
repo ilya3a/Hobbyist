@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -90,7 +91,8 @@ public class CreatePostFragment extends DialogFragment {
 
     private AutoCompleteTextView mAutoCompleteTextView;
     private EditText mPostDescriptionEt;
-    private Button mClosePost, mCreatePost;
+    private Button mClosePost;
+    private MaterialButton mCreatePost;
     private String mUserName;
     private String mCityName;
     private CircleImageView mProfilePicture;

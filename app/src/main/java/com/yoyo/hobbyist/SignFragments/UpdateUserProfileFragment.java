@@ -115,7 +115,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
     EditText mName_et, mLastNameEt, mCityNameEt, mGenderEt, mDateOfBirthEt;
     ArrayList<String> hobbyList;
-    Button accept_btn, add_btn;
+    MaterialButton accept_btn, add_btn;
     FlowLayout flowLayout;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView gender_click, birth_day_click;

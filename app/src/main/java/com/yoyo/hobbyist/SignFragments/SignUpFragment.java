@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -31,9 +32,12 @@ import java.util.regex.Pattern;
 public class SignUpFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
-
     SignUpFragmentListener signUpFragmentListener;
 
+    MaterialButton register_fragment_btn;
+    TextInputLayout email_et_wraper;
+    TextInputLayout password_et_wraper;
+    TextInputLayout password_verify_et_wraper;
     // Get a reference to our posts
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("");
@@ -47,7 +51,7 @@ public class SignUpFragment extends Fragment {
         try {
             signUpFragmentListener = (SignUpFragmentListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement the interface : loginFragmentListener");
+            throw new ClassCastException("Activity must implement the interface : SignUpFragmentListener");
         }
     }
 
@@ -63,13 +67,13 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView=inflater.inflate(R.layout.sign_up_fragment,container,false);
 
-        final TextInputLayout email_et_wraper=rootView.findViewById(R.id.email_input_et_wraper);
-        final TextInputLayout password_et_wraper=rootView.findViewById(R.id.password_input_et_wraper);
-        final TextInputLayout password_verify_et_wraper=rootView.findViewById(R.id.password_verify_input_et_wraper);
+        email_et_wraper=rootView.findViewById(R.id.email_input_et_wraper);
+        password_et_wraper=rootView.findViewById(R.id.password_input_et_wraper);
+        password_verify_et_wraper=rootView.findViewById(R.id.password_verify_input_et_wraper);
         EditText username=rootView.findViewById(R.id.username_ET);
         EditText password1=rootView.findViewById(R.id.password_ET);
         EditText password2=rootView.findViewById(R.id.password_verify_ET);
-        Button register_fragment_btn=rootView.findViewById(R.id.register_btn);
+        register_fragment_btn=rootView.findViewById(R.id.register_btn);
         firebaseAuth= FirebaseAuth.getInstance();
 
         View.OnTouchListener errorclear=new View.OnTouchListener() {

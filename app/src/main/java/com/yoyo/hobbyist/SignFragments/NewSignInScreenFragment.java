@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class NewSignInScreenFragment extends Fragment {
     TextView mSignUpTv;
     String mEmail;
     String mPassword;
+    MaterialButton login_fragment_btn;
 
 
     public interface LoginFragmentListener {
@@ -61,7 +63,7 @@ public class NewSignInScreenFragment extends Fragment {
         mFireBaseAuth = FirebaseAuth.getInstance();
         email_et_wraper = rootView.findViewById(R.id.email_input_et_wraper);
         password_et_wraper = rootView.findViewById(R.id.password_input_et_wraper);
-        final Button login_fragment_btn = rootView.findViewById(R.id.login_fragment_btn);
+        login_fragment_btn = rootView.findViewById(R.id.login_fragment_btn);
         mFragmentManager =getFragmentManager();
         mSp = getContext().getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
         mSpEditor = mSp.edit();
