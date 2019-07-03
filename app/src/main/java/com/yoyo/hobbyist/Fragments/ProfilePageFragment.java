@@ -157,48 +157,6 @@ public class ProfilePageFragment extends Fragment {
             }
         });
     }
-//    public void updateUserImage() {
-//        final Date currentTime = Calendar.getInstance().getTime();
-//        mFireBaseStorageRef = FirebaseStorage.getInstance().getReference( "images/"+ currentTime.toString()+".jpg" );
-//        mProfilePhoto.setImageBitmap( BitmapFactory.decodeFile( mFile.getAbsolutePath() ) );
-//       
-//        Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
-//        Uri uri = Uri.fromFile( mFile );
-//        mFireBaseStorageRef.putFile( uri ).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        mPictureUrl = uri.toString();
-//                        mUserProfile.setmPictureUrl(mPictureUrl);
-//                    }
-//                } );
-//            }
-//        } ).addOnFailureListener( new OnFailureListener() {
-//
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText( getContext(), "Update Faild", Toast.LENGTH_SHORT ).show();
-//            }
-//        } ).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                mFireBaseStorageRef.child( "images/"+ currentTime.toString()+".jpg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        Toast.makeText( getContext(), uri.toString(), Toast.LENGTH_LONG ).show();
-//                        Glide.with( getContext() ).load( uri ).into( mProfilePhoto );
-//                        mUserProfile.setmPictureUrl(mPictureUrl);
-//                        mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
-//                        mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build());
-//                        updateProfileOnfireBase();
-//                    }
-//                } );
-//            }
-//        });
-//
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

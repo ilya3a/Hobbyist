@@ -21,8 +21,8 @@ import java.util.Date;
 public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder> {
 
 
-    interface RecyclerCallBack {
-        void onItemClicked(UserPost article);
+    public interface RecyclerCallBack {
+        void onItemClicked(String userId);
     }
 
     RecyclerCallBack recyclerCallBack;
@@ -39,7 +39,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     public PostsRecyclerViewAdapter(ArrayList<UserPost> userPosts, Context mContext) {
         this.userPosts = userPosts;
         this.mContext = mContext;
-//        recyclerCallBack = (RecyclerCallBack) mContext;
+        recyclerCallBack = (RecyclerCallBack) mContext;
     }
 
 
@@ -69,7 +69,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                recyclerCallBack.onItemClicked(post);
+                recyclerCallBack.onItemClicked(post.getUserToken());
             }
         });
     }

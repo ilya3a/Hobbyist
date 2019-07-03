@@ -4,17 +4,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.yoyo.hobbyist.Fragments.ChatFragment;
+import com.yoyo.hobbyist.Fragments.ChatsFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 
-import java.util.ArrayList;
-
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private int mNumOfTabs;
-Fragment[] fragments = {new DashboardFragment(),new SearchFragment(),new ChatFragment(),new ProfilePageFragment()};
+Fragment[] fragments = {new DashboardFragment(),new SearchFragment(),new ChatsFragment(),new ProfilePageFragment()};
 
     public PagerAdapter(FragmentManager fm, int numOfTabs) {
         super( fm );

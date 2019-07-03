@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f6f6"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/upper_linear"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/ic_logo_background"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_left_arrow" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/chat_buddy_iv"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_user" />
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/chat_buddy_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Barry Aguiler"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Active in last 2 minss"
+                android:textColor="#9580d7"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@id/lower_linear"
+    android:layout_below="@+id/upper_linear"
+    android:background="@color/grey"
+    android:id="@+id/msg_recycler">
+
+</android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/lower_linear"
+        android:layout_margin="5dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="Write a replay"
+            android:id="@+id/chat_text_to_send"
+            android:minWidth="250dp"
+            android:textColorHint="#ced5db" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-45dp"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:id="@+id/send_message_btn"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_send_black_24dp"/>
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+
+            <!--android:gravity="right">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:src="@drawable/ic_smile"-->
+                <!--android:tint="#d9d9d9" />-->
+
+
+            <!--<ImageView-->
+            <!--android:id="@+id/attach"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:src="@drawable/ic_attach_file"-->
+            <!--android:tint="#d9d9d9" />-->
+        <!--</LinearLayout>-->
+    </LinearLayout>
+
+</RelativeLayout>

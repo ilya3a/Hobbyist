@@ -26,11 +26,14 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
+import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
+import com.yoyo.hobbyist.Adapters.UserAdapter;
 import com.yoyo.hobbyist.DataModels.UserProfile;
-import com.yoyo.hobbyist.Fragments.ChatFragment;
+import com.yoyo.hobbyist.Fragments.ChatsFragment;
 import com.yoyo.hobbyist.Fragments.CreatePostFragment;
 import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.MenuFragment;
+import com.yoyo.hobbyist.Fragments.MessageFragment;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 
@@ -42,12 +45,11 @@ import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
-        SearchFragment.OnFragmentInteractionListener, ChatFragment.OnFragmentInteractionListener,
-        MenuFragment.OnFragmentInteractionListener, CreatePostFragment.OnFragmentInteractionListener, ProfilePageFragment.ProfileFragmentListener {
+        SearchFragment.OnFragmentInteractionListener, MenuFragment.OnFragmentInteractionListener, UserAdapter.RecyclerCallBack,
+        CreatePostFragment.OnFragmentInteractionListener, ProfilePageFragment.ProfileFragmentListener,PostsRecyclerViewAdapter.RecyclerCallBack{
 
     final int CAMERA_REQUEST = 1;
-    final String UPDATE_USER_FRAGMENT_TAG = "update_user_fragment";
-    //    Toolbar mToolbar;
+    final String MESSAGE_FRAGMENT_TAG = "message_fragment_tag";
     TabLayout mTabLayout;
     ViewPager mPager;
     PagerAdapter mAdapter;
@@ -59,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     UserProfile mUserProfile;
     FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mFireBaseUser;
-    DataStore mDataStore;
-    //    LottieAnimationView mSwipeLeftLottie, mSwipeRightLottie;
     FloatingActionButton mFab;
     FragmentManager mFragmentManager;
     FirebaseMessaging topicMessegingAlert = FirebaseMessaging.getInstance();
@@ -124,21 +124,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 mFragmentManager = getSupportFragmentManager();
                 DialogFragment dialogFragment = new CreatePostFragment();
                 dialogFragment.show(mFragmentManager, CREATE_POST_FRAGMENT_TAG);
-
-//                getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//                dialogFragment.setCancelable(false);
             }
         });
 
-//        Button buttonLogOut = findViewById(R.id.logout);
-//        buttonLogOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mFireBaseAuth.signOut();
-//               Intent  intent = new Intent(MainActivity.this,LoginSignUpActivity.class);
-//               startActivity(intent);
-//            }
-//        });
 
         mTabLayout = findViewById(R.id.tab_layout);
 
@@ -147,28 +135,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         tabItem3 = findViewById(R.id.chat);
         tabItem4 = findViewById(R.id.menu);
         mPager = findViewById(R.id.pager);
-//        mSwipeLeftLottie = findViewById( R.id.swipe_left );
-//        mSwipeLeftLottie.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                mPager.setCurrentItem( mTabLayout.getSelectedTabPosition() - 1 );
-//            }
-//        } );
-//        mSwipeRightLottie =
-//
-//                findViewById( R.id.swipe_right );
-//        mSwipeRightLottie.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mPager.setCurrentItem( mTabLayout.getSelectedTabPosition() + 1 );
-//            }
-//        } );
 
-
-        mAdapter = new
-
-                PagerAdapter(getSupportFragmentManager(), mTabLayout.
+        mAdapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.
 
                 getTabCount());
         mPager.setAdapter(mAdapter);
@@ -260,6 +228,14 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         } else {
             startActivityForResult(intent, CAMERA_REQUEST);
         }
+    }
+
+
+    @Override
+    public void onItemClicked(String userId) {
+        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        //fragment for chat getting user id
+        mFragmentManager.beginTransaction().add(R.id.bla,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
     interface MainActivityDashboardFragmentDataPass {
