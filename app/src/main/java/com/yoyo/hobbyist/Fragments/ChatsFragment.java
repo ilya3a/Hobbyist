@@ -20,8 +20,11 @@ import com.yoyo.hobbyist.Adapters.UserAdapter;
 import com.yoyo.hobbyist.DataModels.Chat;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
+import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class ChatsFragment extends Fragment {
@@ -59,16 +62,18 @@ public class ChatsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersList.clear();
+                ArrayList<String> temp = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
 
                     if (chat.getSender().equals(firebaseUser.getUid())) {
-                        usersList.add(chat.getReciver());
+                        temp.add(chat.getReciver());
                     }
                     if (chat.getReciver().equals(firebaseUser.getUid())) {
-                        usersList.add(chat.getSender());
+                        temp.add(chat.getSender());
                     }
                 }
+                usersList = UtilFuncs.removeDuplicates(temp);
                 readChats();
             }
 
@@ -89,21 +94,24 @@ public class ChatsFragment extends Fragment {
                 userProfiles.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     UserProfile user = snapshot.getValue(UserProfile.class);
-                    //display 1 user from chats
-                    for (String id : usersList) {
-                        if (user.getmUserToken().equals(id)) {
-                            if (userProfiles.size() != 0) {
-                                for (UserProfile profile : userProfiles) {
-                                    if (!user.getmUserToken().equals(profile.getmUserToken())) {
-                                        userProfiles.add(user);
-                                    }
-
-                                }
-                            } else {
-                                userProfiles.add(user);
-                            }
-                        }
+                    if (usersList.contains(user.getmUserToken())) {
+                        userProfiles.add(user);
                     }
+//                    //display 1 user from chats
+//                    for (String id : usersList) {
+//                        if (user.getmUserToken().equals(id)) {
+//                            if (userProfiles.size() != 0) {
+//                                for (UserProfile profile : userProfiles) {
+//                                    if (!user.getmUserToken().equals(profile.getmUserToken())) {
+//                                        userProfiles.add(user);
+//                                    }
+//
+//                                }
+//                            } else {
+//                                userProfiles.add(user);
+//                            }
+//                        }
+//                    }
                 }
                 userAdapter = new UserAdapter(userProfiles, getContext());
                 recyclerView.setAdapter(userAdapter);
