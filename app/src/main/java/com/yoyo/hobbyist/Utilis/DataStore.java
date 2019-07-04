@@ -29,7 +29,7 @@ public class DataStore {
 
     @SuppressLint("CommitPrefEdits")
     private DataStore(Context context) {
-        mSharedPref = context.getSharedPreferences(PREFS, context.MODE_PRIVATE);
+        mSharedPref = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         mEditor = mSharedPref.edit();
     }
 

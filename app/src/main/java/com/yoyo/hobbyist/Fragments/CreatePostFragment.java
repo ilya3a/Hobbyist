@@ -67,6 +67,7 @@ import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.InternetConnection;
+import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -113,8 +114,7 @@ public class CreatePostFragment extends DialogFragment {
     File mFile;
     Boolean isPhotoExists = false;
     PostsRecyclerViewAdapter mAdapter;
-    FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
+    DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     ArrayList<UserPost> mPostsList = new ArrayList<>();
     ArrayList<String> hobbylist = new ArrayList<>();
     final String API_TOKEN_KEY = "AAAAPp81o9o:APA91bFIxD-hnOSdPhGzCD7wGtE-of6OWANn44pQFapd1xSccxippK9IorvoK3jsGBn9RpMv8P6W44-Mo5X9itXu7Fntu0x3o5L01tsFjRQaNAueI2QFLQPwwxz-naOyXMOYfwSbnRoy";
@@ -418,7 +418,7 @@ public class CreatePostFragment extends DialogFragment {
         });
     }
     public void updateUserProfileOnFireBase(UserProfile userProfile){
-        mDatabaseReference.child( "appUsers" ).child( userProfile.getmUserToken() ).setValue( userProfile );
+        UtilFuncs.saveUserToFireBase(userProfile);
         mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
         DataStore.getInstance(getContext()).saveUser(userProfile);
     }

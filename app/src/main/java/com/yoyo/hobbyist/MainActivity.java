@@ -416,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     }
 
     private void status(String status){
+        mUserProfile=DataStore.getInstance(this).getUser();
         mUserProfile.setmStatus(status);
        DataStore.getInstance(this).saveUser(mUserProfile);
         UtilFuncs.saveUserToFireBase(mUserProfile);

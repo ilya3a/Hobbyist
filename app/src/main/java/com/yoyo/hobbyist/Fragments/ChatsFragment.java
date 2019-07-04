@@ -23,9 +23,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.yoyo.hobbyist.Adapters.UserAdapter;
 import com.yoyo.hobbyist.DataModels.Chat;
 import com.yoyo.hobbyist.DataModels.UserProfile;
+import com.yoyo.hobbyist.Notifications.Token;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
@@ -90,6 +92,7 @@ public class ChatsFragment extends Fragment {
 
             }
         });
+        updateToken(FirebaseInstanceId.getInstance().getToken());
         return view;
     }
 
@@ -106,7 +109,7 @@ public class ChatsFragment extends Fragment {
                         userProfiles.add(user);
                     }
                 }
-                userAdapter = new UserAdapter(userProfiles, getActivity(),true);
+                userAdapter = new UserAdapter(userProfiles, getActivity(), true);
                 recyclerView.setAdapter(userAdapter);
             }
 
@@ -117,5 +120,10 @@ public class ChatsFragment extends Fragment {
         });
     }
 
+    private void updateToken(String token) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(firebaseUser.getUid()).setValue(token1);
+    }
 
 }

@@ -282,7 +282,7 @@ public class ProfilePageFragment extends Fragment {
 
         mHobbysCount.setText(String.valueOf(mHobbysList.size()));
         mAge.setText(mUserProfile.getmAge());
-        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList()==null?0:mUserProfile.getmUserPostList().size()));
         mCity.setText(mUserProfile.getmCityName());
         mNameTv.setText(mUserProfile.getmName()+"       "+mUserProfile.getmLastName());
         updateflow();

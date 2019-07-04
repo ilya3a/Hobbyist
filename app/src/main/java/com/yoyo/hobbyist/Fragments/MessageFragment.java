@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +27,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.yoyo.hobbyist.Adapters.MessageAdapter;
 import com.yoyo.hobbyist.DataModels.Chat;
 import com.yoyo.hobbyist.DataModels.UserProfile;
+import com.yoyo.hobbyist.Notifications.Client;
+import com.yoyo.hobbyist.Notifications.Data;
+import com.yoyo.hobbyist.Notifications.MyResponse;
+import com.yoyo.hobbyist.Notifications.Sender;
+import com.yoyo.hobbyist.Notifications.Token;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
@@ -37,6 +44,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MessageFragment extends Fragment {
@@ -55,12 +65,14 @@ public class MessageFragment extends Fragment {
     ArrayList<Chat> mChats;
     RecyclerView recyclerView;
 
+    boolean notify = false;
 
+    APIService apiService;
     public MessageFragment() {
         // Required empty public constructor
     }
 
-    private void sendMessage(String sender, String reciver, String message) {
+    private void sendMessage(String sender, final String reciver, String message) {
         reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
@@ -68,6 +80,66 @@ public class MessageFragment extends Fragment {
         hashMap.put("message", message);
 
         reference.child("chats").push().setValue(hashMap);
+
+
+        UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
+        if(notify){
+            sendNotification(reciver,userProfile.getmName()+" "+userProfile.getmLastName(), message);
+        }
+        notify=false;
+
+//        reference = FirebaseDatabase.getInstance().getReference("appUsers").child(firebaseUser.getUid());
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+//                sendNotification(reciver,userProfile.getmName()+" "+userProfile.getmLastName(), msg);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+    }
+
+    private void sendNotification(String reciver, final String username, String msg) {
+
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(reciver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(firebaseUser.getUid(),R.mipmap.ic_logo_round,username,"New Message",mUserId);
+
+                    Sender sender = new Sender(data,token.getToken());
+
+                    apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+                        @Override
+                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                            if(response.code()==200){
+                                if (response.body().success != 1){
+                                    Toast.makeText(getContext(), "Faild", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void readMessages(final String myId, final String userId, final String imageUrl) {
@@ -140,6 +212,7 @@ public class MessageFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
+        apiService= Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference().child("appUsers").child(mUserId);
 
@@ -162,6 +235,7 @@ public class MessageFragment extends Fragment {
         mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notify=true;
                 String msg = mTextToSendEt.getText().toString();
                 if (!msg.equals("")) {
                     sendMessage(firebaseUser.getUid(), mUserId, msg);
