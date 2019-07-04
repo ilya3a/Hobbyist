@@ -16,9 +16,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -83,6 +86,23 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Window window = this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.tab_color));
+        }
+    }
+
+    @Override
     public void notifCheckChange(boolean isChecked) {
         DataStore.getInstance(this).setNotifOk(isChecked);
         if (isChecked) {
@@ -110,6 +130,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         MessageFragment messageFragment = MessageFragment.newInstance(userId);
         //fragment for chat getting user id
         mFragmentManager.beginTransaction().add(R.id.bla,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
