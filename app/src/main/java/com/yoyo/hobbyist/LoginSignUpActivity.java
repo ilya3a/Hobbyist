@@ -1,11 +1,9 @@
 package com.yoyo.hobbyist;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,18 +11,12 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -45,13 +37,8 @@ import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
-
-import static java.security.AccessController.getContext;
 
 public class LoginSignUpActivity extends AppCompatActivity implements SignUpFragment.SignUpFragmentListener,
         NewSignInScreenFragment.LoginFragmentListener, UpdateUserProfileFragment.UpdateUserProfileFragmentListener {
@@ -152,7 +139,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
                     mFragmentManager.beginTransaction().commit();
                     mLottieAnimationView.setVisibility(View.GONE);
-                    getUserProfiles();
+                    getUserProfile();
                 }
             };
             handler.postDelayed(runnable, 3100);
@@ -251,7 +238,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
     }
 
-    public void getUserProfiles() {
+    public void getUserProfile() {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers").child(mFireBaseUser.getUid());
         Query usersQuery = mDatabaseReference.orderByKey();

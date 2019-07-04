@@ -22,7 +22,14 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.Adapters.PagerAdapter;
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     final int CAMERA_REQUEST = 1;
     final String MESSAGE_FRAGMENT_TAG = "message_fragment_tag";
+    final String PROFILE_PAGE_FRAGMENT_TAG="profile_page_fragment_tag";
     TabLayout mTabLayout;
     ViewPager mPager;
     PagerAdapter mAdapter;
@@ -95,6 +103,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             }
         }
 
+    }
+
+    @Override
+    public void openChatFromProfile(String userId) {
+        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        //fragment for chat getting user id
+        mFragmentManager.beginTransaction().add(R.id.bla,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
     @Override
@@ -232,7 +247,19 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
     @Override
-    public void onItemClicked(String userId) {
+    public void ChatFragmentOnItemClicked(String userId) {
+        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        //fragment for chat getting user id
+        mFragmentManager.beginTransaction().add(R.id.bla,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void postOnPhotoItemClicked(String userId) {
+        getUserProfile(userId);
+    }
+
+    @Override
+    public void postOnChatItemClicked(String userId) {
         MessageFragment messageFragment = MessageFragment.newInstance(userId);
         //fragment for chat getting user id
         mFragmentManager.beginTransaction().add(R.id.bla,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
@@ -289,7 +316,29 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
     }
+    public void getUserProfile(final String mUserId) {
+        final Gson mGson = new Gson();
+        FirebaseDatabase mFirebaseDatabase2 = FirebaseDatabase.getInstance();
+        DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child("appUsers").child(mUserId);
+        Query usersQuery = mDatabaseReference2.orderByKey();
 
+        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUserProfile = dataSnapshot.getValue(UserProfile.class);
+                String userString = mGson.toJson(mUserProfile);
+                ProfilePageFragment profilePageFragment = ProfilePageFragment.newInstance(userString);
+                mFragmentManager.beginTransaction().add(R.id.bla,profilePageFragment,PROFILE_PAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
 }
 
