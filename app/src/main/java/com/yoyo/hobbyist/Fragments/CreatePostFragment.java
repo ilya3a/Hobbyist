@@ -402,7 +402,7 @@ public class CreatePostFragment extends DialogFragment {
     }
 
     private void callPermissions() {
-        Permissions.check(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required to get the Weather", new PermissionHandler() {
+        Permissions.check(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required", new PermissionHandler() {
             @Override
             public void onGranted() {
                 mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());

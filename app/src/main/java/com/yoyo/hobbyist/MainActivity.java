@@ -51,7 +51,6 @@ import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
@@ -142,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+
+
 
         if (DataStore.getInstance( this ).isNotifOk()) {
             mUserProfile = DataStore.getInstance( this ).getUser();
@@ -398,6 +399,21 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         });
 
     }
+    private void callLocationPermissions() {
+        Permissions.check(this, Manifest.permission.ACCESS_FINE_LOCATION,null, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                callLocationPermissions();
+            }
+
+        });
+    }
 
     private void status(String status){
         mUserProfile.setmStatus(status);
@@ -408,6 +424,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onResume() {
         super.onResume();
         status("Online");
+        callLocationPermissions();
     }
 
     @Override

@@ -31,7 +31,6 @@
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/profile_image"
         android:src="@android:drawable/presence_online"
-        android:scaleType="fitXY"
         android:visibility="gone"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -43,6 +42,5 @@
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/profile_image"
         android:src="@android:drawable/radiobutton_off_background"
-        android:scaleType="fitXY"
         android:visibility="gone"/>
 </RelativeLayout>

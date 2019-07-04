@@ -1,7 +1,9 @@
 package com.yoyo.hobbyist.Adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,34 +20,37 @@ import java.util.ArrayList;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
-    ArrayList<UserProfile> mUserProfiles;
-    Context mContext;
+    private ArrayList<UserProfile> mUserProfiles;
+    private Context mContext;
     private boolean isChat;
 
     public interface RecyclerCallBack {
         void ChatFragmentOnItemClicked(String userId);
     }
 
-    UserAdapter.RecyclerCallBack recyclerCallBack;
+    private UserAdapter.RecyclerCallBack recyclerCallBack;
 
     public UserAdapter(ArrayList<UserProfile> mUserProfiles, Context mContext, boolean isChat) {
         this.mUserProfiles = mUserProfiles;
         this.mContext = mContext;
         this.isChat = isChat;
+try {
+    recyclerCallBack = (RecyclerCallBack) mContext;
 
-        if (mContext instanceof RecyclerCallBack) {
-            recyclerCallBack = (RecyclerCallBack) mContext;
-        } else {
-            throw new RuntimeException(mContext.toString()
-                    + " must implement UserAdapter.RecyclerCallback");
-        }
+}catch (ClassCastException ex){
+    Log.d("ilya",mContext.toString()+ "must implement interface" );
+    throw new ClassCastException(mContext.toString()+ "must implement interface");
+}
+
+
 
     }
 
+    @NonNull
     @Override
-    public UserAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public UserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.user_item, viewGroup, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, viewGroup, false);
 
         return new UserAdapter.ViewHolder(view);
 
@@ -53,7 +58,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final UserAdapter.ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final UserAdapter.ViewHolder viewHolder, final int i) {
 
         final UserProfile userProfile = mUserProfiles.get(i);
 

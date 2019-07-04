@@ -106,7 +106,7 @@ public class ChatsFragment extends Fragment {
                         userProfiles.add(user);
                     }
                 }
-                userAdapter = new UserAdapter(userProfiles, getContext(),true);
+                userAdapter = new UserAdapter(userProfiles, getActivity(),true);
                 recyclerView.setAdapter(userAdapter);
             }
 
