@@ -1,5 +1,6 @@
 package com.yoyo.hobbyist.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +57,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import com.google.gson.Gson;
 import com.himanshurawat.imageworker.ImageWorker;
 
 import com.nex3z.flowlayout.FlowLayout;
@@ -90,7 +94,7 @@ public class ProfilePageFragment extends Fragment {
     MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView mNameTv,mPostsCount,mHobbysCount;
-    EditText mAge,mCity, mGenderEt;
+    EditText mAge,mCity, mGenderEt,mName,mLastName;
     String mPictureUrl;
     FlowLayout flowLayout;
     CircleImageView mProfilePhoto;
@@ -112,13 +116,26 @@ public class ProfilePageFragment extends Fragment {
     FloatingActionButton mFab,mExitFab;
     Boolean editMode=false;
     private OnFragmentInteractionListener mListener;
-
+    Boolean nameHasChanged=false;
     ProfileFragmentListener profileFragmentListener;
+    String mUserId;
+    private Gson mGson = new Gson();
+    Boolean onlyShowProfile=false;
+
+
+    public static ProfilePageFragment newInstance(String userId) {
+        ProfilePageFragment fragment = new ProfilePageFragment();
+        Bundle args = new Bundle();
+        args.putString("userId", userId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public interface ProfileFragmentListener {
         void updateImage(Intent intent, View view);
         void logOut();
         void notifCheckChange(boolean isChecked);
+        void openChatFromProfile(String userId);
     }
     public ProfilePageFragment() {
         // Required empty public constructor
@@ -161,7 +178,14 @@ public class ProfilePageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("ilya","onCreate");
+        dataStore=DataStore.getInstance(getContext());
+        if (getArguments() != null) {
+            mUserId = getArguments().getString("userId");
+            mUserProfile=mGson.fromJson(mUserId, UserProfile.class);
+            onlyShowProfile=true;
+        }
+        else
+            mUserProfile=dataStore.getUser();
     }
 
     @Override
@@ -170,6 +194,7 @@ public class ProfilePageFragment extends Fragment {
         Log.d("ilya","ondestroy");
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("ilya","onCreateview");
@@ -184,7 +209,7 @@ public class ProfilePageFragment extends Fragment {
         mNameTv=rootView.findViewById(R.id.name_tv);
         mFab=rootView.findViewById(R.id.fab);
         flowLayout=rootView.findViewById(R.id.flow_layout);
-        dataStore=DataStore.getInstance(getContext());
+
         mFireBaseAuth= FirebaseAuth.getInstance();
         mFireBaseUser =mFireBaseAuth.getCurrentUser();
         mAddBtn=rootView.findViewById(R.id.add_btn);
@@ -205,10 +230,21 @@ public class ProfilePageFragment extends Fragment {
         final Drawable originalDrawable = mAge.getBackground();
         mAge.setBackgroundColor(Color.TRANSPARENT);
         mBlurryImageView =rootView.findViewById(R.id.blur_test);
-        mUserProfile=dataStore.getUser();
-        mHobbysList =mUserProfile.getmHobbylist();
+        mName=rootView.findViewById(R.id.name_change_edittext);
+        mLastName=rootView.findViewById(R.id.last_name_change_edittext);
 
+
+        mHobbysList =mUserProfile.getmHobbylist();
         mGenderEt.setText(mUserProfile.getmGender());
+
+        if (onlyShowProfile){
+            RelativeLayout mNotificationLayout =rootView.findViewById(R.id.notification_layout);
+            mNotificationLayout.setVisibility(View.GONE);
+            mExitFab.setVisibility(View.INVISIBLE);
+            //mFab.setVisibility(View.INVISIBLE);
+            mFab.setImageResource(R.drawable.ic_chat_icon_selected);
+
+        }
 
         mExitFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,53 +323,72 @@ public class ProfilePageFragment extends Fragment {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if (editMode.equals(false)){
-                   editMode=true;
-                   mFab.setImageResource(R.drawable.ic_check_black_24dp);
-                   mCity.setBackground(originalDrawable);
-                   mCity.setEnabled(true);
-                   mEditHobbysLayot.setVisibility(View.VISIBLE);
-                   for (TextView tv :mHobbysTv){
-                       tv.setClickable(true);
-                       tv.setAnimation(shake);
-                       tv.startAnimation(shake);
-                   }
-                   mEditHobbysLayot.setVisibility(View.VISIBLE);
-                   mProfilePhoto.setEnabled(true);
-               }
-               else{
-                   editMode=false;
-                   mFab.setImageResource(R.drawable.ic_edit_black_24dp);
-                   mCity.setBackgroundColor(Color.TRANSPARENT);
-                   mCity.setEnabled(false);
-                   mEditHobbysLayot.setVisibility(View.GONE);
-                   for (TextView tv :mHobbysTv){
-                       tv.setClickable(false);
-                       tv.setAnimation(shake);
-                       tv.clearAnimation();
-                   }
-                   mEditHobbysLayot.setVisibility(View.GONE);
+                if(onlyShowProfile){
+                    profileFragmentListener.openChatFromProfile(mUserProfile.getmUserToken());
+                }
+                else {
+                    if (editMode.equals(false)) {
+                        editMode = true;
+                        mFab.setImageResource(R.drawable.ic_check_black_24dp);
+                        mCity.setBackground(originalDrawable);
+                        mCity.setEnabled(true);
+                        mEditHobbysLayot.setVisibility(View.VISIBLE);
+                        for (TextView tv : mHobbysTv) {
+                            tv.setClickable(true);
+                            tv.setAnimation(shake);
+                            tv.startAnimation(shake);
+                        }
+                        mEditHobbysLayot.setVisibility(View.VISIBLE);
+                        mProfilePhoto.setEnabled(true);
+                        mName.setText(mUserProfile.getmName());
+                        mLastName.setText(mUserProfile.getmLastName());
+                        mName.setVisibility(View.VISIBLE);
+                        mLastName.setVisibility(View.VISIBLE);
+                        mNameTv.setVisibility(View.GONE);
+                    } else {
+                        editMode = false;
+                        mFab.setImageResource(R.drawable.ic_edit_black_24dp);
+                        mCity.setBackgroundColor(Color.TRANSPARENT);
+                        mCity.setEnabled(false);
+                        mEditHobbysLayot.setVisibility(View.GONE);
+                        for (TextView tv : mHobbysTv) {
+                            tv.setClickable(false);
+                            tv.setAnimation(shake);
+                            tv.clearAnimation();
+                        }
+                        mEditHobbysLayot.setVisibility(View.GONE);
 
-                   if (!mCity.getText().toString().equals("")){
-                       mUserProfile.setmCityName(mCity.getText().toString());
-                   }
-                   else
-                   {
-                       mCity.setText(mUserProfile.getmCityName());
-                   }
-                   if (mHobbysList.isEmpty())
-                   {
-                       mHobbysList=mUserProfile.getmHobbylist();
-                   }
-                   profileFragmentListener.notifCheckChange(false);
-                   mUserProfile.setmHobbylist(mHobbysList);
-                   Integer temp= mHobbysList.size();
-                   mHobbysCount.setText(temp.toString());
-                   updateflow();
-                   updateProfileOnfireBase();
-                   mProfilePhoto.setEnabled(false);
-                   profileFragmentListener.notifCheckChange(true);
-               }
+                        if (!mCity.getText().toString().equals("")) {
+                            mUserProfile.setmCityName(mCity.getText().toString());
+                        } else {
+                            mCity.setText(mUserProfile.getmCityName());
+                        }
+                        if (mHobbysList.isEmpty()) {
+                            mHobbysList = mUserProfile.getmHobbylist();
+                        }
+                        profileFragmentListener.notifCheckChange(false);
+                        mUserProfile.setmHobbylist(mHobbysList);
+                        Integer temp = mHobbysList.size();
+                        mHobbysCount.setText(temp.toString());
+                        mProfilePhoto.setEnabled(false);
+                        profileFragmentListener.notifCheckChange(true);
+
+                        if (mName.getText().toString().equals("") || mLastName.getText().toString().equals("")) {
+
+                        } else {
+                            nameHasChanged = true;
+                            mNameTv.setText(mName.getText().toString() + "   " + mLastName.getText().toString());
+                            mUserProfile.setmName(mName.getText().toString());
+                            mUserProfile.setmLastName(mLastName.getText().toString());
+                        }
+                        mName.setVisibility(View.GONE);
+                        mLastName.setVisibility(View.GONE);
+                        mNameTv.setVisibility(View.VISIBLE);
+
+                        updateflow();
+                        updateProfileOnfireBase();
+                    }
+                }
             }
         });
 
@@ -349,20 +404,6 @@ public class ProfilePageFragment extends Fragment {
                 profileFragmentListener.updateImage( intent, mProfilePhoto );
             }
         });
-//        mProfilePhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Date currentTime = Calendar.getInstance().getTime();
-//                mFile = new File( Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg" );
-//                mFilePath = mFile.getAbsolutePath();
-//                imageUri = FileProvider.getUriForFile( getContext(),
-//                        getActivity().getPackageName() + ".provider",
-//                        mFile );
-//                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
-//                intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
-//                profileFragmentListener.updateImage( intent, mProfilePhoto );
-//            }
-//        });
 
         if (mUserProfile.getmPictureUrl().equals(""))
         {
@@ -425,7 +466,7 @@ public class ProfilePageFragment extends Fragment {
                 public void onClick(View v) {
                     mHobbysList.remove(v.getTag());
                     mUserProfile.setmHobbylist(mHobbysList);
-                    updateflow();
+                    flowLayout.removeView(v);
                 }
             });
             textView.setClickable(false);
@@ -438,6 +479,11 @@ public class ProfilePageFragment extends Fragment {
         mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
         mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
         DataStore.getInstance(getContext()).saveUser(mUserProfile);
+        if (nameHasChanged)
+        {
+            nameHasChanged=false;
+            mFireBaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mName.getText().toString()+" "+mLastName.getText().toString()).build());
+        }
     }
     private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
@@ -449,5 +495,25 @@ public class ProfilePageFragment extends Fragment {
         }
         return list;
     }
+    public void getUserProfile() {
+            FirebaseDatabase mFirebaseDatabase2 = FirebaseDatabase.getInstance();
+            DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child("appUsers").child(mUserId);
+            Query usersQuery = mDatabaseReference2.orderByKey();
 
-}
+            usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    mUserProfile = dataSnapshot.getValue(UserProfile.class);
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+    }
+    }
+
+

@@ -1,12 +1,12 @@
 package com.yoyo.hobbyist.Adapters;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +16,13 @@ import com.yoyo.hobbyist.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder> {
 
 
     public interface RecyclerCallBack {
-        void onItemClicked(String userId);
+        void postOnChatItemClicked(String userId);
+        void postOnPhotoItemClicked(String userId);
     }
 
     RecyclerCallBack recyclerCallBack;
@@ -62,14 +62,20 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         viewHolder.postTv.setText(post.getPostDescription());
         viewHolder.userCityTV.setText(post.getCityName());
         viewHolder.hobbyTV.setText(post.getHobby());
-        viewHolder.dateTV.setText(Calendar.getInstance().getTime().toString());
-
-
+        viewHolder.dateTV.setText(post.getDate());
         viewHolder.parentLayout.setTag(i);
-        viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
+
+        viewHolder.chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerCallBack.onItemClicked(post.getUserToken());
+                recyclerCallBack.postOnChatItemClicked(post.getUserToken());
+            }
+        });
+
+        viewHolder.coverImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerCallBack.postOnPhotoItemClicked(post.getUserToken());
             }
         });
     }
@@ -85,7 +91,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         ImageView onlineImageView;
         TextView userNameTV, userCityTV, postTv, hobbyTV, dateTV;
         CardView parentLayout;
-        Button chatBtn;
+        AppCompatImageButton chatBtn;
 
         public ViewHolder(final View itemView) {
             super(itemView);

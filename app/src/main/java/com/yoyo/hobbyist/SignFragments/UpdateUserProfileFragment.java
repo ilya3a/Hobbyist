@@ -337,7 +337,6 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         Toast.makeText(getContext(), "add at least one hobby ", Toast.LENGTH_SHORT).show();
                     }
                     if (continue_flag) {
-                        //ArrayList<UserPost> userPosts=new ArrayList<>();
                         UserProfile userProfile = new UserProfile();
                         userProfile.setmName(mNameEtWrapper.getEditText().getText().toString())
                                 .setmCityName(mCityNameEtWrapper.getEditText().getText().toString())
@@ -349,13 +348,12 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                                 .setmYear(mYear)
                                 .setmUserPostList(userPosts)
                                 .setmUserToken(mUid);
-                        //userProfile.setmUserPostList(userPosts);
 
                         if (isPhotoExists) {
                             userProfile.setmPictureUrl(mPictureUrl);
                         }
                         mDatabaseReference.child("appUsers").child(userProfile.getmUserToken()).setValue(userProfile);
-                        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mNameEtWrapper.getEditText().getText().toString() + mLastNameEtWrapper.getEditText().getText().toString()).build());
+                        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mNameEtWrapper.getEditText().getText().toString() +" "+mLastNameEtWrapper.getEditText().getText().toString()).build());
                         DataStore.getInstance(getContext()).saveUser(userProfile);
                         updateUserProfileFragmentListener.afterUpdateUserUpdate(true, hobbys.toArray(new String[hobbys.size()]));
                     }

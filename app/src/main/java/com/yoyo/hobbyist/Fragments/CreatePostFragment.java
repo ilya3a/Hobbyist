@@ -73,6 +73,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -84,6 +85,10 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.android.volley.VolleyLog.TAG;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 
 public class CreatePostFragment extends DialogFragment {
 
@@ -192,7 +197,14 @@ public class CreatePostFragment extends DialogFragment {
                                                        mCityName = userProfile.getmCityName();
 
                                                        Calendar calendar = Calendar.getInstance();
-                                                       String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+                                                       int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                                       int currentMinute = calendar.get(Calendar.MINUTE);
+                                                       int date = calendar.get(Calendar.DAY_OF_MONTH);
+                                                       int month = calendar.get(Calendar.MONTH);
+                                                       int year = calendar.get(Calendar.YEAR);
+
+                                                       String currentDate =date+"/"+month+"/"+year+ "   "+currentHour+":"+currentMinute;
+
                                                        String userToken = mFirebaseUser.getUid();
 
 

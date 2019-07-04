@@ -1,20 +1,15 @@
 package com.yoyo.hobbyist.Adapters;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.yoyo.hobbyist.DataModels.Chat;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 
@@ -27,7 +22,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     Context mContext;
 
     public interface RecyclerCallBack {
-        void onItemClicked(String userId);
+        void ChatFragmentOnItemClicked(String userId);
     }
 
     UserAdapter.RecyclerCallBack recyclerCallBack;
@@ -66,7 +61,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         viewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerCallBack.onItemClicked(userProfile.getmUserToken());
+                recyclerCallBack.ChatFragmentOnItemClicked(userProfile.getmUserToken());
             }
         });
 
