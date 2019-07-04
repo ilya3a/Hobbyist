@@ -126,7 +126,6 @@ public class CreatePostFragment extends DialogFragment {
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_create_post, container, false);
@@ -347,7 +346,7 @@ public class CreatePostFragment extends DialogFragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnPostForMapListener");
         }
     }
 
@@ -411,6 +410,4 @@ public class CreatePostFragment extends DialogFragment {
         mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
         DataStore.getInstance(getContext()).saveUser(userProfile);
     }
-
-
 }

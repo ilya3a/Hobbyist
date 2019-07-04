@@ -74,7 +74,6 @@ public class SearchListFragment extends Fragment {
         recyclerView.setHasFixedSize( true );
         mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext() );
 
-
         PostViewModel postViewModel = ViewModelProviders.of( this ).get( PostViewModel.class );
         postViewModel.getPosts().observe( this, new Observer<List<UserPost>>() {
             @Override
@@ -99,11 +98,11 @@ public class SearchListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
+//        if (context instanceof OnPostForMapListener) {
+//            mListener = (OnPostForMapListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
+//                    + " must implement OnPostForMapListener");
 //        }
     }
 
@@ -156,6 +155,7 @@ public class SearchListFragment extends Fragment {
 
 
     }
+
     public void getPostsFromUsers(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers");
@@ -175,6 +175,7 @@ public class SearchListFragment extends Fragment {
                 for (UserPost post : tempPosts){
                     if(currentUser.getmHobbylist().contains(post.getHobby())){
                         postsToShowForUser.add(post);
+
                     }
                 }
 
@@ -189,6 +190,5 @@ public class SearchListFragment extends Fragment {
 
             }
         });
-
     }
 }

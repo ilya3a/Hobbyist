@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -13,60 +14,68 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.DataModels.UserPost;
+import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
+import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LIST_FRAGMENT_TAG = "list";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_PARAM2 = "param2";
+    private static final float DEFAULT_ZOOM = 15f;
+
+
     private GoogleMap mMap;
-    private SearchView searchView;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationCallback mLocationCallback;
-    private List<UserPost> mPostsAroundMeList = new ArrayList<>();
     TabItem tabItem1;
     TabItem tabItem2;
     TabLayout mTabLayout;
 
+    ArrayList<UserPost> userPosts = new ArrayList<>();
     FragmentManager mFragmentManager;
     SupportMapFragment mMapFragment;
     SearchListFragment mSearchListFragment;
 
+
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabaseReference;
 
-    private OnFragmentInteractionListener mListener;
+    private onSearchFragmentListener mListener;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -74,24 +83,24 @@ public class SearchFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu( menu, inflater );
+        inflater.inflate( R.menu.main, menu );
     }
 
     // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        args.putString( ARG_PARAM2, param2 );
+        fragment.setArguments( args );
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
         if (getArguments() != null) {
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -117,33 +126,33 @@ public class SearchFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        getChildFragmentManager().beginTransaction().remove(mSearchListFragment).commit();
+        getChildFragmentManager().beginTransaction().remove( mSearchListFragment ).commit();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.search_fragment, container, false);
+        View rootView = inflater.inflate( R.layout.search_fragment, container, false );
         mFragmentManager = getChildFragmentManager();
-        mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById(R.id.map);
+        mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById( R.id.map );
         mSearchListFragment = new SearchListFragment();
-        mFragmentManager.beginTransaction().hide(mMapFragment).add(R.id.search_fragment_child_container, mSearchListFragment, LIST_FRAGMENT_TAG).commit();
+        mFragmentManager.beginTransaction().hide( mMapFragment ).add( R.id.search_fragment_child_container, mSearchListFragment, LIST_FRAGMENT_TAG ).commit();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
-        mTabLayout = rootView.findViewById(R.id.search_tab_layout);
-        tabItem1 = rootView.findViewById(R.id.dashboard);
-        tabItem2 = rootView.findViewById(R.id.search);
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout = rootView.findViewById( R.id.search_tab_layout );
+        tabItem1 = rootView.findViewById( R.id.dashboard );
+        tabItem2 = rootView.findViewById( R.id.search );
+        mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        mFragmentManager.beginTransaction().hide(mMapFragment).show(mSearchListFragment).commit();
+                        mFragmentManager.beginTransaction().hide( mMapFragment ).show( mSearchListFragment ).commit();
                         break;
                     case 1:
-                        mFragmentManager.beginTransaction().hide(mSearchListFragment).show(mMapFragment).commit();
+                        mFragmentManager.beginTransaction().hide( mSearchListFragment ).show( mMapFragment ).commit();
                         break;
                 }
 
@@ -152,48 +161,63 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
+                if (tab.getPosition() == 1) {
+                    mListener.onSwishedTab();
+                }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
-//        getPostsForUser();
+        } );
 
-        mMapFragment.getMapAsync(new OnMapReadyCallback() {
+        mMapFragment.getMapAsync( new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-                    mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+                getDeviseLocation();
+                if (ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                mMap.setMyLocationEnabled( true );
+                mMap.setOnInfoWindowClickListener( SearchFragment.this );
+                if (ContextCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) == PermissionChecker.PERMISSION_GRANTED) {
+                    mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
                     requestLocationUpdates();
                 } else {
                     callPermissions();
                 }
-                loadPostsAroundMe(mPostsAroundMeList);
             }
-        });
-        mListener.onMapCreate();
-        return rootView;
+        } );
 
+        getPostsFromUsers();
+
+        return rootView;
     }
 
     private void callPermissions() {
-        Permissions.check(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required to get the Weather", new PermissionHandler() {
+        Permissions.check( getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required to get the location", new PermissionHandler() {
             @Override
             public void onGranted() {
-                mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+                mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
                 requestLocationUpdates();
             }
 
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
+                super.onDenied( context, deniedPermissions );
                 callPermissions();
             }
 
-        });
+        } );
     }
 
     private void requestLocationUpdates() {
@@ -202,79 +226,103 @@ public class SearchFragment extends Fragment {
             @Override
             public void onLocationResult(final LocationResult locationResult) {
 
-                Location lastLocation = locationResult.getLastLocation();
-                LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(location).title("current location"));
             }
         };
 
         LocationRequest request = LocationRequest.create();
         // get accuracy level
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        request.setPriority( LocationRequest.PRIORITY_HIGH_ACCURACY );
         // get update every...
-        request.setInterval(1000);
+        request.setInterval( 1000 );
         // the fastest update...
-        request.setFastestInterval(500);
-        request.setNumUpdates(1);
+        request.setFastestInterval( 500 );
+        request.setNumUpdates( 1 );
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
             callPermissions();
         }
-        mFusedLocationProviderClient.requestLocationUpdates(request, mLocationCallback, null);
-        loadPostsAroundMe(mPostsAroundMeList);
+        mFusedLocationProviderClient.requestLocationUpdates( request, mLocationCallback, null );
+
     }
 
-//    public void getPostsForUser() {
-//
-//        final ArrayList<UserPost> userPosts = new ArrayList<>();
-//        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-//        ArrayList<DatabaseReference> dataBases = new ArrayList<>();
-//
-//
-//        for (String hobby : DataStore.getInstance(getContext()).getUser().getmHobbylist()) {
-//            dataBases.add(mFirebaseDatabase.getReference().child("usersPost").child(hobby));
-//        }
-//
-//        for (DatabaseReference databaseReference : dataBases) {
-//            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    ArrayList<DataSnapshot> snapshotArrayList = new ArrayList<>();
-//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        if (!snapshot.getKey().equals(DataStore.getInstance(getContext()).getUser().getmUserToken())) {
-//                            snapshotArrayList.add(snapshot);
-//                        }
-//                    }
-//                    for (DataSnapshot snapshot : snapshotArrayList) {
-//                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-//                            UserPost userPost =(UserPost)snapshot1.getValue();
-//                            userPosts.add(userPost);
-//                            //todo: to deal with the showing the posts
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
-//
-//    }
+    public void getPostsFromUsers() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
+        final ArrayList<UserPost> tempPosts = new ArrayList<>();
+        final ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
+        final UserProfile currentUser = DataStore.getInstance( getContext() ).getUser();
+        mDatabaseReference.addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserProfile userProfile = snapshot.getValue( UserProfile.class );
+                    if ((!userProfile.getmUserToken().equals( currentUser.getmUserToken() ) && userProfile.getmUserPostList() != null)) {
+                        tempPosts.addAll( userProfile.getmUserPostList() );
+                    }
+                }
+
+                for (UserPost post : tempPosts) {
+                    if (currentUser.getmHobbylist().contains( post.getHobby() )) {
+                        postsToShowForUser.add( post );
+                        LatLng location = new LatLng( post.getLatitude(), post.getLongitude() );
+                        mMap.addMarker( new MarkerOptions().position( location ).title( post.getHobby() ) );
+
+                    }
+                }
+                userPosts.addAll( postsToShowForUser );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        } );
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        int markerIndex = Integer.parseInt( marker.getId().replace( "m", "" ) );
+        mListener.onMarkerInfoClicked( userPosts.get( markerIndex ) );
+
+    }
 
 
-    public void loadPostsAroundMe(List<UserPost> postsAroundMe) {
+    public interface onSearchFragmentListener {
+        void onMarkerInfoClicked(UserPost userPost);
 
-        for (int i = 0; i < postsAroundMe.size(); i++) {
+        void onSwishedTab();
 
+    }
+
+    private void getDeviseLocation() {
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
+        if (ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
-        for (UserPost userPost : postsAroundMe) {
+        Task location = mFusedLocationProviderClient.getLastLocation();
+        location.addOnCompleteListener( new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    Location currentLocation = (Location) task.getResult();
+                    moveCamera( new LatLng( currentLocation.getLatitude(),currentLocation.getLongitude()), DEFAULT_ZOOM );
+                } else {
+                    Toast.makeText( getContext(), "Unable to get location", Toast.LENGTH_SHORT ).show();
+                }
 
-//            mDatabaseReference.child( "usersPost" ).child( userPost.getUserToken() ).setValue( userPost );
+            }
+        } );
+    }
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(userPost.getLatitude(), userPost.getLongitude())).title("Marker in Sydney"));
-        }
+    private void moveCamera(LatLng latLng, float zoom) {
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng, zoom ) );
     }
 
 
@@ -286,12 +334,12 @@ public class SearchFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        super.onAttach( context );
+        if (context instanceof onSearchFragmentListener) {
+            mListener = (onSearchFragmentListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException( context.toString()
+                    + " must implement OnPostForMapListener" );
         }
     }
 
@@ -299,10 +347,5 @@ public class SearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onMapCreate();
     }
 }
