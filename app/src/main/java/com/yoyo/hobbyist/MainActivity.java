@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void openChatFromProfile(String userId) {
         MessageFragment messageFragment = MessageFragment.newInstance(userId);
         //fragment for chat getting user id
-        mFragmentManager.beginTransaction().add(R.id.bla,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+        mFragmentManager.beginTransaction().add(R.id.main_layout,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
     @Override
@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 mUserProfile = dataSnapshot.getValue(UserProfile.class);
                 String userString = mGson.toJson(mUserProfile);
                 ProfilePageFragment profilePageFragment = ProfilePageFragment.newInstance(userString);
-                mFragmentManager.beginTransaction().add(R.id.bla,profilePageFragment,PROFILE_PAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().add(R.id.main_layout,profilePageFragment,PROFILE_PAGE_FRAGMENT_TAG).addToBackStack(null).commit();
 
             }
 

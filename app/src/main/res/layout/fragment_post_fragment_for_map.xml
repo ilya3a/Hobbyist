@@ -1,140 +1,165 @@
-<?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/post_for_map"
-    android:layout_width="match_parent"
+    android:id="@+id/parent_card"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
     android:layout_alignParentBottom="true"
+    android:layout_margin="5dp"
     android:layoutDirection="ltr"
     android:padding="3dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:background="@color/white_color"
         android:orientation="vertical"
         android:padding="5dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentEnd="true">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/post_profile_image_for_map"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_user" />
-
-            <LinearLayout
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/post_city_for_map"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="5dp"
-                        android:text="Barcelona"
-                        android:textSize="20sp" />
-
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/post_profile_name_for_map"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:text="Lena "
-                    android:textColor="@android:color/black"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_calendar" />
 
             <TextView
                 android:id="@+id/create_date_for_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:text="25/06/19" />
+                android:text="25/06/19"
+                android:textSize="9dp" />
         </LinearLayout>
 
-        <LinearLayout
+
+        <RelativeLayout
+            android:id="@+id/upper_relativ_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="8dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/post_profile_image_for_map"
+                android:layout_width="70dp"
+                android:layout_height="90dp"
+                android:src="@drawable/ic_user"
+                app:civ_border_color="#000"
+                app:civ_border_width="1dp" />
+
+            <TextView
+                android:id="@+id/post_profile_name_for_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="17dp"
+                android:layout_toEndOf="@+id/post_profile_image_for_map"
+                android:fontFamily="@font/acme_regular"
+                android:text="Lena gonsales"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/post_publish_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@+id/post_profile_name"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/post_profile_image"
+                android:fontFamily="@font/acme_regular"
+                android:text="14:20"
+                android:textColor="@android:color/black"
+                android:textSize="9sp"
+                android:visibility="invisible" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="17dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_placeholder" />
 
                 <TextView
-                    android:id="@+id/headline_for_map"
+                    android:id="@+id/post_city_for_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/acme_regular"
+                    android:text="Barcelona"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/post_profile_name_for_map"
+                android:layout_toEndOf="@+id/post_profile_name_for_map">
+
+                <TextView
+                    android:id="@+id/headline_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="Who into "
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/hobby_name_for_map"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tennis"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" ?"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/hobby_name_for_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Tennis"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/post_description_for_map"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="tennis as I do.. I've got the all equipment (table balls and bet's) "
-            android:textSize="15sp" />
+            android:layout_below="@+id/upper_relativ_layout">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="end"
-            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/post_description_for_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:maxLines="7"
+                android:text="tennis as I do.. I've got the all equipment (table balls and bet's) "
+                android:textSize="15sp" />
 
-
-            <Button
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/post_chat_btn_for_map"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/ic_chat_icon_selected" />
+                android:layout_below="@+id/post_description_for_map"
+                android:layout_alignParentStart="true"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_chat_icon_selected" />
+        </RelativeLayout>
 
-        </LinearLayout>
-    </LinearLayout>
+
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
-
-
