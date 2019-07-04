@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Toast.makeText(this, getIntent().getAction(), Toast.LENGTH_LONG).show();
         if (DataStore.getInstance(this).isNotifOk()) {
             mUserProfile = DataStore.getInstance(this).getUser();
             if (mUserProfile != null) {

@@ -1,18 +1,28 @@
 package com.yoyo.hobbyist.Utilis;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class UtilFuncs {
-    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
-    {
-        ArrayList<T> newList = new ArrayList<T>();
+    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
+        {
 
-        for (T element : list) {
+            // Create a new LinkedHashSet
+            Set<T> set = new LinkedHashSet<>();
 
-            if (!newList.contains(element)) {
-                newList.add(element);
-            }
+            // Add the elements to set
+            set.addAll(list);
+
+            // Clear the list
+            list.clear();
+
+            // add the elements of set
+            // with no duplicates to the list
+            list.addAll(set);
+
+            // return the list
+            return list;
         }
-        return newList;
     }
 }

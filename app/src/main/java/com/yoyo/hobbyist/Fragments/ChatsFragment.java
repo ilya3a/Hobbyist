@@ -73,6 +73,7 @@ public class ChatsFragment extends Fragment {
                         temp.add(chat.getSender());
                     }
                 }
+
                 usersList = UtilFuncs.removeDuplicates(temp);
                 readChats();
             }
@@ -97,21 +98,6 @@ public class ChatsFragment extends Fragment {
                     if (usersList.contains(user.getmUserToken())) {
                         userProfiles.add(user);
                     }
-//                    //display 1 user from chats
-//                    for (String id : usersList) {
-//                        if (user.getmUserToken().equals(id)) {
-//                            if (userProfiles.size() != 0) {
-//                                for (UserProfile profile : userProfiles) {
-//                                    if (!user.getmUserToken().equals(profile.getmUserToken())) {
-//                                        userProfiles.add(user);
-//                                    }
-//
-//                                }
-//                            } else {
-//                                userProfiles.add(user);
-//                            }
-//                        }
-//                    }
                 }
                 userAdapter = new UserAdapter(userProfiles, getContext());
                 recyclerView.setAdapter(userAdapter);
