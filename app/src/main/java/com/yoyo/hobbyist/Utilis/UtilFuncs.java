@@ -1,5 +1,10 @@
 package com.yoyo.hobbyist.Utilis;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.yoyo.hobbyist.DataModels.UserProfile;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -24,5 +29,9 @@ public class UtilFuncs {
             // return the list
             return list;
         }
+    }
+    public static void saveUserToFireBase(UserProfile userProfile){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("appUsers").child(userProfile.getmUserToken());
+        reference.setValue(userProfile);
     }
 }

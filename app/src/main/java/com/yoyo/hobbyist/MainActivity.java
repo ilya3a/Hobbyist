@@ -48,8 +48,10 @@ import com.yoyo.hobbyist.Fragments.PostFragmentForMap;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
+import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
@@ -135,10 +137,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         mFragmentManager.beginTransaction().add(R.id.main_layout,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -395,10 +394,26 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
+    }
+
+    private void status(String status){
+        mUserProfile.setmStatus(status);
+       DataStore.getInstance(this).saveUser(mUserProfile);
+        UtilFuncs.saveUserToFireBase(mUserProfile);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("Online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("Offline");
     }
 
 }

@@ -17,9 +17,19 @@ public class UserProfile implements Serializable {
     private String mUserAboutMe;
     private String mCityName;
     private String mGender;
+    private String mStatus;
     private ArrayList<String> mHobbylist;
     private ArrayList<UserPost> mUserPostList;
     private String mUserToken;
+
+    public String getmStatus() {
+        return mStatus;
+    }
+
+    public UserProfile setmStatus(String mStatus) {
+        this.mStatus = mStatus;
+        return this;
+    }
 
     public ArrayList<UserPost> getmUserPostList() {
         return mUserPostList;

@@ -154,8 +154,10 @@
 
             <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/post_chat_btn"
+                android:layout_margin="3dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:scaleType="fitXY"
                 android:layout_below="@+id/post_description"
                 android:layout_alignParentStart="true"
                 android:background="@color/transparent"

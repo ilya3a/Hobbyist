@@ -20,6 +20,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     ArrayList<UserProfile> mUserProfiles;
     Context mContext;
+    private boolean isChat;
 
     public interface RecyclerCallBack {
         void ChatFragmentOnItemClicked(String userId);
@@ -27,9 +28,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     UserAdapter.RecyclerCallBack recyclerCallBack;
 
-    public UserAdapter(ArrayList<UserProfile> mUserProfiles, Context mContext) {
+    public UserAdapter(ArrayList<UserProfile> mUserProfiles, Context mContext, boolean isChat) {
         this.mUserProfiles = mUserProfiles;
         this.mContext = mContext;
+        this.isChat = isChat;
+
         if (mContext instanceof RecyclerCallBack) {
             recyclerCallBack = (RecyclerCallBack) mContext;
         } else {
@@ -58,6 +61,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         if (!userProfile.getmPictureUrl().equals("")) {
             Glide.with(mContext).load(userProfile.getmPictureUrl()).thumbnail(0.4f).into(viewHolder.profileImage);
         }
+
+        if (isChat){
+            if (userProfile.getmStatus().equals("Online")){
+                viewHolder.imgOn.setVisibility(View.VISIBLE);
+                viewHolder.imgOff.setVisibility(View.GONE);
+            }else {
+                viewHolder.imgOn.setVisibility(View.GONE);
+                viewHolder.imgOff.setVisibility(View.VISIBLE);
+            }
+        }else {
+            viewHolder.imgOn.setVisibility(View.GONE);
+            viewHolder.imgOff.setVisibility(View.GONE);
+        }
         viewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +95,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         ImageView profileImage;
         TextView userName;
         RelativeLayout relativeLayout;
+        ImageView imgOn;
+        ImageView imgOff;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -86,6 +104,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             profileImage = itemView.findViewById(R.id.profile_image);
             userName = itemView.findViewById(R.id.user_name);
             relativeLayout = itemView.findViewById(R.id.user_item_layout);
+            imgOn =itemView.findViewById(R.id.img_online);
+            imgOff =itemView.findViewById(R.id.img_offline);
+
         }
     }
 
