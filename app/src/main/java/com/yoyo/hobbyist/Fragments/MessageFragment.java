@@ -41,6 +41,7 @@ import com.yoyo.hobbyist.Notifications.Sender;
 import com.yoyo.hobbyist.Notifications.Token;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
+import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,7 @@ public class MessageFragment extends Fragment {
     ImageButton mSendBtn;
     UserProfile mBuddyUserProfile;
     EditText mTextToSendEt;
+    TextView mLastseenTV;
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
@@ -69,9 +71,34 @@ public class MessageFragment extends Fragment {
 
     boolean notify = false;
 
+    ValueEventListener seenValueEventListener;
+
     APIService apiService;
     public MessageFragment() {
         // Required empty public constructor
+    }
+
+    private void seenMsg(final String userId ){
+        reference = FirebaseDatabase.getInstance().getReference("chats");
+        seenValueEventListener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if(chat.getReciver().equals(firebaseUser.getUid())&&chat.getSender().equals(userId)){
+                        HashMap<String,Object> hashMap = new HashMap<>();
+                        hashMap.put("isseen",true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sendMessage(String sender, final String reciver, String message) {
@@ -80,6 +107,8 @@ public class MessageFragment extends Fragment {
         hashMap.put("sender", sender);
         hashMap.put("reciver", reciver);
         hashMap.put("message", message);
+        hashMap.put("isseen", false);
+        hashMap.put("timesent", UtilFuncs.getCurrentDate());
 
         reference.child("chats").push().setValue(hashMap);
 
@@ -90,22 +119,9 @@ public class MessageFragment extends Fragment {
         }
         notify=false;
 
-//        reference = FirebaseDatabase.getInstance().getReference("appUsers").child(firebaseUser.getUid());
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-//                sendNotification(reciver,userProfile.getmName()+" "+userProfile.getmLastName(), msg);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
-    private void sendNotification(String reciver, final String username, String msg) {
+    private void sendNotification(String reciver, final String username, final String msg) {
 
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(reciver);
@@ -114,7 +130,7 @@ public class MessageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(firebaseUser.getUid(),R.mipmap.ic_logo_round,username,"New Message",mUserId);
+                    Data data = new Data(firebaseUser.getUid(),R.mipmap.ic_logo_round,msg,"New Message from "+ username,mUserId);
 
                     Sender sender = new Sender(data,token.getToken());
 
@@ -206,6 +222,7 @@ public class MessageFragment extends Fragment {
         mUserPicIV = rootView.findViewById(R.id.chat_buddy_iv);
         mSendBtn = rootView.findViewById(R.id.send_message_btn);
         mTextToSendEt = rootView.findViewById(R.id.chat_text_to_send);
+        mLastseenTV = rootView.findViewById(R.id.last_seen);
 
         recyclerView = rootView.findViewById(R.id.msg_recycler);
         recyclerView.setHasFixedSize(true);
@@ -223,6 +240,7 @@ public class MessageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mBuddyUserProfile = dataSnapshot.getValue(UserProfile.class);
                 mUserNameTV.setText(mBuddyUserProfile.getmName() + " " + mBuddyUserProfile.getmLastName());
+                mLastseenTV.setText(mBuddyUserProfile.getmStatus());
                 if (!mBuddyUserProfile.getmPictureUrl().equals("")) {
                     Glide.with(getContext()).load(mBuddyUserProfile.getmPictureUrl()).into(mUserPicIV);
                 }
@@ -238,6 +256,9 @@ public class MessageFragment extends Fragment {
 
             }
         });
+
+        seenMsg(mUserId);
+
         mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,5 +297,17 @@ public class MessageFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        reference.removeEventListener(seenValueEventListener);
+        DataStore.getInstance(getContext()).saveCurrenttalkingUser("none");
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        DataStore.getInstance(getContext()).saveCurrenttalkingUser(mUserId);
+
+    }
 }

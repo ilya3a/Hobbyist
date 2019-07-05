@@ -80,6 +80,7 @@ public class ChatsFragment extends Fragment {
                     }
                     if (chat.getReciver().equals(firebaseUser.getUid())) {
                         temp.add(chat.getSender());
+
                     }
                 }
 

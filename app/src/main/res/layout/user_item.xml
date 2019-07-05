@@ -16,7 +16,6 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/profile_image"
         android:text="userName"
@@ -31,7 +30,7 @@
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/profile_image"
         android:src="@android:drawable/presence_online"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_offline"
@@ -42,5 +41,49 @@
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/profile_image"
         android:src="@android:drawable/radiobutton_off_background"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/last_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_name"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/profile_image"
+        android:maxLines="1"
+        android:text="last message"
+        android:textColor="@color/grey" />
+
+    <RelativeLayout
+        android:id="@+id/num_of_unread_holder"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignTop="@id/last_msg"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/num_unread_bkg"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@color/tab_color" />
+
+        <TextView
+            android:id="@+id/num_of_unread"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="#fff" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/last_msg_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/user_name"
+        android:layout_alignParentEnd="true"
+        android:text="15:32"
+        android:textColor="@color/grey" />
 </RelativeLayout>

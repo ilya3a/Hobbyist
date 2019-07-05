@@ -48,7 +48,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (i == MSG_TYPE_LEFT) {
             View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.chat_item_left, viewGroup, false);
             return new MessageAdapter.ViewHolder(view);
-        }else {
+        } else {
             View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.chat_item_right, viewGroup, false);
             return new MessageAdapter.ViewHolder(view);
         }
@@ -60,12 +60,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(final MessageAdapter.ViewHolder viewHolder, final int i) {
         Chat chat = mChat.get(i);
         viewHolder.showMessage.setText(chat.getMessage());
-        if(!imageUrl.equals("")){
+        if (!imageUrl.equals("")) {
             Glide.with(mContext).load(imageUrl).thumbnail(0.4f).into(viewHolder.profileImage);
         }
-        if (!gender.equals("Male") && imageUrl.equals("")){
+        if (!gender.equals("Male") && imageUrl.equals("")) {
             Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.coverImageView);
         }
+
+        if (i == mChat.size() - 1) {
+            if (chat.isIsseen()) {
+                viewHolder.seenTV.setText("Seen");
+            } else {
+                viewHolder.seenTV.setText("Delivered");
+            }
+        } else {
+            viewHolder.seenTV.setVisibility(View.GONE);
+        }
+        viewHolder.timeSentTV.setText(chat.getTimesent());
 
 
     }
@@ -90,7 +101,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         ImageView coverImageView;
         ImageView profileImage;
-        TextView showMessage, userCityTV, postTv, hobbyTV, dateTV;
+        TextView showMessage, timeSentTV, seenTV, hobbyTV, dateTV;
         CardView parentLayout;
         Button chatBtn;
 
@@ -99,6 +110,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
             profileImage = itemView.findViewById(R.id.chat_item_profile_image);
             showMessage = itemView.findViewById(R.id.chat_show_message);
+            timeSentTV = itemView.findViewById(R.id.sent_at);
+            seenTV = itemView.findViewById(R.id.seen_txt);
 
         }
     }

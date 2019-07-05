@@ -211,14 +211,7 @@ public class CreatePostFragment extends DialogFragment {
                                                    if (InternetConnection.isNetworkAvailable(getContext())) {
 
 
-                                                       Calendar calendar = Calendar.getInstance();
-                                                       int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-                                                       int currentMinute = calendar.get(Calendar.MINUTE);
-                                                       int date = calendar.get(Calendar.DAY_OF_MONTH);
-                                                       int month = calendar.get(Calendar.MONTH);
-                                                       int year = calendar.get(Calendar.YEAR);
-
-                                                       String currentDate = date + "/" + month + "/" + year + "   " + currentHour + ":" + currentMinute;
+                                                       String currentDate = UtilFuncs.getCurrentDate();
 
                                                        String userToken = mFirebaseUser.getUid();
 

@@ -53,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:id="@+id/last_seen"
                 android:text="Active in last 2 minss"
                 android:textColor="#9580d7"
                 android:textSize="14sp" />

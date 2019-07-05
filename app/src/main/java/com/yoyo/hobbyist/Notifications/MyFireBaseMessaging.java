@@ -15,6 +15,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.yoyo.hobbyist.MainActivity;
 import com.yoyo.hobbyist.R;
+import com.yoyo.hobbyist.Utilis.DataStore;
 
 public class MyFireBaseMessaging extends FirebaseMessagingService {
     @Override
@@ -36,36 +37,38 @@ public class MyFireBaseMessaging extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
 
-        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        if (!DataStore.getInstance(getApplicationContext()).getCurrenttalkingUser().equals(user)) {
+            RemoteMessage.Notification notification = remoteMessage.getNotification();
 //        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MainActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("userid", user);
-        intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT);
+            Intent intent = new Intent(this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("userid", user);
+            intent.putExtras(bundle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"1");
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "1");
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel channel = new NotificationChannel("id_1", "name_1", NotificationManager.IMPORTANCE_HIGH);
-            manager.createNotificationChannel(channel);
-            builder.setChannelId("id_1");
-        }
-        builder.setContentTitle(title)
-                .setContentText(body)
-                .setSmallIcon(android.R.drawable.star_on)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+            if (Build.VERSION.SDK_INT >= 26) {
+                NotificationChannel channel = new NotificationChannel("id_1", "name_1", NotificationManager.IMPORTANCE_HIGH);
+                manager.createNotificationChannel(channel);
+                builder.setChannelId("id_1");
+            }
+            builder.setContentTitle(title)
+                    .setContentText(body)
+                    .setSmallIcon(android.R.drawable.star_on)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
 
 //        int i = 0;
 //        if (j > 0) {
 //            i = j;
 //        }
 
-        manager.notify(1, builder.build());
+            manager.notify(1, builder.build());
+        }
     }
 
 }

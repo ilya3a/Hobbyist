@@ -37,6 +37,13 @@ public class DataStore {
         return mSharedPref;
     }
 
+    public  void saveCurrenttalkingUser(String userId){
+        mEditor.putString("talk_to", userId);
+        mEditor.apply();
+    }
+    public  String getCurrenttalkingUser(){
+        return mSharedPref.getString("talk_to", "none");
+    }
     public void saveUser(UserProfile user) {
         String userString = mGson.toJson(user);
         mEditor.putString(SHARED_KEY_NEW_USER, userString);

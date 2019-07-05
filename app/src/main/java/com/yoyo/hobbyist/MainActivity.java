@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onPause() {
         super.onPause();
-        status("Offline");
+        status("Last seen at: "+UtilFuncs.getCurrentDate());
     }
 
 }
