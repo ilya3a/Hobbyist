@@ -24,6 +24,7 @@ import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
@@ -32,6 +33,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private boolean isChat;
     private String theLastMsg;
+    private HashMap<String,Integer> unreadMsgMap;
+    private String thetime;
 
     public interface RecyclerCallBack {
         void ChatFragmentOnItemClicked(String userId);
@@ -39,10 +42,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private UserAdapter.RecyclerCallBack recyclerCallBack;
 
-    public UserAdapter(ArrayList<UserProfile> mUserProfiles, Context mContext, boolean isChat) {
+    public UserAdapter(ArrayList<UserProfile> mUserProfiles, Context mContext, boolean isChat, HashMap<String,Integer> unreadMsgMap) {
         this.mUserProfiles = mUserProfiles;
         this.mContext = mContext;
         this.isChat = isChat;
+        this.unreadMsgMap = unreadMsgMap;
         try {
             recyclerCallBack = (RecyclerCallBack) mContext;
 
@@ -70,6 +74,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         final UserProfile userProfile = mUserProfiles.get(i);
 
+
+
         viewHolder.userName.setText(userProfile.getmName());
         if (!userProfile.getmPictureUrl().equals("")) {
             Glide.with(mContext).load(userProfile.getmPictureUrl()).thumbnail(0.4f).into(viewHolder.profileImage);
@@ -78,7 +84,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.profileImage);
         }
         if (isChat){
-            lastMsg(userProfile.getmUserToken(),viewHolder.lastMsg);
+            lastMsg(userProfile.getmUserToken(),viewHolder.lastMsg,viewHolder.timeOfLastMsg,viewHolder.numOfUnread,viewHolder.unreadHolder);
         }
         else {
             viewHolder.lastMsg.setVisibility(View.GONE);
@@ -146,8 +152,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    private void lastMsg(final String userId, final TextView lastMsg) {
+    private void lastMsg(final String userId, final TextView lastMsg , final TextView lastMsgTime , final TextView numOfUnread , final RelativeLayout holder) {
         theLastMsg = "";
+        thetime = "";
+        final int[] unread = {0};
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chats");
 
@@ -156,9 +164,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
+                    if(chat.getReciver().equals(firebaseUser.getUid())&& chat.getSender().equals(userId)){
+                        if(!chat.isIsseen()){
+                            unread[0]++;
+                        }
+                    }
                     if (chat.getReciver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId) ||
                             chat.getReciver().equals(userId) && chat.getSender().equals(firebaseUser.getUid())) {
                         theLastMsg = chat.getMessage();
+                        thetime= chat.getTimesent();
                     }
                 }
                 switch (theLastMsg) {
@@ -167,8 +181,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         break;
                     default:
                         lastMsg.setText(theLastMsg);
+                        lastMsgTime.setText(thetime);
                 }
                 theLastMsg = "";
+                if (unread[0]!=0){
+                    holder.setVisibility(View.VISIBLE);
+                    numOfUnread.setText(String.valueOf(unread[0]));
+                }
             }
 
             @Override

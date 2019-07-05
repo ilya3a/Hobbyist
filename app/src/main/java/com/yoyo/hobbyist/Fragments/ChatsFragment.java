@@ -1,20 +1,13 @@
 package com.yoyo.hobbyist.Fragments;
 
-import android.app.ActionBar;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,8 +25,7 @@ import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 
 
 public class ChatsFragment extends Fragment {
@@ -48,6 +40,7 @@ public class ChatsFragment extends Fragment {
     DatabaseReference reference;
 
     ArrayList<String> usersList;
+    HashMap<String,Integer> unreadMsgMap = new HashMap<>();
 
 
     public ChatsFragment() {
@@ -80,7 +73,10 @@ public class ChatsFragment extends Fragment {
                     }
                     if (chat.getReciver().equals(firebaseUser.getUid())) {
                         temp.add(chat.getSender());
-
+                        int i =0;
+                        if (!chat.isIsseen()){
+                            unreadMsgMap.put(chat.getSender(),++i);
+                        }
                     }
                 }
 
@@ -110,7 +106,7 @@ public class ChatsFragment extends Fragment {
                         userProfiles.add(user);
                     }
                 }
-                userAdapter = new UserAdapter(userProfiles, getActivity(), true);
+                userAdapter = new UserAdapter(userProfiles, getActivity(), true,unreadMsgMap);
                 recyclerView.setAdapter(userAdapter);
             }
 

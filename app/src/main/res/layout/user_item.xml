@@ -57,24 +57,27 @@
 
     <RelativeLayout
         android:id="@+id/num_of_unread_holder"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignTop="@id/last_msg"
         android:layout_alignParentEnd="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/num_unread_bkg"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@color/tab_color" />
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@color/tab_color"
+            />
 
         <TextView
             android:id="@+id/num_of_unread"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:gravity="center"
             android:text="4"
+            android:textSize="10sp"
             android:textColor="#fff" />
     </RelativeLayout>
 

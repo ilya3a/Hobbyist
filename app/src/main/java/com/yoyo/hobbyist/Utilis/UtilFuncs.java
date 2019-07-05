@@ -43,6 +43,15 @@ public class UtilFuncs {
         int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
 
-        return date + "/" + month + "/" + year + "   " + currentHour + ":" + currentMinute;
+        if (currentMinute/10==0&&currentHour/10==0){
+            return date + "/" + (month+1) + "/" + year + "   " + "0"+currentHour + ":" + "0"+currentMinute;
+        }
+        if (currentHour/10==0){
+            return date + "/" + (month+1) + "/" + year + "   " + "0"+currentHour + ":" + currentMinute;
+        }
+        if (currentMinute/10==0){
+            return date + "/" + (month+1) + "/" + year + "   " + currentHour + ":" + "0"+currentMinute;
+        }
+        return date + "/" + (month+1) + "/" + year + "   " + currentHour + ":" + currentMinute;
     }
 }
