@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_color">
@@ -58,6 +59,14 @@
                     app:civ_border_color="#FFf"
                     app:civ_border_width="2dp" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profilePhoto_iv"
+                    android:layout_toEndOf="@+id/profilePhoto_iv"
+                    android:src="@drawable/ic_edit"
+                    android:id="@+id/picture_edit_image"
+                    android:visibility="gone"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,82 +106,106 @@
 
 
             </RelativeLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/upper_layout"
+    android:id="@+id/second_liniar2">
 
-            <LinearLayout
-                android:id="@+id/second_liniar"
+
+
+    <LinearLayout
+        android:id="@+id/second_liniar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upper_layout"
+        android:background="#ffff"
+        android:orientation="horizontal"
+        tools:ignore="NotSibling">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/number_of_posts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/upper_layout"
-                android:background="#ffff"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:text="5"
+                android:textColor="#009293"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/number_of_posts"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="5"
-                        android:textColor="#009293"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/acme_regular"
+            <TextView
+                android:id="@+id/comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/acme_regular"
                         android:gravity="center"
                         android:text="Posts"
                         android:textColor="#000" />
-                </LinearLayout>
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#7E7E7E"
-                    android:padding="0.1dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#7E7E7E"
+            android:padding="0.1dp">
 
-                </LinearLayout>
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/number_of_hobbys"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="7"
-                        android:textColor="#009293"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/number_of_hobbys"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="#009293"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/channel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/acme_regular"
+            <TextView
+                android:id="@+id/channel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/acme_regular"
                         android:gravity="center"
                         android:text="Hobbys"
                         android:textColor="#000" />
-                </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit"
+        android:id="@+id/post_edit_image"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:visibility="gone"
+        />
+</RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/second_liniar"
+                android:layout_below="@+id/second_liniar2"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -204,10 +237,10 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:enabled="false"
-                        android:fontFamily="@font/acme_regular"
                         android:inputType="textEmailAddress"
                         android:padding="16dp"
-                        android:text="font test" />
+                        android:text="font test"
+                        android:fontFamily="@font/acme_regular"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -225,12 +258,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_weight="0.5"
-                        android:fontFamily="@font/acme_regular"
+                        android:layout_weight="0.3"
                         android:padding="20dp"
                         android:text="City"
                         android:textSize="15dp"
-                        android:textStyle="italic|bold" />
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="italic|bold"/>
 
                     <EditText
                         android:id="@+id/city_et"
@@ -240,9 +273,10 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:enabled="false"
-                        android:fontFamily="@font/acme_regular"
                         android:inputType="textEmailAddress"
-                        android:padding="16dp" />
+                        android:padding="16dp"
+                        android:fontFamily="@font/acme_regular"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -265,7 +299,7 @@
                         android:padding="20dp"
                         android:text="Gender"
                         android:textSize="15dp"
-                        android:textStyle="italic|bold" />
+                        android:textStyle="italic|bold"/>
 
                     <EditText
                         android:id="@+id/gender_et"
@@ -275,9 +309,9 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:enabled="false"
-                        android:fontFamily="@font/acme_regular"
                         android:inputType="textEmailAddress"
-                        android:padding="16dp" />
+                        android:padding="16dp"
+                        android:fontFamily="@font/acme_regular"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -287,10 +321,10 @@
                     android:padding="0.1dp" />
 
                 <LinearLayout
-                    android:id="@+id/notification_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/notification_layout">
 
                     <TextView
                         android:id="@+id/notif_tv"
@@ -298,11 +332,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="0.5"
-                        android:fontFamily="@font/acme_regular"
                         android:padding="20dp"
                         android:text="Notification"
                         android:textSize="15dp"
-                        android:textStyle="italic|bold" />
+                        android:fontFamily="@font/acme_regular"
+                        android:textStyle="italic|bold"/>
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -337,11 +371,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.3"
-                        android:fontFamily="@font/acme_regular"
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="Hobby's"
                         android:textSize="18dp"
+                        android:fontFamily="@font/acme_regular"
                         android:textStyle="bold|italic" />
 
                     <com.nex3z.flowlayout.FlowLayout
@@ -362,7 +396,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone">
-
                         <android.support.design.button.MaterialButton
 
                             android:id="@+id/add_btn"
@@ -384,6 +417,7 @@
                             android:layout_marginStart="3dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1" />
+
 
 
                     </LinearLayout>

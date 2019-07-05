@@ -47,6 +47,7 @@ import com.yoyo.hobbyist.Fragments.MessageFragment;
 import com.yoyo.hobbyist.Fragments.PostFragmentForMap;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
+import com.yoyo.hobbyist.Fragments.SearchListFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
@@ -57,12 +58,14 @@ import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.onSearchFragmentListener, MenuFragment.OnFragmentInteractionListener, UserAdapter.RecyclerCallBack,
-        CreatePostFragment.OnFragmentInteractionListener, ProfilePageFragment.ProfileFragmentListener, PostsRecyclerViewAdapter.RecyclerCallBack, PostFragmentForMap.OnPostForMapListener {
+        CreatePostFragment.OnFragmentInteractionListener, ProfilePageFragment.ProfileFragmentListener, PostsRecyclerViewAdapter.RecyclerCallBack, PostFragmentForMap.OnPostForMapListener
+, MessageFragment.MessageFragmentListener {
 
     final int CAMERA_REQUEST = 1;
     final String MESSAGE_FRAGMENT_TAG = "message_fragment_tag";
     final String POST_FRAGMENT_FOR_MAP = "post_fragment_for_map";
     final String PROFILE_PAGE_FRAGMENT_TAG="profile_page_fragment_tag";
+    final String SEARCHLIST_FRAGMENT_TAG="searchlist_fragment_tag";
     TabLayout mTabLayout;
     ViewPager mPager;
     PagerAdapter mAdapter;
@@ -90,17 +93,26 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     }
 
     @Override
+    public void postOnEraseItemClicked() {
+        Fragment fragment = mAdapter.getItem( 3 );
+        ((ProfilePageFragment)fragment).UpdateUser();
+    }
+
+    @Override
+    public void editPostsClickd() {
+        SearchListFragment searchListFragment=SearchListFragment.newInstance(true);
+        mFragmentManager.beginTransaction().add(R.id.main_layout,searchListFragment,SEARCHLIST_FRAGMENT_TAG).addToBackStack(null).commit();
+        //MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        //fragment for chat getting user id
+        //mFragmentManager.beginTransaction().add(R.id.main_layout,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Window window = this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(ContextCompat.getColor(this,R.color.tab_color));
         }
@@ -279,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     @Override
     public void postOnPhotoItemClicked(String userId) {
-        getUserProfile(userId);
+        getAndOpenUserProfile(userId);
     }
 
     @Override
@@ -324,6 +336,11 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         //fragment for chat getting user id
         mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
 
+    }
+
+    @Override
+    public void onProfileClickd(String userId) {
+        getAndOpenUserProfile(userId);
     }
 
     interface MainActivityDashboardFragmentDataPass {
@@ -377,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
     }
-    public void getUserProfile(final String mUserId) {
+    public void getAndOpenUserProfile(final String mUserId) {
         final Gson mGson = new Gson();
         FirebaseDatabase mFirebaseDatabase2 = FirebaseDatabase.getInstance();
         DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child("appUsers").child(mUserId);

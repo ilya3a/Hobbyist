@@ -20,7 +20,8 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_left_arrow" />
+            android:src="@drawable/ic_left_arrow"
+            android:id="@+id/back_btn"/>
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -29,7 +30,9 @@
             android:id="@+id/chat_buddy_iv"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_avatar_man" />
+            android:src="@drawable/ic_avatar_man"
+            app:civ_border_color="#FFf"
+            app:civ_border_width="2dp"/>
 
         <LinearLayout
 

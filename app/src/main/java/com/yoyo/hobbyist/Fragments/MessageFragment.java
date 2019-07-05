@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +59,7 @@ public class MessageFragment extends Fragment {
     CircleImageView mUserPicIV;
     TextView mUserNameTV;
     ImageButton mSendBtn;
+    ImageView mBackbtn;
     UserProfile mBuddyUserProfile;
     EditText mTextToSendEt;
     TextView mLastseenTV;
@@ -74,10 +76,15 @@ public class MessageFragment extends Fragment {
     ValueEventListener seenValueEventListener;
 
     APIService apiService;
+    MessageFragmentListener messageFragmentListener;
     public MessageFragment() {
         // Required empty public constructor
     }
 
+    public interface MessageFragmentListener{
+        void onProfileClickd(String userId);
+        void onBackPressed();
+    }
     private void seenMsg(final String userId ){
         reference = FirebaseDatabase.getInstance().getReference("chats");
         seenValueEventListener = reference.addValueEventListener(new ValueEventListener() {
@@ -200,18 +207,7 @@ public class MessageFragment extends Fragment {
         if (getArguments() != null) {
             mUserId = getArguments().getString("userId");
         }
-        Window window = getActivity().getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-        }
+        windowColorChnge();
     }
 
     @Override
@@ -222,6 +218,7 @@ public class MessageFragment extends Fragment {
         mUserPicIV = rootView.findViewById(R.id.chat_buddy_iv);
         mSendBtn = rootView.findViewById(R.id.send_message_btn);
         mTextToSendEt = rootView.findViewById(R.id.chat_text_to_send);
+        mBackbtn=rootView.findViewById(R.id.back_btn);
         mLastseenTV = rootView.findViewById(R.id.last_seen);
 
         recyclerView = rootView.findViewById(R.id.msg_recycler);
@@ -234,6 +231,13 @@ public class MessageFragment extends Fragment {
         apiService= Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference().child("appUsers").child(mUserId);
+
+        mBackbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageFragmentListener.onBackPressed();
+            }
+        });
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -254,6 +258,12 @@ public class MessageFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+        mUserPicIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageFragmentListener.onProfileClickd(mUserId);
             }
         });
 
@@ -280,12 +290,19 @@ public class MessageFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        try {
+            messageFragmentListener = (MessageFragment.MessageFragmentListener)context;
+
+        }catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement the interface : messageFragmentListener");
+        }
     }
 
 
     @Override
     public void onDetach() {
         super.onDetach();
+        messageFragmentListener=null;
     }
 
     @Override
@@ -297,6 +314,14 @@ public class MessageFragment extends Fragment {
         }
     }
 
+    void windowColorChnge(){
+        Window window = getActivity().getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        }
+    }
     @Override
     public void onPause() {
         super.onPause();

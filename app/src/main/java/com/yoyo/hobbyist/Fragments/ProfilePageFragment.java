@@ -90,7 +90,7 @@ public class ProfilePageFragment extends Fragment {
 
     ArrayList<String> hobbysFromServer = new ArrayList<>();
     SwitchCompat mNotificationSw;
-    ImageView mBlurryImageView;
+    ImageView mBlurryImageView,mEditProfile,mEditPosts;
     MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView mNameTv, mPostsCount, mHobbysCount;
@@ -139,6 +139,7 @@ public class ProfilePageFragment extends Fragment {
         void notifCheckChange(boolean isChecked);
 
         void openChatFromProfile(String userId);
+        void editPostsClickd();
     }
 
     public ProfilePageFragment() {
@@ -197,6 +198,12 @@ public class ProfilePageFragment extends Fragment {
         super.onDestroy();
         Log.d("ilya", "ondestroy");
     }
+//todo: why???
+    @Override
+    public void onResume() {
+        super.onResume();
+        DataStore.getInstance(getContext()).getUser();
+    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -213,6 +220,8 @@ public class ProfilePageFragment extends Fragment {
         mNameTv = rootView.findViewById(R.id.name_tv);
         mFab = rootView.findViewById(R.id.fab);
         flowLayout = rootView.findViewById(R.id.flow_layout);
+        mEditProfile=rootView.findViewById(R.id.picture_edit_image);
+        mEditPosts=rootView.findViewById(R.id.post_edit_image);
 
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
@@ -250,6 +259,19 @@ public class ProfilePageFragment extends Fragment {
 
         }
 
+        mEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProfilePhoto.callOnClick();
+            }
+        });
+
+        mEditPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileFragmentListener.editPostsClickd();
+            }
+        });
         mExitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,6 +367,8 @@ public class ProfilePageFragment extends Fragment {
                         mName.setVisibility(View.VISIBLE);
                         mLastName.setVisibility(View.VISIBLE);
                         mNameTv.setVisibility(View.GONE);
+                        mEditProfile.setVisibility(View.VISIBLE);
+                        mEditPosts.setVisibility(View.VISIBLE);
                     } else {
                         editMode = false;
                         mFab.setImageResource(R.drawable.ic_edit_black_24dp);
@@ -384,7 +408,9 @@ public class ProfilePageFragment extends Fragment {
                         mName.setVisibility(View.GONE);
                         mLastName.setVisibility(View.GONE);
                         mNameTv.setVisibility(View.VISIBLE);
-
+                        mEditProfile.setVisibility(View.GONE);
+                        mEditPosts.setVisibility(View.GONE);
+                        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
                         updateflow();
                         updateProfileOnfireBase();
                     }
@@ -537,6 +563,9 @@ public class ProfilePageFragment extends Fragment {
         } else {
             return MoveAnimation.create(MoveAnimation.DOWN, enter, 1000);
         }
+    }
+    public void UpdateUser(){
+        mUserProfile=DataStore.getInstance(getContext()).getUser();
     }
 }
 
