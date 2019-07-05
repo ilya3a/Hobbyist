@@ -142,16 +142,20 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
         mDatabaseReference = mFirebaseDatabase.getReference();
 
         mTabLayout = rootView.findViewById( R.id.search_tab_layout );
-        tabItem1 = rootView.findViewById( R.id.dashboard );
-        tabItem2 = rootView.findViewById( R.id.search );
+        tabItem1 = rootView.findViewById( R.id.search_list_of_posts_tab );
+        tabItem2 = rootView.findViewById( R.id.search_map_of_posts_tab );
         mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
+                        mTabLayout.getTabAt(0).setIcon(R.drawable.ic_list_posts_selected);
+                        mTabLayout.getTabAt(1).setIcon(R.drawable.ic_map_not_selected);
                         mFragmentManager.beginTransaction().hide( mMapFragment ).show( mSearchListFragment ).commit();
                         break;
                     case 1:
+                        mTabLayout.getTabAt(0).setIcon(R.drawable.ic_list_posts_not_selected);
+                        mTabLayout.getTabAt(1).setIcon(R.drawable.ic_map_selected);
                         mFragmentManager.beginTransaction().hide( mSearchListFragment ).show( mMapFragment ).commit();
                         break;
                 }

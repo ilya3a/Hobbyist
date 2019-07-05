@@ -11,11 +11,12 @@ public class UserPost {
     String date;
     String hobby;
     String userToken;
+    String gender;
     String postDescription;
     double latitude;
     double longitude;
 
-    public UserPost(String userProfilePicUrl, String userName, String cityName, boolean isOnline, String date, String hobby, String userToken, String postDescription, double latitude, double longitude) {
+    public UserPost(String userProfilePicUrl, String userName, String cityName, boolean isOnline, String date, String hobby, String userToken, String postDescription, double latitude, double longitude, String gender) {
         this.userProfilePicUrl = userProfilePicUrl;
         this.userName = userName;
         this.cityName = cityName;
@@ -26,6 +27,16 @@ public class UserPost {
         this.postDescription = postDescription;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public UserPost setGender(String gender) {
+        this.gender = gender;
+        return this;
     }
 
     public UserPost() {

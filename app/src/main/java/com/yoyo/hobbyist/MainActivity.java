@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void onMarkerInfoClicked(UserPost userPost) {
 
         mPostFragmentForMap = new PostFragmentForMap( userPost.getUserProfilePicUrl(), userPost.getUserName(), userPost.getCityName(),
-                userPost.getPostDescription(), userPost.getHobby(), userPost.getDate() );
+                userPost.getPostDescription(), userPost.getHobby(), userPost.getDate() , userPost.getGender() );
 
         PostFragmentForMap postFragmentForMap = (PostFragmentForMap) mFragmentManager.findFragmentByTag( POST_FRAGMENT_FOR_MAP );
 

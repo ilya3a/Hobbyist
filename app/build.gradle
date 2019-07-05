@@ -76,6 +76,8 @@ dependencies {
     implementation 'com.github.maayyaannkk:ImagePicker:1.0.3'
     // very cool fragment transactions
     implementation 'com.labo.kaji:fragmentanimations:0.1.1'
+    // LayoutManeger
+    implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
 }
 apply plugin: 'com.google.gms.google-services'
 

@@ -66,6 +66,7 @@ import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.himanshurawat.imageworker.ImageWorker;
 
+import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.nex3z.flowlayout.FlowLayout;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
@@ -82,19 +83,18 @@ import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 import jp.wasabeef.blurry.Blurry;
 
 
-
 import static android.support.v4.graphics.TypefaceCompatUtil.getTempFile;
 
 
 public class ProfilePageFragment extends Fragment {
 
-   ArrayList<String> hobbysFromServer = new ArrayList<>();
+    ArrayList<String> hobbysFromServer = new ArrayList<>();
     SwitchCompat mNotificationSw;
     ImageView mBlurryImageView;
     MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
-    TextView mNameTv,mPostsCount,mHobbysCount;
-    EditText mAge,mCity, mGenderEt,mName,mLastName;
+    TextView mNameTv, mPostsCount, mHobbysCount;
+    EditText mAge, mCity, mGenderEt, mName, mLastName;
     String mPictureUrl;
     FlowLayout flowLayout;
     CircleImageView mProfilePhoto;
@@ -113,14 +113,14 @@ public class ProfilePageFragment extends Fragment {
     ArrayList<String> mHobbysList;
     ArrayList<TextView> mHobbysTv;
     Uri imageUri;
-    FloatingActionButton mFab,mExitFab;
-    Boolean editMode=false;
+    FloatingActionButton mFab, mExitFab;
+    Boolean editMode = false;
     private OnFragmentInteractionListener mListener;
-    Boolean nameHasChanged=false;
+    Boolean nameHasChanged = false;
     ProfileFragmentListener profileFragmentListener;
     String mUserId;
     private Gson mGson = new Gson();
-    Boolean onlyShowProfile=false;
+    Boolean onlyShowProfile = false;
 
 
     public static ProfilePageFragment newInstance(String userId) {
@@ -133,16 +133,21 @@ public class ProfilePageFragment extends Fragment {
 
     public interface ProfileFragmentListener {
         void updateImage(Intent intent, View view);
+
         void logOut();
+
         void notifCheckChange(boolean isChecked);
+
         void openChatFromProfile(String userId);
     }
+
     public ProfilePageFragment() {
         // Required empty public constructor
     }
-    public void updateUserImage(final String filePath){
+
+    public void updateUserImage(final String filePath) {
         final Date currentTime = Calendar.getInstance().getTime();
-        mFireBaseStorageRef=FirebaseStorage.getInstance().getReference("images/"+currentTime.toString()+".png");
+        mFireBaseStorageRef = FirebaseStorage.getInstance().getReference("images/" + currentTime.toString() + ".png");
         //final File file=new File(filePath);
         //Uri uri = Uri.fromFile( file );
         Uri uri = Uri.fromFile(new File(filePath));
@@ -153,7 +158,7 @@ public class ProfilePageFragment extends Fragment {
         mFireBaseStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+                mFireBaseStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         dialog.cancel();
@@ -163,7 +168,7 @@ public class ProfilePageFragment extends Fragment {
                         mUserProfile.setmPictureUrl(mPictureUrl);
                         updateProfileOnfireBase();
                     }
-                } );
+                });
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -178,67 +183,66 @@ public class ProfilePageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dataStore=DataStore.getInstance(getContext());
+        dataStore = DataStore.getInstance(getContext());
         if (getArguments() != null) {
             mUserId = getArguments().getString("userId");
-            mUserProfile=mGson.fromJson(mUserId, UserProfile.class);
-            onlyShowProfile=true;
-        }
-        else
-            mUserProfile=dataStore.getUser();
+            mUserProfile = mGson.fromJson(mUserId, UserProfile.class);
+            onlyShowProfile = true;
+        } else
+            mUserProfile = dataStore.getUser();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("ilya","ondestroy");
+        Log.d("ilya", "ondestroy");
     }
 
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("ilya","onCreateview");
+        Log.d("ilya", "onCreateview");
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
-        mProfilePhoto=rootView.findViewById(R.id.profilePhoto_iv);
+        mProfilePhoto = rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
-        mPostsCount=rootView.findViewById(R.id.number_of_posts);
-        mHobbysCount=rootView.findViewById(R.id.number_of_hobbys);
-        mAutoCompleteTextView=rootView.findViewById(R.id.auto_complete_tv);
-        mAge=rootView.findViewById(R.id.age_et);
-        mCity=rootView.findViewById(R.id.city_et);
-        mNameTv=rootView.findViewById(R.id.name_tv);
-        mFab=rootView.findViewById(R.id.fab);
-        flowLayout=rootView.findViewById(R.id.flow_layout);
+        mPostsCount = rootView.findViewById(R.id.number_of_posts);
+        mHobbysCount = rootView.findViewById(R.id.number_of_hobbys);
+        mAutoCompleteTextView = rootView.findViewById(R.id.auto_complete_tv);
+        mAge = rootView.findViewById(R.id.age_et);
+        mCity = rootView.findViewById(R.id.city_et);
+        mNameTv = rootView.findViewById(R.id.name_tv);
+        mFab = rootView.findViewById(R.id.fab);
+        flowLayout = rootView.findViewById(R.id.flow_layout);
 
-        mFireBaseAuth= FirebaseAuth.getInstance();
-        mFireBaseUser =mFireBaseAuth.getCurrentUser();
-        mAddBtn=rootView.findViewById(R.id.add_btn);
-        mHobbysTv =new ArrayList<>();
-        mEditHobbysLayot =rootView.findViewById(R.id.add_hobbys_layout);
-        mNotificationSw=rootView.findViewById(R.id.notif_sw);
+        mFireBaseAuth = FirebaseAuth.getInstance();
+        mFireBaseUser = mFireBaseAuth.getCurrentUser();
+        mAddBtn = rootView.findViewById(R.id.add_btn);
+        mHobbysTv = new ArrayList<>();
+        mEditHobbysLayot = rootView.findViewById(R.id.add_hobbys_layout);
+        mNotificationSw = rootView.findViewById(R.id.notif_sw);
         mNotificationSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               profileFragmentListener.notifCheckChange(isChecked);
+                profileFragmentListener.notifCheckChange(isChecked);
             }
         });
-        mExitFab=rootView.findViewById(R.id.fab_logout);
-        mGenderEt =rootView.findViewById(R.id.gender_et);
+        mExitFab = rootView.findViewById(R.id.fab_logout);
+        mGenderEt = rootView.findViewById(R.id.gender_et);
         mFireBaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseDatabase=FirebaseDatabase.getInstance();
-        final Animation shake = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        final Animation shake = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
         final Drawable originalDrawable = mAge.getBackground();
         mAge.setBackgroundColor(Color.TRANSPARENT);
-        mBlurryImageView =rootView.findViewById(R.id.blur_test);
-        mName=rootView.findViewById(R.id.name_change_edittext);
-        mLastName=rootView.findViewById(R.id.last_name_change_edittext);
+        mBlurryImageView = rootView.findViewById(R.id.blur_test);
+        mName = rootView.findViewById(R.id.name_change_edittext);
+        mLastName = rootView.findViewById(R.id.last_name_change_edittext);
 
 
-        mHobbysList =mUserProfile.getmHobbylist();
+        mHobbysList = mUserProfile.getmHobbylist();
         mGenderEt.setText(mUserProfile.getmGender());
 
-        if (onlyShowProfile){
-            RelativeLayout mNotificationLayout =rootView.findViewById(R.id.notification_layout);
+        if (onlyShowProfile) {
+            LinearLayout mNotificationLayout = rootView.findViewById(R.id.notification_layout);
             mNotificationLayout.setVisibility(View.GONE);
             mExitFab.setVisibility(View.INVISIBLE);
             //mFab.setVisibility(View.INVISIBLE);
@@ -258,21 +262,23 @@ public class ProfilePageFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    int i =0;
+                    int i = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try {
                             String hobby = (String) snapshot.getValue();
-                            if (hobby.replace(" ","").matches("[a-zA-Z0-9-_.~%]{1,900}")){
-                                hobbysFromServer.add(hobby);}
+                            if (hobby.replace(" ", "").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
+                                hobbysFromServer.add(hobby);
+                            }
                             i++;
-                        }catch (ClassCastException ex){
-                            Log.d("ilya",i+"");
+                        } catch (ClassCastException ex) {
+                            Log.d("ilya", i + "");
                         }
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_dropdown_item_1line, hobbysFromServer);
-                    mAutoCompleteTextView.setAdapter( adapter );
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, hobbysFromServer);
+                    mAutoCompleteTextView.setAdapter(adapter);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -282,29 +288,24 @@ public class ProfilePageFragment extends Fragment {
 
         mHobbysCount.setText(String.valueOf(mHobbysList.size()));
         mAge.setText(mUserProfile.getmAge());
-        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList()==null?0:mUserProfile.getmUserPostList().size()));
+        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList() == null ? 0 : mUserProfile.getmUserPostList().size()));
         mCity.setText(mUserProfile.getmCityName());
-        mNameTv.setText(mUserProfile.getmName()+"       "+mUserProfile.getmLastName());
+        mNameTv.setText(mUserProfile.getmName() + "       " + mUserProfile.getmLastName());
         updateflow();
-
 
 
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String hobby=mAutoCompleteTextView.getEditableText().toString();
-                if (!hobbysFromServer.contains(hobby)){
-                    Snackbar.make(rootView, "Cant find the hobby", Snackbar.LENGTH_SHORT ).show();
+                String hobby = mAutoCompleteTextView.getEditableText().toString();
+                if (!hobbysFromServer.contains(hobby)) {
+                    Snackbar.make(rootView, "Cant find the hobby", Snackbar.LENGTH_SHORT).show();
                     mAutoCompleteTextView.setText("");
-                }
-                else
-                {
-                    if (mHobbysList.contains(hobby))
-                    {
-                        Toast.makeText(getContext(), "You already choose this hobby " , Toast.LENGTH_SHORT).show();
+                } else {
+                    if (mHobbysList.contains(hobby)) {
+                        Toast.makeText(getContext(), "You already choose this hobby ", Toast.LENGTH_SHORT).show();
                         mAutoCompleteTextView.setText("");
-                    }
-                    else {
+                    } else {
                         TextView textView = new TextView(getContext());
                         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         textView.setText(hobby);
@@ -323,10 +324,9 @@ public class ProfilePageFragment extends Fragment {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onlyShowProfile){
+                if (onlyShowProfile) {
                     profileFragmentListener.openChatFromProfile(mUserProfile.getmUserToken());
-                }
-                else {
+                } else {
                     if (editMode.equals(false)) {
                         editMode = true;
                         mFab.setImageResource(R.drawable.ic_check_black_24dp);
@@ -400,17 +400,30 @@ public class ProfilePageFragment extends Fragment {
                 intent.putExtra(ImageSelectActivity.FLAG_COMPRESS, false);//default is true
                 intent.putExtra(ImageSelectActivity.FLAG_CAMERA, true);//default is true
                 intent.putExtra(ImageSelectActivity.FLAG_GALLERY, true);//default is true
-                intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
-                profileFragmentListener.updateImage( intent, mProfilePhoto );
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                profileFragmentListener.updateImage(intent, mProfilePhoto);
             }
         });
 
-        if (mUserProfile.getmPictureUrl().equals(""))
-        {
-            Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(getResources().getDrawable(R.drawable.ic_android_foreground));
-            mProfilePhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_android_foreground));
+        if (mUserProfile.getmPictureUrl().equals("") && !mUserProfile.getmGender().equals("Male")) {
+//            Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(getResources().getDrawable(R.drawable.ic_android_foreground));
+//            mProfilePhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_android_foreground));
+//            Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(mProfilePhoto);
+            Glide.with(getContext()).load(R.drawable.ic_avatar_woman).addListener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(resource);
+                    Blurry.with(getContext()).radius(10).from(bitmap).into(mBlurryImageView);
+                    return false;
+                }
+            }).into(mProfilePhoto);
         }
-        else {
+        if (!mUserProfile.getmPictureUrl().equals("")) {
             Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).addListener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -435,7 +448,7 @@ public class ProfilePageFragment extends Fragment {
         try {
             profileFragmentListener = (ProfilePageFragment.ProfileFragmentListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException( "Activity must implement the interface : profileFragmentListener" );
+            throw new ClassCastException("Activity must implement the interface : profileFragmentListener");
         }
     }
 
@@ -449,10 +462,11 @@ public class ProfilePageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-    void updateflow(){
+
+    void updateflow() {
         flowLayout.removeAllViews();
         mHobbysTv.clear();
-        for  (final String hobby : mHobbysList){
+        for (final String hobby : mHobbysList) {
             TextView textView = new TextView(getContext());
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setText(hobby);
@@ -475,16 +489,17 @@ public class ProfilePageFragment extends Fragment {
 
         }
     }
-    void updateProfileOnfireBase(){
-        mFireBaseDatabaseReference.child( "appUsers" ).child( mUserProfile.getmUserToken() ).setValue( mUserProfile );
-        mFireBaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
+
+    void updateProfileOnfireBase() {
+        mFireBaseDatabaseReference.child("appUsers").child(mUserProfile.getmUserToken()).setValue(mUserProfile);
+        mFireBaseUser.updateProfile(new UserProfileChangeRequest.Builder().build());
         DataStore.getInstance(getContext()).saveUser(mUserProfile);
-        if (nameHasChanged)
-        {
-            nameHasChanged=false;
-            mFireBaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mName.getText().toString()+" "+mLastName.getText().toString()).build());
+        if (nameHasChanged) {
+            nameHasChanged = false;
+            mFireBaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mName.getText().toString() + " " + mLastName.getText().toString()).build());
         }
     }
+
     private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -495,25 +510,34 @@ public class ProfilePageFragment extends Fragment {
         }
         return list;
     }
+
     public void getUserProfile() {
-            FirebaseDatabase mFirebaseDatabase2 = FirebaseDatabase.getInstance();
-            DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child("appUsers").child(mUserId);
-            Query usersQuery = mDatabaseReference2.orderByKey();
+        FirebaseDatabase mFirebaseDatabase2 = FirebaseDatabase.getInstance();
+        DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child("appUsers").child(mUserId);
+        Query usersQuery = mDatabaseReference2.orderByKey();
 
-            usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    mUserProfile = dataSnapshot.getValue(UserProfile.class);
+        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUserProfile = dataSnapshot.getValue(UserProfile.class);
 
-                }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
 
     }
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter) {
+            return MoveAnimation.create(MoveAnimation.LEFT, enter, 600);
+        } else {
+            return MoveAnimation.create(MoveAnimation.DOWN, enter, 1000);
+        }
     }
+}
 
 

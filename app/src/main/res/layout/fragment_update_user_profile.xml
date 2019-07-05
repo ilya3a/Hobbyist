@@ -1,192 +1,202 @@
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/gradiant_v2"
     android:isScrollContainer="true"
+    android:orientation="vertical">
 
-
-    xmlns:android="http://schemas.android.com/apk/res/android">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update Profile"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:id="@+id/updateUser_text_headline"
-            android:textColor="@color/cardview_light_background"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_android"
-            android:id="@+id/photoCiv"
-            app:civ_border_color="#FFf"
-            app:civ_border_width="2dp"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="5dp">
-    <android.support.design.widget.TextInputLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/name_input_et_wrapper"
-        android:hint="First name"
-        android:textColorHint="#fff"
-        android:layout_margin="5dp"
-        android:layout_weight="1">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/name_input_et"
-            android:inputType="text"
-            android:textColor="#fff"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/last_name_input_et_wrapper"
-        android:hint="Last name"
-        android:layout_marginTop="5dp"
-        android:textColorHint="#fff"
-        android:layout_margin="5dp"
-        android:layout_weight="1">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/last_name_input_et"
-            android:textColor="#fff"/>
-    </android.support.design.widget.TextInputLayout>
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="5dp">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
-
-            android:id="@+id/date_of_birth_et"
-            android:textColor="#fff"
-            android:inputType="none"
-            android:text="Birthday"
-            android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-            />
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:entries="@array/gender_array"
-        android:id="@+id/spinner"
-        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-        >
-
-    </Spinner>
-
-</LinearLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/city_name_et_wrapper"
-        android:hint="City name"
-        android:textColorHint="#fff"
-        android:layout_marginTop="5dp"
-        android:layout_margin="5dp">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/city_name_et"
-            android:inputType="text"
-            android:textColor="#fff"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chose all your hobbys"
-        android:textColor="#ffff"
-        android:textSize="20sp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="10dp"
-        />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_complete_tv"
-        android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="3dp"/>
-
-    <android.support.design.button.MaterialButton
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="add"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginEnd="5dp"
-        style="@style/AppTheme.RoundedCornerMaterialButton"
-        android:id="@+id/add_btn"
-        app:icon="@drawable/ic_add_black_24dp"
-        />
-</LinearLayout>
-<com.nex3z.flowlayout.FlowLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:id="@+id/flow_box"
-    app:flChildSpacing="15dp"
-    app:flRowSpacing="7dp"
-    app:flMaxRows="4"
-    app:flRowVerticalGravity="center"
-    app:flRtl="false">
-
-</com.nex3z.flowlayout.FlowLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="*all fields required"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="5dp"
-        android:textSize="16sp"
-        android:textColor="@color/red"
-        android:visibility="gone"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center|bottom"
-            android:gravity="bottom"
-            android:layout_margin="15dp">
+            android:orientation="vertical">
 
-            <android.support.design.button.MaterialButton
-                android:id="@+id/accept_btn"
+            <TextView
+                android:id="@+id/updateUser_text_headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="10dp"
+                android:text="Create User Profile"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/photoCiv"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_take_picture"
+                app:civ_border_color="#D0D2D1"
+                app:civ_border_width="2dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Accept"
-                android:textAllCaps="false"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="50dp"
-               style="@style/AppTheme.RoundedCornerMaterialButton" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/name_input_et_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:hint="First name"
+                    android:textColorHint="#fff">
+
+                    <EditText
+                        android:id="@+id/name_input_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textColor="#fff" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/last_name_input_et_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:hint="Last name"
+                    android:textColorHint="#fff">
+
+                    <EditText
+                        android:id="@+id/last_name_input_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/date_of_birth_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                    android:inputType="none"
+                    android:text="Birthday"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/gender_array">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/city_name_et_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="5dp"
+                android:hint="City name"
+                android:textColorHint="#fff">
+
+                <EditText
+                    android:id="@+id/city_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="#fff" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="10dp"
+                android:text="Chose all your hobbys"
+                android:textColor="#ffff"
+                android:textSize="20sp" />
+
+
+            <com.nex3z.flowlayout.FlowLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/flow_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                app:flChildSpacing="15dp"
+                app:flMaxRows="4"
+                app:flRowSpacing="7dp"
+                app:flRowVerticalGravity="center"
+                app:flRtl="false">
+
+            </com.nex3z.flowlayout.FlowLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/auto_complete_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1" />
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/add_btn"
+                    style="@style/AppTheme.RoundedCornerMaterialButton"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="add"
+                    app:icon="@drawable/ic_add_black_24dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:text="*all fields required"
+                android:textColor="@color/red"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|bottom"
+                android:layout_margin="15dp"
+                android:gravity="bottom">
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/accept_btn"
+                    style="@style/AppTheme.RoundedCornerMaterialButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Accept"
+                    android:textAllCaps="false" />
+            </LinearLayout>
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-    </LinearLayout>
+</LinearLayout>

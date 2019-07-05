@@ -26,14 +26,14 @@
                 android:id="@+id/search_list_of_posts_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_list_black_24dp"
+                android:icon="@drawable/ic_list_posts_selected"
                 />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/search_map_of_posts_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_location_on" />
+                android:icon="@drawable/ic_map_not_selected" />
         </android.support.design.widget.TabLayout>
 
         <android.support.v7.widget.CardView

@@ -168,8 +168,8 @@
         android:gravity="center"
         android:layout_marginBottom="400dp">
       <de.hdodenhof.circleimageview.CircleImageView
-          android:layout_width="100dp"
-          android:layout_height="100dp"
+          android:layout_width="150dp"
+          android:layout_height="150dp"
           android:src="@mipmap/ic_logo_round"/>
 
     </LinearLayout>

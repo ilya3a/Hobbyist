@@ -66,6 +66,9 @@ try {
         if (!userProfile.getmPictureUrl().equals("")) {
             Glide.with(mContext).load(userProfile.getmPictureUrl()).thumbnail(0.4f).into(viewHolder.profileImage);
         }
+        if (!userProfile.getmGender().equals("Male") && userProfile.getmPictureUrl().equals("")){
+            Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.profileImage);
+        }
 
         if (isChat){
             if (userProfile.getmStatus().equals("Online")){

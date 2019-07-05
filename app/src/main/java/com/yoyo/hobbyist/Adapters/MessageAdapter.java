@@ -25,15 +25,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     ArrayList<Chat> mChat;
     Context mContext;
     String imageUrl;
+    String gender;
     FirebaseUser firebaseUser;
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
 
 
-    public MessageAdapter(ArrayList<Chat> mChat, Context mContext, String imageUrl) {
+    public MessageAdapter(ArrayList<Chat> mChat, Context mContext, String imageUrl, String gender) {
         this.mChat = mChat;
         this.mContext = mContext;
         this.imageUrl = imageUrl;
+        this.gender = gender;
     }
 
     public interface RecyclerCallBack {
@@ -58,11 +60,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(final MessageAdapter.ViewHolder viewHolder, final int i) {
         Chat chat = mChat.get(i);
         viewHolder.showMessage.setText(chat.getMessage());
-        if(imageUrl.equals("")){
-            viewHolder.profileImage.setImageResource(R.mipmap.ic_android);
-        }
-        else {
+        if(!imageUrl.equals("")){
             Glide.with(mContext).load(imageUrl).thumbnail(0.4f).into(viewHolder.profileImage);
+        }
+        if (!gender.equals("Male") && imageUrl.equals("")){
+            Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.coverImageView);
         }
 
 

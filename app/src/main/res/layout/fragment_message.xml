@@ -29,7 +29,7 @@
             android:id="@+id/chat_buddy_iv"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_user" />
+            android:src="@drawable/ic_avatar_man" />
 
         <LinearLayout
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.yoyo.hobbyist.Adapters.MessageAdapter;
 import com.yoyo.hobbyist.DataModels.Chat;
 import com.yoyo.hobbyist.DataModels.UserProfile;
@@ -156,7 +158,7 @@ public class MessageFragment extends Fragment {
                             chat.getReciver().equals(userId) && chat.getSender().equals(myId)) {
                         mChats.add(chat);
                     }
-                    messageAdapter = new MessageAdapter(mChats, getContext(), imageUrl);
+                    messageAdapter = new MessageAdapter(mChats, getContext(), imageUrl , mBuddyUserProfile.getmGender());
                     recyclerView.setAdapter(messageAdapter);
                 }
             }
@@ -224,6 +226,10 @@ public class MessageFragment extends Fragment {
                 if (!mBuddyUserProfile.getmPictureUrl().equals("")) {
                     Glide.with(getContext()).load(mBuddyUserProfile.getmPictureUrl()).into(mUserPicIV);
                 }
+                if (!mBuddyUserProfile.getmGender().equalsIgnoreCase("male") && mBuddyUserProfile.getmPictureUrl().equals("")){
+                    Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(mUserPicIV);
+
+                }
                 readMessages(firebaseUser.getUid(), mUserId, mBuddyUserProfile.getmPictureUrl());
             }
 
@@ -261,6 +267,14 @@ public class MessageFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter) {
+            return MoveAnimation.create(MoveAnimation.LEFT, enter, 600);
+        } else {
+            return MoveAnimation.create(MoveAnimation.DOWN, enter, 600);
+        }
+    }
 
 
 }

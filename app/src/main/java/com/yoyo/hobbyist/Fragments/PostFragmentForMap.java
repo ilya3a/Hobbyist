@@ -33,19 +33,21 @@ public class PostFragmentForMap extends Fragment {
     String postDescription;
     String hobby;
     String date;
+    String gender;
 
-    public PostFragmentForMap(String imageProfileUrl, String userName, String cityName, String postDescription, String hobby, String date) {
+    public PostFragmentForMap(String imageProfileUrl, String userName, String cityName, String postDescription, String hobby, String date, String gender) {
         this.imageProfileUrl = imageProfileUrl;
         this.userName = userName;
         this.cityName = cityName;
         this.postDescription = postDescription;
         this.hobby = hobby;
         this.date = date;
+        this.gender = gender;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
     }
@@ -53,27 +55,32 @@ public class PostFragmentForMap extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate( R.layout.fragment_post_fragment_for_map, container, false );
+        View rootView = inflater.inflate(R.layout.fragment_post_fragment_for_map, container, false);
 
-        profileImageView = rootView.findViewById( R.id.post_profile_image_for_map );
-        Glide.with( getContext() ).load( imageProfileUrl ).thumbnail( 0.3f ).into( profileImageView );
-        userNameTV = rootView.findViewById( R.id.post_profile_name_for_map );
-        userNameTV.setText( userName );
-        userCityTV = rootView.findViewById( R.id.post_city_for_map );
-        userCityTV.setText( cityName );
-        postDescriptionTv = rootView.findViewById( R.id.post_description_for_map );
-        postDescriptionTv.setText( postDescription );
-        hobbyTV = rootView.findViewById( R.id.hobby_name_for_map );
-        hobbyTV.setText( hobby );
-        dateTV = rootView.findViewById( R.id.create_date_for_map );
-        dateTV.setText( date );
-        chatBtn = rootView.findViewById( R.id.post_chat_btn_for_map );
-        chatBtn.setOnClickListener( new View.OnClickListener() {
+        profileImageView = rootView.findViewById(R.id.post_profile_image_for_map);
+        if (!imageProfileUrl.equals("")) {
+            Glide.with(getContext()).load(imageProfileUrl).thumbnail(0.3f).into(profileImageView);
+        }
+        if (!gender.equals("Male") && imageProfileUrl.equals("")) {
+            Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(profileImageView);
+        }
+        userNameTV = rootView.findViewById(R.id.post_profile_name_for_map);
+        userNameTV.setText(userName);
+        userCityTV = rootView.findViewById(R.id.post_city_for_map);
+        userCityTV.setText(cityName);
+        postDescriptionTv = rootView.findViewById(R.id.post_description_for_map);
+        postDescriptionTv.setText(postDescription);
+        hobbyTV = rootView.findViewById(R.id.hobby_name_for_map);
+        hobbyTV.setText(hobby);
+        dateTV = rootView.findViewById(R.id.create_date_for_map);
+        dateTV.setText(date);
+        chatBtn = rootView.findViewById(R.id.post_chat_btn_for_map);
+        chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        } );
+        });
         return rootView;
     }
 
@@ -86,12 +93,12 @@ public class PostFragmentForMap extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach( context );
+        super.onAttach(context);
         if (context instanceof OnPostForMapListener) {
             mListener = (OnPostForMapListener) context;
         } else {
-            throw new RuntimeException( context.toString()
-                    + " must implement OnPostForMapListener" );
+            throw new RuntimeException(context.toString()
+                    + " must implement OnPostForMapListener");
         }
     }
 
@@ -109,9 +116,9 @@ public class PostFragmentForMap extends Fragment {
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
-            return MoveAnimation.create( MoveAnimation.UP, enter, 1000 );
+            return MoveAnimation.create(MoveAnimation.UP, enter, 1000);
         } else {
-            return MoveAnimation.create( MoveAnimation.DOWN, enter, 1000 );
+            return MoveAnimation.create(MoveAnimation.DOWN, enter, 1000);
         }
     }
 }

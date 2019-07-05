@@ -82,11 +82,11 @@ public class DashboardFragment extends Fragment {
             }
         } );
 
-
-        ArrayList<UserPost> userPosts = new ArrayList<>();
-        for (int i = 0; i < 100; ++i) {
-            userPosts.add(new UserPost("A", "B", "C", true, "D", "E", "F", "G", 1, 2));
-        }
+//
+//        ArrayList<UserPost> userPosts = new ArrayList<>();
+//        for (int i = 0; i < 100; ++i) {
+//            userPosts.add(new UserPost("A", "B", "C", true, "D", "E", "F", "G", 1, 2));
+//        }
 
         PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter(userPosts, getContext());
         recyclerView.setHasFixedSize(true);

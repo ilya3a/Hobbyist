@@ -58,6 +58,9 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         if (!post.getUserProfilePicUrl().equals("")) {
             Glide.with(mContext).load(post.getUserProfilePicUrl()).thumbnail(0.1f).into(viewHolder.coverImageView);
         }
+//        if (!post.getGender().equals("Male") && post.getImageUrl().equals("")){
+//            Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.coverImageView);
+//        }
         viewHolder.userNameTV.setText(post.getUserName());
         viewHolder.postTv.setText(post.getPostDescription());
         viewHolder.userCityTV.setText(post.getCityName());

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -57,6 +58,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
@@ -97,6 +99,7 @@ public class CreatePostFragment extends DialogFragment {
 
     private AutoCompleteTextView mAutoCompleteTextView;
     private EditText mPostDescriptionEt;
+    private TextView mUserNameTV;
     private Button mClosePost;
     private MaterialButton mCreatePost;
     private String mUserName;
@@ -138,6 +141,10 @@ public class CreatePostFragment extends DialogFragment {
         requestLocationUpdates();
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFireBaseAuth.getCurrentUser();
+        mAutoCompleteTextView = rootView.findViewById(R.id.chosen_hobby_name);
+        mUserNameTV = rootView.findViewById(R.id.post_profile_name);
+        mProfilePicture = rootView.findViewById(R.id.post_profile_image);
+        mCreatePost = rootView.findViewById(R.id.create_post_btn);
         mDatabaseReference.child("appHobbys").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -146,7 +153,7 @@ public class CreatePostFragment extends DialogFragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try {
                             String hobby = (String) snapshot.getValue();
-                            if (hobby.replace(" ","").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
+                            if (hobby.replace(" ", "").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
                                 hobbylist.add(hobby);
                             }
                             i++;
@@ -154,7 +161,7 @@ public class CreatePostFragment extends DialogFragment {
                             Log.d("ilya", i + "");
                         }
                     }
-                    mAutoCompleteTextView = rootView.findViewById(R.id.chosen_hobby_name);
+
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, hobbylist);
                     mAutoCompleteTextView.setAdapter(adapter);
                     addTextChangedListener();
@@ -168,7 +175,21 @@ public class CreatePostFragment extends DialogFragment {
         });
 
 
-        mProfilePicture = rootView.findViewById(R.id.post_profile_image);
+        final UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
+
+        mPictureUrl = userProfile.getmPictureUrl();
+        mUserName = userProfile.getmName();
+        mCityName = userProfile.getmCityName();
+        if (getContext() != null) {
+            if (!mPictureUrl.equals("")) {
+                Glide.with(getContext()).load(mPictureUrl).thumbnail(0.4f).into(mProfilePicture);
+            }
+            if (!userProfile.getmGender().equals("Male") && mPictureUrl.equals("")) {
+                Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(mProfilePicture);
+            }
+        }
+        mUserNameTV.setText(mUserName);
+
         mClosePost = rootView.findViewById(R.id.close_post_dialog);
         mClosePost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +200,7 @@ public class CreatePostFragment extends DialogFragment {
         });
         mPostDescriptionEt = rootView.findViewById(R.id.post_description);
 
-        mCreatePost = rootView.findViewById(R.id.create_post_btn);
+
         mCreatePost.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
@@ -190,12 +211,6 @@ public class CreatePostFragment extends DialogFragment {
                                                    if (InternetConnection.isNetworkAvailable(getContext())) {
 
 
-                                                       UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
-
-                                                       mPictureUrl = userProfile.getmPictureUrl();
-                                                       mUserName = userProfile.getmName();
-                                                       mCityName = userProfile.getmCityName();
-
                                                        Calendar calendar = Calendar.getInstance();
                                                        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
                                                        int currentMinute = calendar.get(Calendar.MINUTE);
@@ -203,16 +218,16 @@ public class CreatePostFragment extends DialogFragment {
                                                        int month = calendar.get(Calendar.MONTH);
                                                        int year = calendar.get(Calendar.YEAR);
 
-                                                       String currentDate =date+"/"+month+"/"+year+ "   "+currentHour+":"+currentMinute;
+                                                       String currentDate = date + "/" + month + "/" + year + "   " + currentHour + ":" + currentMinute;
 
                                                        String userToken = mFirebaseUser.getUid();
 
 
                                                        UserPost userPost = new UserPost(mPictureUrl, mUserName, mCityName, true, currentDate, mAutoCompleteTextView.getText().toString(),
-                                                               userToken, mPostDescriptionEt.getText().toString(), mLatitude, mLongitude);
+                                                               userToken, mPostDescriptionEt.getText().toString(), mLatitude, mLongitude, userProfile.getmGender());
 
                                                        mDatabaseReference.child("usersPost").child(userPost.getHobby()).child(userToken).push().setValue(userPost);
-                                                       if (userProfile.getmUserPostList()==null){
+                                                       if (userProfile.getmUserPostList() == null) {
                                                            ArrayList<UserPost> arrayList = new ArrayList<>();
                                                            userProfile.setmUserPostList(arrayList);
                                                        }
@@ -240,7 +255,7 @@ public class CreatePostFragment extends DialogFragment {
                                                        }
                                                          */
 
-                                                       String textToSend = "Check out new Activity on" + userPost.getHobby();
+                                                       String textToSend = "Check out new Activity on " + userPost.getHobby();
                                                        try {
                                                            final JSONObject rootObject = new JSONObject();
                                                            rootObject.put("to", "/topics/" + userPost.getHobby().replace(" ", ""));
@@ -421,9 +436,19 @@ public class CreatePostFragment extends DialogFragment {
 
         });
     }
-    public void updateUserProfileOnFireBase(UserProfile userProfile){
+
+    public void updateUserProfileOnFireBase(UserProfile userProfile) {
         UtilFuncs.saveUserToFireBase(userProfile);
-        mFirebaseUser.updateProfile( new UserProfileChangeRequest.Builder().build() );
+        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().build());
         DataStore.getInstance(getContext()).saveUser(userProfile);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter) {
+            return MoveAnimation.create(MoveAnimation.UP, enter, 1000);
+        } else {
+            return MoveAnimation.create(MoveAnimation.DOWN, enter, 1000);
+        }
     }
 }
