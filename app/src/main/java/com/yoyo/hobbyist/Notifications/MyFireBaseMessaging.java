@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.yoyo.hobbyist.MainActivity;
+import com.yoyo.hobbyist.R;
 
 public class MyFireBaseMessaging extends FirebaseMessagingService {
     @Override
@@ -54,7 +55,7 @@ public class MyFireBaseMessaging extends FirebaseMessagingService {
         }
         builder.setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(Integer.parseInt(icon))
+                .setSmallIcon(android.R.drawable.star_on)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);

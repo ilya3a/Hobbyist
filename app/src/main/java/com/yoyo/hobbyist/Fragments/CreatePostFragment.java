@@ -212,6 +212,10 @@ public class CreatePostFragment extends DialogFragment {
                                                                userToken, mPostDescriptionEt.getText().toString(), mLatitude, mLongitude);
 
                                                        mDatabaseReference.child("usersPost").child(userPost.getHobby()).child(userToken).push().setValue(userPost);
+                                                       if (userProfile.getmUserPostList()==null){
+                                                           ArrayList<UserPost> arrayList = new ArrayList<>();
+                                                           userProfile.setmUserPostList(arrayList);
+                                                       }
                                                        userProfile.getmUserPostList().add(userPost);
                                                        DataStore.getInstance(getContext()).saveUser(userProfile);
                                                        updateUserProfileOnFireBase(userProfile);
