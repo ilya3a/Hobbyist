@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_color">
@@ -57,6 +58,15 @@
                     android:src="@mipmap/ic_android"
                     app:civ_border_color="#FFf"
                     app:civ_border_width="2dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profilePhoto_iv"
+                    android:layout_toEndOf="@+id/profilePhoto_iv"
+                    android:src="@drawable/ic_edit"
+                    android:id="@+id/picture_edit_image"
+                    android:visibility="gone"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -95,82 +105,106 @@
 
 
             </RelativeLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/upper_layout"
+    android:id="@+id/second_liniar2">
 
-            <LinearLayout
-                android:id="@+id/second_liniar"
+
+
+    <LinearLayout
+        android:id="@+id/second_liniar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upper_layout"
+        android:background="#ffff"
+        android:orientation="horizontal"
+        tools:ignore="NotSibling">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/number_of_posts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/upper_layout"
-                android:background="#ffff"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:text="5"
+                android:textColor="#009293"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <TextView
+                android:id="@+id/comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Posts"
+                android:textColor="#000"
+                android:fontFamily="@font/acme_regular"/>
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/number_of_posts"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="5"
-                        android:textColor="#009293"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#7E7E7E"
+            android:padding="0.1dp">
 
-                    <TextView
-                        android:id="@+id/comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Posts"
-                        android:textColor="#000"
-                        android:fontFamily="@font/acme_regular"/>
-                </LinearLayout>
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#7E7E7E"
-                    android:padding="0.1dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-                </LinearLayout>
+            <TextView
+                android:id="@+id/number_of_hobbys"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="#009293"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <TextView
+                android:id="@+id/channel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Hobbys"
+                android:textColor="#000"
+                android:fontFamily="@font/acme_regular"/>
+        </LinearLayout>
+    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/number_of_hobbys"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="7"
-                        android:textColor="#009293"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit"
+        android:id="@+id/post_edit_image"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:visibility="gone"
+        />
+</RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/channel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Hobbys"
-                        android:textColor="#000"
-                        android:fontFamily="@font/acme_regular"/>
-                </LinearLayout>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/second_liniar"
+                android:layout_below="@+id/second_liniar2"
                 android:orientation="vertical">
 
                 <LinearLayout
