@@ -70,7 +70,8 @@
     android:layout_height="match_parent"
     android:layout_above="@id/lower_linear"
     android:layout_below="@+id/upper_linear"
-    android:background="@color/grey"
+    android:background="@drawable/bkg"
+
     android:id="@+id/msg_recycler">
 
 </android.support.v7.widget.RecyclerView>

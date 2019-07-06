@@ -72,6 +72,8 @@ import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
+import com.yoyo.hobbyist.Utilis.InternetConnection;
+import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -91,7 +93,7 @@ public class ProfilePageFragment extends Fragment {
 
     ArrayList<String> hobbysFromServer = new ArrayList<>();
     SwitchCompat mNotificationSw;
-    ImageView mBlurryImageView,mEditProfile,mEditPosts,mEditCity;
+    ImageView mBlurryImageView, mEditProfile, mEditPosts, mEditCity;
     MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView mNameTv, mPostsCount, mHobbysCount;
@@ -140,12 +142,14 @@ public class ProfilePageFragment extends Fragment {
         void notifCheckChange(boolean isChecked);
 
         void openChatFromProfile(String userId);
+
         void editPostsClickd();
     }
 
     public ProfilePageFragment() {
         // Required empty public constructor
     }
+
 
     public void updateUserImage(final String filePath) {
         final Date currentTime = Calendar.getInstance().getTime();
@@ -155,7 +159,7 @@ public class ProfilePageFragment extends Fragment {
         Uri uri = Uri.fromFile(new File(filePath));
         //mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
-                getString(R.string.uploading_please_wait) , true);
+                getString(R.string.uploading_please_wait), true);
         dialog.show();
         mFireBaseStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -198,6 +202,8 @@ public class ProfilePageFragment extends Fragment {
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto = rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
@@ -209,9 +215,9 @@ public class ProfilePageFragment extends Fragment {
         mNameTv = rootView.findViewById(R.id.name_tv);
         mFab = rootView.findViewById(R.id.fab);
         flowLayout = rootView.findViewById(R.id.flow_layout);
-        mEditProfile=rootView.findViewById(R.id.picture_edit_image);
-        mEditPosts=rootView.findViewById(R.id.post_edit_image);
-        mEditCity=rootView.findViewById(R.id.post_edit_city);
+        mEditProfile = rootView.findViewById(R.id.picture_edit_image);
+        mEditPosts = rootView.findViewById(R.id.post_edit_image);
+        mEditCity = rootView.findViewById(R.id.post_edit_city);
 
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
@@ -236,7 +242,7 @@ public class ProfilePageFragment extends Fragment {
         mName = rootView.findViewById(R.id.name_change_edittext);
         mLastName = rootView.findViewById(R.id.last_name_change_edittext);
 
-        mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getmUserPostList().size()+"");
+        mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getmUserPostList().size() + "");
 
         mHobbysList = mUserProfile.getmHobbylist();
         mGenderEt.setText(mUserProfile.getmGender());
@@ -337,86 +343,94 @@ public class ProfilePageFragment extends Fragment {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onlyShowProfile) {
-                    profileFragmentListener.openChatFromProfile(mUserProfile.getmUserToken());
-                } else {
-                    if (editMode.equals(false)) {
-                        editMode = true;
-                        mFab.setImageResource(R.drawable.ic_check_black_24dp);
-                        mCity.setBackground(originalDrawable);
-                        mCity.setEnabled(true);
-                        mEditHobbysLayot.setVisibility(View.VISIBLE);
-                        for (TextView tv : mHobbysTv) {
-                            tv.setClickable(true);
-                            tv.setAnimation(shake);
-                            tv.startAnimation(shake);
-                        }
-                        if(!(mUserProfile.getmUserPostList()==null)){
-                            mEditPosts.setVisibility(View.VISIBLE);
-                        }
-                        mEditHobbysLayot.setVisibility(View.VISIBLE);
-                        mProfilePhoto.setEnabled(true);
-                        mName.setText(mUserProfile.getmName());
-                        mLastName.setText(mUserProfile.getmLastName());
-                        mName.setVisibility(View.VISIBLE);
-                        mLastName.setVisibility(View.VISIBLE);
-                        mNameTv.setVisibility(View.GONE);
-                        mEditProfile.setVisibility(View.VISIBLE);
-
-                        mEditCity.setVisibility(View.VISIBLE);
-                        mExitFab.setVisibility(View.GONE);
+                if (InternetConnection.isNetworkAvailable(getContext())) {
+                    if (onlyShowProfile) {
+                        profileFragmentListener.openChatFromProfile(mUserProfile.getmUserToken());
                     } else {
-                        editMode = false;
-                        mFab.setImageResource(R.drawable.ic_edit_black_24dp);
-                        mCity.setBackgroundColor(Color.TRANSPARENT);
-                        mCity.setEnabled(false);
-                        mEditHobbysLayot.setVisibility(View.GONE);
-                        for (TextView tv : mHobbysTv) {
-                            tv.setClickable(false);
-                            tv.setAnimation(shake);
-                            tv.clearAnimation();
-                        }
-                        mEditHobbysLayot.setVisibility(View.GONE);
+                        if (editMode.equals(false)) {
+                            editMode = true;
+                            mFab.setImageResource(R.drawable.ic_check_black_24dp);
+                            mCity.setBackground(originalDrawable);
+                            mCity.setEnabled(true);
+                            mEditHobbysLayot.setVisibility(View.VISIBLE);
+                            for (TextView tv : mHobbysTv) {
+                                tv.setClickable(true);
+                                tv.setAnimation(shake);
+                                tv.startAnimation(shake);
+                            }
+                            if (!(mUserProfile.getmUserPostList() == null)) {
+                                mEditPosts.setVisibility(View.VISIBLE);
+                            }
+                            mEditHobbysLayot.setVisibility(View.VISIBLE);
+                            mProfilePhoto.setEnabled(true);
+                            mName.setText(mUserProfile.getmName());
+                            mLastName.setText(mUserProfile.getmLastName());
+                            mName.setVisibility(View.VISIBLE);
+                            mLastName.setVisibility(View.VISIBLE);
+                            mNameTv.setVisibility(View.GONE);
+                            mEditProfile.setVisibility(View.VISIBLE);
 
-                        if (!mCity.getText().toString().equals("")) {
-                            mUserProfile.setmCityName(mCity.getText().toString());
+                            mEditCity.setVisibility(View.VISIBLE);
+                            mExitFab.setVisibility(View.GONE);
                         } else {
-                            mCity.setText(mUserProfile.getmCityName());
-                        }
-                        if (mHobbysList.isEmpty()) {
-                            mHobbysList = mUserProfile.getmHobbylist();
-                        }
-                        profileFragmentListener.notifCheckChange(false);
-                        mUserProfile.setmHobbylist(mHobbysList);
-                        Integer temp = mHobbysList.size();
-                        mHobbysCount.setText(temp.toString());
-                        mProfilePhoto.setEnabled(false);
-                        profileFragmentListener.notifCheckChange(true);
+                            editMode = false;
+                            mFab.setImageResource(R.drawable.ic_edit_black_24dp);
+                            mCity.setBackgroundColor(Color.TRANSPARENT);
+                            mCity.setEnabled(false);
+                            mEditHobbysLayot.setVisibility(View.GONE);
+                            for (TextView tv : mHobbysTv) {
+                                tv.setClickable(false);
+                                tv.setAnimation(shake);
+                                tv.clearAnimation();
+                            }
+                            mEditHobbysLayot.setVisibility(View.GONE);
 
-                        if (mName.getText().toString().equals("") || mLastName.getText().toString().equals("")) {
+                            if (!mCity.getText().toString().equals("")) {
+                                mUserProfile.setmCityName(mCity.getText().toString());
+                            } else {
+                                mCity.setText(mUserProfile.getmCityName());
+                            }
+                            if (mHobbysList.isEmpty()) {
+                                mHobbysList = mUserProfile.getmHobbylist();
+                            }
+                            profileFragmentListener.notifCheckChange(false);
+                            mUserProfile.setmHobbylist(mHobbysList);
+                            Integer temp = mHobbysList.size();
+                            mHobbysCount.setText(temp.toString());
+                            mProfilePhoto.setEnabled(false);
+                            profileFragmentListener.notifCheckChange(true);
 
-                        } else {
-                            nameHasChanged = true;
-                            mNameTv.setText(mName.getText().toString() + "   " + mLastName.getText().toString());
-                            mUserProfile.setmName(mName.getText().toString());
-                            mUserProfile.setmLastName(mLastName.getText().toString());
+                            if (mName.getText().toString().equals("") || mLastName.getText().toString().equals("")) {
+
+                            } else {
+                                nameHasChanged = true;
+                                mNameTv.setText(mName.getText().toString() + "   " + mLastName.getText().toString());
+                                mUserProfile.setmName(mName.getText().toString());
+                                mUserProfile.setmLastName(mLastName.getText().toString());
+                            }
+                            mName.setVisibility(View.GONE);
+                            mLastName.setVisibility(View.GONE);
+                            mNameTv.setVisibility(View.VISIBLE);
+                            mEditProfile.setVisibility(View.GONE);
+                            mEditPosts.setVisibility(View.GONE);
+                            mEditCity.setVisibility(View.GONE);
+                            if (!((mUserProfile.getmUserPostList()) == null)) {
+                                mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+                            } else {
+                                mPostsCount.setText("0");
+                            }
+                            mExitFab.setVisibility(View.VISIBLE);
+                            updateflow();
+                            updateProfileOnfireBase();
                         }
-                        mName.setVisibility(View.GONE);
-                        mLastName.setVisibility(View.GONE);
-                        mNameTv.setVisibility(View.VISIBLE);
-                        mEditProfile.setVisibility(View.GONE);
-                        mEditPosts.setVisibility(View.GONE);
-                        mEditCity.setVisibility(View.GONE);
-                        if(!((mUserProfile.getmUserPostList())== null)) {
-                            mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
-                        }
-                        else {
-                            mPostsCount.setText("0");
-                        }
-                        mExitFab.setVisibility(View.VISIBLE);
-                        updateflow();
-                        updateProfileOnfireBase();
                     }
+                }else {
+                    Snackbar.make(rootView.findViewById(R.id.profile_cooardinator),R.string.no_internet_connection,Snackbar.LENGTH_SHORT).setAction(R.string.retry, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mFab.callOnClick();
+                        }
+                    }).show();
                 }
             }
         });
@@ -557,6 +571,7 @@ public class ProfilePageFragment extends Fragment {
         });
 
     }
+
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
@@ -565,8 +580,9 @@ public class ProfilePageFragment extends Fragment {
             return MoveAnimation.create(MoveAnimation.DOWN, enter, 1000);
         }
     }
-    public void UpdateUser(){
-        mUserProfile=DataStore.getInstance(getContext()).getUser();
+
+    public void UpdateUser() {
+        mUserProfile = DataStore.getInstance(getContext()).getUser();
     }
 }
 

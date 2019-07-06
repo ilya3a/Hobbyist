@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,10 +39,12 @@ public class SearchListFragment extends Fragment {
     PostsRecyclerViewAdapter mAdapter;
     RecyclerView recyclerView;
     ArrayList<UserPost> userPosts = new ArrayList<>();
+    ArrayList<UserPost> mPostsList = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabaseReference;
     Boolean editMode = false;
+    RelativeLayout relativeLayout;
 
     public SearchListFragment() {
         // Required empty public constructor
@@ -69,9 +73,10 @@ public class SearchListFragment extends Fragment {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-
+        relativeLayout = rootView.findViewById(R.id.first);
         recyclerView = rootView.findViewById( R.id.dash_recycler );
         recyclerView.setHasFixedSize( true );
+
 
         mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext(),editMode );
 
@@ -85,6 +90,8 @@ public class SearchListFragment extends Fragment {
         } );
 
         getPostsFromUsers();
+        mPostsList = DataStore.getInstance(getContext()).getPostList();
+        recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
 
         return rootView;
     }
@@ -182,9 +189,17 @@ public class SearchListFragment extends Fragment {
                     }
 
                     // todo: set adapter
+
+                    DataStore.getInstance(getContext()).saveUserPostList(postsToShowForUser);
+                    mPostsList = postsToShowForUser;
                     mAdapter.setUserPosts(postsToShowForUser);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerView.setAdapter(mAdapter);
+                    if (postsToShowForUser.size()==0){
+
+                        relativeLayout.setVisibility(View.VISIBLE);
+
+                    }
                 }
 
                 @Override
@@ -193,5 +208,24 @@ public class SearchListFragment extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.setUserPosts(DataStore.getInstance(getContext()).getPostList());
+                recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+            }
+        },300);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
     }
 }

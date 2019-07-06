@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
+
+import java.util.ArrayList;
 
 public class DataStore {
 
@@ -55,6 +58,11 @@ public class DataStore {
         mEditor.putString(SHARED_KEY_NEW_POST, postString);
         mEditor.apply();
     }
+    public void saveUserPostList(ArrayList<UserPost> posts) {
+        String postString = mGson.toJson(posts);
+        mEditor.putString("posts", postString);
+        mEditor.apply();
+    }
 
     public void clearAllData() {
         mEditor.clear();
@@ -75,6 +83,11 @@ public class DataStore {
 
         String userPost = mSharedPref.getString(SHARED_KEY_NEW_POST, "");
         return mGson.fromJson(userPost, UserPost.class);
+    }
+    public ArrayList<UserPost> getPostList() {
+
+        String userPosts = mSharedPref.getString("posts", "");
+        return mGson.fromJson(userPosts,new TypeToken<ArrayList<UserPost>>(){}.getType());
     }
     public boolean isNotifOk(){
         return  mSharedPref.getBoolean("notif", true);

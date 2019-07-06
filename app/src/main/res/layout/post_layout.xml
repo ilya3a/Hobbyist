@@ -165,12 +165,12 @@
 
             <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/post_chat_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_below="@+id/post_description"
-                android:layout_alignParentStart="true"
                 android:background="@color/transparent"
                 android:padding="5dp"
+                android:layout_alignParentEnd="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_chat_icon_selected" />
         </RelativeLayout>

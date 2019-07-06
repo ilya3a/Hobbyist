@@ -7,14 +7,37 @@
     tools:context=".Fragments.DashboardFragment"
     android:id="@+id/dash_coardinator">
 
+
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/dash_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
         >
 
     </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/first"
+        android:visibility="gone"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="30dp"
+            android:id="@+id/t1"
+            android:gravity="center"
+            android:text="No Posts for you at the moment"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Try to add more hobbys to your profile"
+            android:gravity="center"
+            android:layout_below="@+id/t1"/>
+
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

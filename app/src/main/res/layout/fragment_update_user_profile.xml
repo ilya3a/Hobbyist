@@ -90,6 +90,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
                     android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                    android:editable="false"
                     android:inputType="none"
                     android:text="@string/birthday"
                     android:textColor="#fff" />
