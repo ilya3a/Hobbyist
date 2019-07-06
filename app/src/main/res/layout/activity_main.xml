@@ -107,6 +107,7 @@
             app:fabSize="normal"
             app:layout_anchor="@id/pager"
             app:layout_anchorGravity="bottom|right"
-            app:rippleColor="@color/cardview_dark_background" />
+            app:rippleColor="@color/cardview_dark_background"
+            app:layout_behavior=".Behavior.ScrollFabBehavior"/>
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

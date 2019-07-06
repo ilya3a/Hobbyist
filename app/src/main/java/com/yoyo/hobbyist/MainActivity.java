@@ -154,8 +154,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_main );
 
-        Toast.makeText(this, getIntent().getAction(), Toast.LENGTH_SHORT).show();
+
+
+
+
 
         if (DataStore.getInstance( this ).isNotifOk()) {
             mUserProfile = DataStore.getInstance( this ).getUser();
@@ -167,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             }
         }
 
-        setContentView( R.layout.activity_main );
+
         mFragmentManager = getSupportFragmentManager();
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
@@ -220,6 +224,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
                     mFab.setVisibility( View.VISIBLE );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mFab.setNestedScrollingEnabled(false);
+                    }
 
 
                 } else if (itemPos == 1) {
@@ -230,6 +237,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
                     mFab.setVisibility( View.VISIBLE );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mFab.setNestedScrollingEnabled(true);
+                    }
+
 
                 } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
@@ -239,6 +250,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
                     mFab.setVisibility( View.VISIBLE );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mFab.setNestedScrollingEnabled(false);
+                    }
                 } else {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.GONE );
@@ -247,6 +261,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
                     mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon_selected );
                     mFab.setVisibility( View.GONE );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mFab.setNestedScrollingEnabled(false);
+                    }
 
                 }
             }
@@ -264,6 +281,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         } );
 
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
+        if(!(getIntent().getStringExtra("msg")==null)){
+            onChatBtnClicked(getIntent().getStringExtra("id"));
+        }
+        Toast.makeText(this, getIntent().getStringExtra("id"), Toast.LENGTH_SHORT).show();
     }
 
 

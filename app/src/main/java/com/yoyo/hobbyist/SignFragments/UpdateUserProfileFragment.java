@@ -54,8 +54,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.nex3z.flowlayout.FlowLayout;
+
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
+import com.yoyo.hobbyist.LoginSignUpActivity;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
@@ -116,8 +118,9 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
     String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid, mDay, mMonth, mYear;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
-    EditText mName_et, mLastNameEt, mCityNameEt, mGenderEt, mDateOfBirthEt;
+    EditText mName_et, mLastNameEt, mGenderEt, mDateOfBirthEt;
     ArrayList<String> hobbyList;
+    EditText mCityNameEt;
     MaterialButton accept_btn, add_btn;
     FlowLayout flowLayout;
     AutoCompleteTextView mAutoCompleteTextView;
@@ -169,6 +172,8 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
         mPhotoCiv = rootView.findViewById(R.id.photoCiv);
+
+
 
         mDatabaseReference.child("appHobbys").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

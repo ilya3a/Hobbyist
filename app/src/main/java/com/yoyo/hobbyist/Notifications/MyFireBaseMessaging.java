@@ -40,10 +40,10 @@ public class MyFireBaseMessaging extends FirebaseMessagingService {
         if (!DataStore.getInstance(getApplicationContext()).getCurrenttalkingUser().equals(user)) {
             RemoteMessage.Notification notification = remoteMessage.getNotification();
 //        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-            Intent intent = new Intent(this, MainActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("userid", user);
-            intent.putExtras(bundle);
+            Intent intent = new Intent(this,MainActivity.class);
+           intent.putExtra("id",user);
+           intent.putExtra("msg","msg");
+
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT);
 

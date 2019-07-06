@@ -121,6 +121,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:textColor="#fff" />
+
             </android.support.design.widget.TextInputLayout>
 
             <TextView

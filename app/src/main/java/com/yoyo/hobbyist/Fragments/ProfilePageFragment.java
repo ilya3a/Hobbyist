@@ -165,6 +165,7 @@ public class ProfilePageFragment extends Fragment {
                         dialog.cancel();
                         mPictureUrl = uri.toString();
                         mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(filePath));
+//                        mProfilePhoto.setRotation(-90);
                         Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
                         mUserProfile.setmPictureUrl(mPictureUrl);
                         updateProfileOnfireBase();
@@ -246,6 +247,7 @@ public class ProfilePageFragment extends Fragment {
         mName = rootView.findViewById(R.id.name_change_edittext);
         mLastName = rootView.findViewById(R.id.last_name_change_edittext);
 
+        mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getmUserPostList().size()+"");
 
         mHobbysList = mUserProfile.getmHobbylist();
         mGenderEt.setText(mUserProfile.getmGender());

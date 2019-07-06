@@ -26,11 +26,11 @@ Fragment[] fragments = {new DashboardFragment(),new SearchFragment(),new ChatsFr
             case 0:
                 return fragments[0];
             case 1:
-                return fragments[1];
+                return new SearchFragment();
             case 2:
                 return fragments[2];
             case 3:
-                return fragments[3];
+                return new ProfilePageFragment();
             default:
                 return null;
         }
