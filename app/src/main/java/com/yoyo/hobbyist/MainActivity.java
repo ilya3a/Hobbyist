@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 
-
+        Toast.makeText(this, getIntent().getAction(), Toast.LENGTH_SHORT).show();
 
         if (DataStore.getInstance( this ).isNotifOk()) {
             mUserProfile = DataStore.getInstance( this ).getUser();

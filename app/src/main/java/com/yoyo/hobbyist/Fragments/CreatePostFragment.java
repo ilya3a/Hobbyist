@@ -42,10 +42,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -53,20 +50,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
 import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
-import com.yoyo.hobbyist.MainActivity;
 import com.yoyo.hobbyist.R;
-import com.yoyo.hobbyist.SignFragments.UpdateUserProfileFragment;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.InternetConnection;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;

@@ -81,37 +81,38 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
 
         void updateImage(Intent intent, View view);
     }
-        public  void updateUserImage(final String filePath){
-            final StorageReference mStorageRef;
-            final Date currentTime = Calendar.getInstance().getTime();
-            mStorageRef = FirebaseStorage.getInstance().getReference("images/" + currentTime + ".jpg");
-            isPhotoExists = true;
-            //Uri uri = Uri.fromFile(mFile);
-            Uri uri = Uri.fromFile(new File(filePath));
-            final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
-                    "Uploading. Please wait...", true);
-            dialog.show();
-            mStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            mPictureUrl = uri.toString();
-                            dialog.cancel();
-                            mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(filePath));
-                        }
-                    });
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    dialog.cancel();
-                    Snackbar.make(getView(), "Something went wrong", Snackbar.LENGTH_SHORT).show();
-                }
-            });
-        }
+    public void updateUserImage(final String filePath) {
+        final StorageReference mStorageRef;
+        final Date currentTime = Calendar.getInstance().getTime();
+        mStorageRef = FirebaseStorage.getInstance().getReference("images/" + currentTime + ".jpg");
+        isPhotoExists = true;
+        //Uri uri = Uri.fromFile(mFile);
+        Uri uri = Uri.fromFile(new File(filePath));
+        final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
+                "Uploading. Please wait...", true);
+        dialog.show();
+        mStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        mPictureUrl = uri.toString();
+                        dialog.cancel();
+                        mPhotoCiv.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                dialog.cancel();
+                Snackbar.make(getView(), "Something went wrong", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     String mName, mLastName, mAge, mCityName, mGender, mPictureUrl, mUid, mDay, mMonth, mYear;
     TextInputLayout mNameEtWrapper, mLastNameEtWrapper, mCityNameEtWrapper, mDateOfBirthEtWrapper, mGenderEtWrapper;
@@ -158,7 +159,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mCityNameEt = rootView.findViewById(R.id.city_name_et);
         mDateOfBirthEt = rootView.findViewById(R.id.date_of_birth_et);
         mDateOfBirthEt.setInputType(InputType.TYPE_NULL);
-        mAutoCompleteTextView = rootView.findViewById( R.id.auto_complete_tv );
+        mAutoCompleteTextView = rootView.findViewById(R.id.auto_complete_tv);
         accept_btn = rootView.findViewById(R.id.accept_btn);
         add_btn = rootView.findViewById(R.id.add_btn);
         flowLayout = rootView.findViewById(R.id.flow_box);
@@ -173,22 +174,24 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    int i =0;
+                    int i = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try {
                             String hobby = (String) snapshot.getValue();
-                            if (hobby.replace(" ","").matches("[a-zA-Z0-9-_.~%]{1,900}")){
-                                hobbys.add(hobby);}
+                            if (hobby.replace(" ", "").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
+                                hobbys.add(hobby);
+                            }
                             i++;
-                        }catch (ClassCastException ex){
-                            Log.d("ilya",i+"");
+                        } catch (ClassCastException ex) {
+                            Log.d("ilya", i + "");
                         }
                     }
 //                    mDatabaseReference.child("appHobbys").setValue(hobbys);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_dropdown_item_1line, hobbys );
-                    mAutoCompleteTextView.setAdapter( adapter );
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, hobbys);
+                    mAutoCompleteTextView.setAdapter(adapter);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -236,18 +239,11 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mPhotoCiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Date currentTime = Calendar.getInstance().getTime();
-//                mFile = new File(Environment.getExternalStorageDirectory(), currentTime.toString() + "Hobbyist.jpg");
-//                imageUri = FileProvider.getUriForFile(getContext(),
-//                        getActivity().getPackageName() + ".provider", //(use your app signature + ".provider" )
-//                        mFile);
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 Intent intent = new Intent(getContext(), ImageSelectActivity.class);
                 intent.putExtra(ImageSelectActivity.FLAG_COMPRESS, false);//default is true
                 intent.putExtra(ImageSelectActivity.FLAG_CAMERA, true);//default is true
                 intent.putExtra(ImageSelectActivity.FLAG_GALLERY, true);//default is true
-                intent.putExtra( MediaStore.EXTRA_OUTPUT, imageUri );
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 updateUserProfileFragmentListener.updateImage(intent, mPhotoCiv);
             }
         });
@@ -328,35 +324,35 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                             currentField.requestFocus();
                         }
                     }
-                    if (mDateOfBirthEt.getText().equals("Birthday")) {
-                        continue_flag = false;
-                        Snackbar.make(rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT).show();
-                    }
-                    if (hobbyList.isEmpty()) {
-                        continue_flag = false;
-                        Toast.makeText(getContext(), "add at least one hobby ", Toast.LENGTH_SHORT).show();
-                    }
-                    if (continue_flag) {
-                        UserProfile userProfile = new UserProfile();
-                        userProfile.setmName(mNameEtWrapper.getEditText().getText().toString())
-                                .setmCityName(mCityNameEtWrapper.getEditText().getText().toString())
-                                .setmLastName(mLastNameEtWrapper.getEditText().getText().toString())
-                                .setmAge(mAge).setmPictureUrl("")
-                                .setmGender(mGender)
-                                .setmHobbylist(hobbyList)
-                                .setmDay(mDay).setmMonth(mMonth)
-                                .setmYear(mYear)
-                                .setmUserPostList(userPosts)
-                                .setmUserToken(mUid);
+                }
+                if (mDateOfBirthEt.getText().toString().equals("Birthday")) {
+                    continue_flag = false;
+                    Snackbar.make(rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT).show();
+                }
+                if (hobbyList.isEmpty()) {
+                    continue_flag = false;
+                    Toast.makeText(getContext(), "add at least one hobby ", Toast.LENGTH_SHORT).show();
+                }
+                if (continue_flag) {
+                    UserProfile userProfile = new UserProfile();
+                    userProfile.setmName(mNameEtWrapper.getEditText().getText().toString())
+                            .setmCityName(mCityNameEtWrapper.getEditText().getText().toString())
+                            .setmLastName(mLastNameEtWrapper.getEditText().getText().toString())
+                            .setmAge(mAge).setmPictureUrl("")
+                            .setmGender(mGender)
+                            .setmHobbylist(hobbyList)
+                            .setmDay(mDay).setmMonth(mMonth)
+                            .setmYear(mYear)
+                            .setmUserPostList(userPosts)
+                            .setmUserToken(mUid);
 
-                        if (isPhotoExists) {
-                            userProfile.setmPictureUrl(mPictureUrl);
-                        }
-                        mDatabaseReference.child("appUsers").child(userProfile.getmUserToken()).setValue(userProfile);
-                        mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mNameEtWrapper.getEditText().getText().toString() +" "+mLastNameEtWrapper.getEditText().getText().toString()).build());
-                        DataStore.getInstance(getContext()).saveUser(userProfile);
-                        updateUserProfileFragmentListener.afterUpdateUserUpdate(true, hobbys.toArray(new String[hobbys.size()]));
+                    if (isPhotoExists) {
+                        userProfile.setmPictureUrl(mPictureUrl);
                     }
+                    mDatabaseReference.child("appUsers").child(userProfile.getmUserToken()).setValue(userProfile);
+                    mFirebaseUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(mNameEtWrapper.getEditText().getText().toString() + " " + mLastNameEtWrapper.getEditText().getText().toString()).build());
+                    DataStore.getInstance(getContext()).saveUser(userProfile);
+                    updateUserProfileFragmentListener.afterUpdateUserUpdate(true, hobbys.toArray(new String[hobbys.size()]));
                 }
             }
         });
