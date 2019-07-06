@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f6f6f6"
+    android:background="#fff"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -48,7 +48,7 @@
                 android:id="@+id/chat_buddy_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Barry Aguiler"
+                android:text="@string/test"
                 android:textColor="#fff"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:id="@+id/last_seen"
-                android:text="Active in last 2 minss"
+                android:text="@string/test"
                 android:textColor="#9580d7"
                 android:textSize="14sp" />
 
@@ -74,7 +74,7 @@
     android:id="@+id/msg_recycler">
 
 </android.support.v7.widget.RecyclerView>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -82,25 +82,23 @@
         android:layout_margin="5dp"
         android:background="#ffffff"
         android:orientation="horizontal">
-
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:hint="Write a replay"
             android:id="@+id/chat_text_to_send"
-            android:minWidth="250dp"
-            android:textColorHint="#ced5db" />
+            android:textColorHint="#ced5db"
+            android:layout_toStartOf="@+id/send_message_btn"/>
+
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="-45dp"
             android:layout_gravity="center"
-            android:scaleType="fitXY"
             android:id="@+id/send_message_btn"
             android:background="@color/transparent"
-            android:src="@drawable/ic_send_black_24dp"/>
+            android:src="@drawable/ic_send_black_24dp"
+            android:layout_alignParentEnd="true"/>
 
         <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
@@ -126,6 +124,6 @@
             <!--android:src="@drawable/ic_attach_file"-->
             <!--android:tint="#d9d9d9" />-->
         <!--</LinearLayout>-->
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

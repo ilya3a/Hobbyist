@@ -68,6 +68,7 @@ import com.himanshurawat.imageworker.ImageWorker;
 
 import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.nex3z.flowlayout.FlowLayout;
+import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
@@ -90,7 +91,7 @@ public class ProfilePageFragment extends Fragment {
 
     ArrayList<String> hobbysFromServer = new ArrayList<>();
     SwitchCompat mNotificationSw;
-    ImageView mBlurryImageView,mEditProfile,mEditPosts;
+    ImageView mBlurryImageView,mEditProfile,mEditPosts,mEditCity;
     MaterialButton mAddBtn;
     AutoCompleteTextView mAutoCompleteTextView;
     TextView mNameTv, mPostsCount, mHobbysCount;
@@ -154,7 +155,7 @@ public class ProfilePageFragment extends Fragment {
         Uri uri = Uri.fromFile(new File(filePath));
         //mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
-                "Uploading. Please wait...", true);
+                getString(R.string.uploading_please_wait) , true);
         dialog.show();
         mFireBaseStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -176,7 +177,7 @@ public class ProfilePageFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "test faild", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });
@@ -194,22 +195,9 @@ public class ProfilePageFragment extends Fragment {
             mUserProfile = dataStore.getUser();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("ilya", "ondestroy");
-    }
-//todo: why???
-    @Override
-    public void onResume() {
-        super.onResume();
-        DataStore.getInstance(getContext()).getUser();
-    }
-
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("ilya", "onCreateview");
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto = rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
@@ -223,6 +211,7 @@ public class ProfilePageFragment extends Fragment {
         flowLayout = rootView.findViewById(R.id.flow_layout);
         mEditProfile=rootView.findViewById(R.id.picture_edit_image);
         mEditPosts=rootView.findViewById(R.id.post_edit_image);
+        mEditCity=rootView.findViewById(R.id.post_edit_city);
 
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
@@ -323,11 +312,11 @@ public class ProfilePageFragment extends Fragment {
             public void onClick(View v) {
                 String hobby = mAutoCompleteTextView.getEditableText().toString();
                 if (!hobbysFromServer.contains(hobby)) {
-                    Snackbar.make(rootView, "Cant find the hobby", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootView, getString(R.string.cant_find_the_hobby), Snackbar.LENGTH_SHORT).show();
                     mAutoCompleteTextView.setText("");
                 } else {
                     if (mHobbysList.contains(hobby)) {
-                        Toast.makeText(getContext(), "You already choose this hobby ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.you_already_choose_this_hobby), Toast.LENGTH_SHORT).show();
                         mAutoCompleteTextView.setText("");
                     } else {
                         TextView textView = new TextView(getContext());
@@ -362,6 +351,9 @@ public class ProfilePageFragment extends Fragment {
                             tv.setAnimation(shake);
                             tv.startAnimation(shake);
                         }
+                        if(!(mUserProfile.getmUserPostList()==null)){
+                            mEditPosts.setVisibility(View.VISIBLE);
+                        }
                         mEditHobbysLayot.setVisibility(View.VISIBLE);
                         mProfilePhoto.setEnabled(true);
                         mName.setText(mUserProfile.getmName());
@@ -370,7 +362,9 @@ public class ProfilePageFragment extends Fragment {
                         mLastName.setVisibility(View.VISIBLE);
                         mNameTv.setVisibility(View.GONE);
                         mEditProfile.setVisibility(View.VISIBLE);
-                        mEditPosts.setVisibility(View.VISIBLE);
+
+                        mEditCity.setVisibility(View.VISIBLE);
+                        mExitFab.setVisibility(View.GONE);
                     } else {
                         editMode = false;
                         mFab.setImageResource(R.drawable.ic_edit_black_24dp);
@@ -412,7 +406,14 @@ public class ProfilePageFragment extends Fragment {
                         mNameTv.setVisibility(View.VISIBLE);
                         mEditProfile.setVisibility(View.GONE);
                         mEditPosts.setVisibility(View.GONE);
-                        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+                        mEditCity.setVisibility(View.GONE);
+                        if(!((mUserProfile.getmUserPostList())== null)) {
+                            mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+                        }
+                        else {
+                            mPostsCount.setText("0");
+                        }
+                        mExitFab.setVisibility(View.VISIBLE);
                         updateflow();
                         updateProfileOnfireBase();
                     }
@@ -434,9 +435,7 @@ public class ProfilePageFragment extends Fragment {
         });
 
         if (mUserProfile.getmPictureUrl().equals("") && !mUserProfile.getmGender().equals("Male")) {
-//            Bitmap bitmap = ImageWorker.Companion.convert().drawableToBitmap(getResources().getDrawable(R.drawable.ic_android_foreground));
-//            mProfilePhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_android_foreground));
-//            Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(mProfilePhoto);
+
             Glide.with(getContext()).load(R.drawable.ic_avatar_woman).addListener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -452,7 +451,7 @@ public class ProfilePageFragment extends Fragment {
             }).into(mProfilePhoto);
         }
         if (!mUserProfile.getmPictureUrl().equals("")) {
-            Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).addListener(new RequestListener<Drawable>() {
+            Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).thumbnail(0.3f).addListener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     return false;

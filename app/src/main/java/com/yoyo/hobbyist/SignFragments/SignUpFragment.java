@@ -100,17 +100,17 @@ public class SignUpFragment extends Fragment {
                 String email=email_et_wraper.getEditText().getText().toString();
                 if (password1.length()<6 || password2.length()<6)
                 {
-                    password_et_wraper.setError("Password must be at least 6 characters");
-                    password_verify_et_wraper.setError("Password must be at least 6 characters");
+                    password_et_wraper.setError(getString(R.string.password_must_be_at_least_6));
+                    password_verify_et_wraper.setError(getString(R.string.password_must_be_at_least_6));
                 }
                 else if (!(password1.equals(password2)))
                 {
-                    password_et_wraper.setError("Passwords dont match");
+                    password_et_wraper.setError(getString(R.string.password_dont_match));
                 }
                 if (!isEmailValid(email))
                 {
-                    Snackbar.make(rootView,"Enter a valid email", Snackbar.LENGTH_SHORT).show();
-                    email_et_wraper.setError("Invalid Email");
+                    Snackbar.make(rootView, R.string.enter_a_valit_email, Snackbar.LENGTH_SHORT).show();
+                    email_et_wraper.setError(getString(R.string.invalid_email));
                 }
                 if(password1.equals(password2) && (password1.length())>=6 && isEmailValid(email)) {
                     firebaseAuth.createUserWithEmailAndPassword(email_et_wraper.getEditText().getText().toString(), password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -118,14 +118,14 @@ public class SignUpFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful())
                             {
-                                Snackbar.make(rootView,"Registered successfully", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(rootView, R.string.registerd_successfully, Snackbar.LENGTH_SHORT).show();
                                 FirebaseUser user=firebaseAuth.getCurrentUser();
                                 user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName("null").build());
                                 signUpFragmentListener.afterSignUpUserUpdate(user);
                                 removePhoneKeypad(rootView);
                             }
                             else
-                                Snackbar.make(rootView,"Register Failed", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(rootView, R.string.registr_faild, Snackbar.LENGTH_SHORT).show();
                         }
                     });
                 }

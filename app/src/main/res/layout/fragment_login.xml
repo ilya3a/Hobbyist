@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -39,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:id="@+id/email_input_et_wraper"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:textColorHint="#fff">
                 <EditText
                     android:layout_width="match_parent"
@@ -76,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_below="@+id/email_input_et_wraper"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:textColorHint="#fff"
                 android:layout_marginStart="5dp">
 
@@ -108,7 +107,7 @@
     <android.support.design.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Login"
+        android:text="@string/login"
         android:id="@+id/login_fragment_btn"
 
         android:layout_gravity="bottom"
@@ -139,7 +138,7 @@
             android:gravity="center"
 
             android:letterSpacing="0.1"
-            android:text="Create Account ? Signup"
+            android:text="@string/create_account_signup"
             android:textColor="#d9e5f3" />
 
 

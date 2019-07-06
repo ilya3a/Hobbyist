@@ -91,7 +91,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         if (isChat) {
-            if (userProfile.getmStatus().equals("Online")) {
+            if (userProfile.getmStatus().equals(mContext.getString(R.string.online))) {
                 viewHolder.imgOn.setVisibility(View.VISIBLE);
                 viewHolder.imgOff.setVisibility(View.GONE);
             } else {

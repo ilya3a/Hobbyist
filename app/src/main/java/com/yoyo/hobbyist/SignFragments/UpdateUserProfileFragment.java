@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -92,7 +93,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         //Uri uri = Uri.fromFile(mFile);
         Uri uri = Uri.fromFile(new File(filePath));
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
-                "Uploading. Please wait...", true);
+                getString(R.string.uploading_please_wait), true);
         dialog.show();
         mStorageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -111,7 +112,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             @Override
             public void onFailure(@NonNull Exception e) {
                 dialog.cancel();
-                Snackbar.make(getView(), "Something went wrong", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.somthing_went_wrong, Snackbar.LENGTH_SHORT).setActionTextColor(Color.WHITE).show();
             }
         });
     }
@@ -217,11 +218,11 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
             public void onClick(View v) {
                 String hobby = mAutoCompleteTextView.getEditableText().toString();
                 if (!hobbys.contains(hobby)) {
-                    Snackbar.make(rootView, "Cant find the hobby", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootView, R.string.cant_find_the_hobby, Snackbar.LENGTH_SHORT).setActionTextColor(Color.WHITE).show();
                     mAutoCompleteTextView.setText("");
                 } else {
                     if (hobbyList.contains(hobby)) {
-                        Toast.makeText(getContext(), "You already choose this hobby ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.you_already_choose_this_hobby), Toast.LENGTH_SHORT).show();
                         mAutoCompleteTextView.setText("");
                     } else {
                         TextView textView = new TextView(getContext());
@@ -283,14 +284,11 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         lastTouchDown = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_UP:
-                        //if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHHOLD) {
-                        Log.w("App", "You clicked!");
                         DatePickerDialog datePickerDialog = new DatePickerDialog(rootView.getContext(), UpdateUserProfileFragment.this,
                                 Calendar.getInstance().get(Calendar.YEAR),
                                 Calendar.getInstance().get(Calendar.MONTH),
                                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                         datePickerDialog.show();
-                        //}
                         break;
 
                 }
@@ -330,13 +328,13 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         }
                     }
                 }
-                if (mDateOfBirthEt.getText().toString().equals("Birthday")) {
+                if (mDateOfBirthEt.getText().toString().equals(R.string.birthday)) {
                     continue_flag = false;
-                    Snackbar.make(rootView, "Pick a Birthday", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootView, R.string.pick_a_Birthday, Snackbar.LENGTH_SHORT).setActionTextColor(Color.WHITE).show();
                 }
                 if (hobbyList.isEmpty()) {
                     continue_flag = false;
-                    Toast.makeText(getContext(), "add at least one hobby ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.add_at_least_one_hobby), Toast.LENGTH_SHORT).show();
                 }
                 if (continue_flag) {
                     UserProfile userProfile = new UserProfile();

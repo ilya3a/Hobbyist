@@ -2,6 +2,8 @@ package com.yoyo.hobbyist.Adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.CardView;
@@ -115,10 +117,9 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage("Are you sure you want do delete the post?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                builder.setMessage(R.string.are_you_sure).setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no, dialogClickListener).show();
                 recyclerCallBack.postOnEraseItemClicked();
-                Toast.makeText(mContext, "im working", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -155,4 +156,5 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             }
         }
     }
+
 }

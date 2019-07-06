@@ -99,12 +99,6 @@ public class SearchListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnPostForMapListener) {
-//            mListener = (OnPostForMapListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnPostForMapListener");
-//        }
     }
 
     @Override

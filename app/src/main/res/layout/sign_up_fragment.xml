@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/email_input_et_wraper"
-                android:hint="Email Address"
+                android:hint="@string/email"
                 android:textColorHint="#fff"
                 android:layout_marginStart="5dp">
                 <EditText
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/email_input_et_wraper"
                 android:id="@+id/password_input_et_wraper"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:textColorHint="#fff"
                 android:layout_marginStart="5dp">
                 <EditText
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/password_verify_input_et_wraper"
-                android:hint="Re-enter Password"
+                android:hint="@string/re_enter_password"
                 android:textColorHint="#fff"
                 android:layout_marginStart="5dp">
             <EditText
@@ -145,17 +145,15 @@
     >
         <android.support.design.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SignUp"
+            android:layout_height="50dp"
+            android:text="@string/signup"
             android:id="@+id/register_btn"
-            android:textAllCaps="false"
 
             android:layout_gravity="bottom"
             android:layout_marginBottom="50dp"
             style="@style/AppTheme.RoundedCornerMaterialButton"
             android:gravity="center"
             android:letterSpacing="0.2"
-            android:padding="16dp"
             android:textColor="#d9e5f3"
             android:textStyle="bold"
             />
