@@ -319,7 +319,7 @@ public class MessageFragment extends Fragment {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+            window.setStatusBarColor(ContextCompat.getColor(getContext(),R.color.ic_logo_background));
         }
     }
     @Override
