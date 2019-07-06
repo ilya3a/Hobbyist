@@ -48,7 +48,7 @@
                 android:id="@+id/chat_buddy_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Barry Aguiler"
+                android:text="@string/test"
                 android:textColor="#fff"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:id="@+id/last_seen"
-                android:text="Active in last 2 minss"
+                android:text="@string/test"
                 android:textColor="#9580d7"
                 android:textSize="14sp" />
 

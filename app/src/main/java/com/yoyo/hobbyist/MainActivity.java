@@ -59,7 +59,7 @@ import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.OnFragmentInteractionListener,
         SearchFragment.onSearchFragmentListener, MenuFragment.OnFragmentInteractionListener, UserAdapter.RecyclerCallBack,
-        CreatePostFragment.OnFragmentInteractionListener, ProfilePageFragment.ProfileFragmentListener, PostsRecyclerViewAdapter.RecyclerCallBack, PostFragmentForMap.OnPostForMapListener
+        CreatePostFragment.CreatePostFragmentLisener, ProfilePageFragment.ProfileFragmentListener, PostsRecyclerViewAdapter.RecyclerCallBack, PostFragmentForMap.OnPostForMapListener
 , MessageFragment.MessageFragmentListener {
 
     final int CAMERA_REQUEST = 1;
@@ -266,12 +266,15 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
     }
 
-
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
 
+    @Override
+    public void postCreated() {
+
+    }
 
     @Override
     public void updateImage(Intent intent, View view) {
@@ -391,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 startActivityForResult( intent, 1 );
             }
         };
-        Permissions.check( this, string, "you must give those permissions to take a photo", options, permissionHandler );
+        Permissions.check( this, string, getString(R.string.must_give_photo_pemission), options, permissionHandler );
 
 
     }
@@ -442,14 +445,14 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onResume() {
         super.onResume();
-        status("Online");
+        status(getString(R.string.online));
         callLocationPermissions();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        status("Last seen at: "+UtilFuncs.getCurrentDate());
+        status(getString(R.string.last_seet_at)+UtilFuncs.getCurrentDate());
     }
 
 }

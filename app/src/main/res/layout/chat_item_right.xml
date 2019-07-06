@@ -29,14 +29,14 @@
             android:id="@+id/chat_show_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello"
+            android:text="@string/test"
             android:textColor="#fff"
             android:textSize="18sp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/sent_at"
-        android:text="10/12/2019 15:14"
+        android:text="@string/time_test"
         android:textColor="@color/grey"
         android:textSize="10sp"/>
     </LinearLayout>
@@ -44,7 +44,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="seen"
+        android:text="@string/test"
         android:layout_marginEnd="5dp"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/rl"

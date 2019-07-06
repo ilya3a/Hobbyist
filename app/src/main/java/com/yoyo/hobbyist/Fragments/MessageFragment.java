@@ -137,7 +137,7 @@ public class MessageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(firebaseUser.getUid(),R.mipmap.ic_logo_round,msg,"New Message from "+ username,mUserId);
+                    Data data = new Data(firebaseUser.getUid(),R.mipmap.ic_logo_round,msg,getString(R.string.new_message_from)+ username,mUserId);
 
                     Sender sender = new Sender(data,token.getToken());
 
@@ -146,7 +146,7 @@ public class MessageFragment extends Fragment {
                         public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                             if(response.code()==200){
                                 if (response.body().success != 1){
-                                    Toast.makeText(getContext(), "Faild", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

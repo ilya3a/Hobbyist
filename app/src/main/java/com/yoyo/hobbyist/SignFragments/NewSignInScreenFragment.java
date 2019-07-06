@@ -50,7 +50,7 @@ public class NewSignInScreenFragment extends Fragment {
 
 
     public interface LoginFragmentListener {
-        void afterSignInUserUpdate(FirebaseUser user);
+        void afterSignInUserUpdate(FirebaseUser user,Button btn,LottieAnimationView lotii);
         void callSignUp();
     }
 
@@ -88,15 +88,15 @@ public class NewSignInScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!InternetConnection.isNetworkAvailable(getContext())) {
-                    Snackbar.make(rootView, "No internet connection", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(Color.WHITE).setAction("Retry", logInBtnReapeat)
+                    Snackbar.make(rootView, R.string.no_internet_connection, Snackbar.LENGTH_LONG)
+                            .setActionTextColor(Color.WHITE).setAction(R.string.retry, logInBtnReapeat).setActionTextColor(Color.WHITE)
                             .show();
                 } else {
                     rootView.clearFocus();
                     final String useremail = email_et_wraper.getEditText().getText().toString();
                     final String password = password_et_wraper.getEditText().getText().toString();
                     if (useremail.equals("") || password.equals("")) {
-                        Snackbar.make(rootView, "Email or Password are incorrect", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(rootView, R.string.email_or_password_incorrect, Snackbar.LENGTH_SHORT).setActionTextColor(Color.WHITE)
                         .show();
                     } else {
                         mLottieTv.playAnimation();
@@ -111,11 +111,12 @@ public class NewSignInScreenFragment extends Fragment {
                                     mSpEditor.putString("userEmail", useremail).commit();
                                     mSpEditor.putString("userPassword", password).commit();
                                     removePhoneKeypad(rootView);
-                                    mListener.afterSignInUserUpdate(user);
-                                    Toast.makeText(getContext(), "Sign in succsfuly", Toast.LENGTH_SHORT).show();
+                                    mListener.afterSignInUserUpdate(user,login_fragment_btn,mLottieTv);
+                                    Toast.makeText(getContext(), getString(R.string.sign_in_successfully), Toast.LENGTH_SHORT).show();
+
 
                                 } else {
-                                    Snackbar.make(rootView, "Email or Password are incorrect", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(rootView, R.string.email_or_password_incorrect, Snackbar.LENGTH_SHORT).show();
                                     mLottieTv.cancelAnimation();
                                     login_fragment_btn.setVisibility(View.VISIBLE);
                                     mLottieTv.setVisibility(View.GONE);

@@ -34,7 +34,7 @@
                 android:id="@+id/create_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25/06/19"
+                android:text="@string/time_test"
                 android:textSize="9dp" />
 
             <ImageView
@@ -69,7 +69,7 @@
                 android:layout_marginTop="17dp"
                 android:layout_toEndOf="@+id/post_profile_image"
                 android:fontFamily="@font/acme_regular"
-                android:text="Lena gonsales"
+                android:text="@string/test"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/acme_regular"
-                    android:text="Barcelona"
+                    android:text="@string/test"
                     android:textSize="13sp" />
 
                 <ImageView
@@ -139,7 +139,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
-                        android:text="Tennis"
+                        android:text="@string/test"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="7"
-                android:text="tennis as I do.. I've got the all equipment (table balls and bet's) "
+                android:text="@string/test_long"
                 android:textSize="15sp" />
 
             <android.support.v7.widget.AppCompatImageButton

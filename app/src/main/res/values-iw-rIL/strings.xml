@@ -16,4 +16,66 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="test">Test</string>
+    <string name="time_test">10/12/2019 15:14</string>
+    <string name="choose_hobby">בחר תחביבים</string>
+    <string name="additional_info_optional">מידע נוסף (אופציונלי)</string>
+    <string name="password">סיסמה</string>
+    <string name="email">אימייל</string>
+    <string name="login">התחבר</string>
+    <string name="create_account_signup">צור חשבון? הרשם</string>
+    <string name="test_long">tennis as I do.. I\'ve got the all equipment (table balls and bet\'s)</string>
+    <string name="posts">פוסטים</string>
+    <string name="hobbys">תחביבים</string>
+    <string name="age">גיל</string>
+    <string name="gender">מין</string>
+    <string name="notification">התראות</string>
+    <string name="create_user_profile">צור פרופיל חדש</string>
+    <string name="first_name">שם</string>
+    <string name="last_name">שם משפחה</string>
+    <string name="birthday">תאריך לידה</string>
+    <string name="add">הוסף</string>
+    <string name="accept">אישור</string>
+    <string name="signup">הירשם</string>
+    <string name="re_enter_password">הזן סיסמה שנית</string>
+    <string name="city">עיר</string>
+    <string name="chose_all_your_hobbys">בחר/י את כל התחביבים שלך</string>
+    <string name="pick_a_Birthday">בחר תאריך לידה</string>
+    <string name="add_at_least_one_hobby">הוסף לפחות תחביב אחד</string>
+    <string name="cant_find_the_hobby">לא ניתן למצוא תחביב זה</string>
+    <string name="you_already_choose_this_hobby">You already choose this hobby</string>
+    <string name="uploading_please_wait">מעלה,אנא המתן...</string>
+    <string name="somthing_went_wrong">משהו קרה</string>
+    <string name="no_internet_connection">אין אינטרנט</string>
+    <string name="sign_in_successfully">התחברת בהצלחה</string>
+    <string name="retry">נסה שנית</string>
+    <string name="email_or_password_incorrect">אימייל או סיסמה לא נכונים</string>
+    <string name="must_give_photo_pemission">חייב הרשאות אלה כדי לצלם</string>
+    <string name="info">Info</string>
+    <string name="warning">Warning</string>
+    <string name="password_must_be_at_least_6">סיסמה צריכה להיות לפחות 6 תווים</string>
+    <string name="password_dont_match">סיסמאות לא מתאימות</string>
+    <string name="enter_a_valit_email">הכנס אימייל חוקי</string>
+    <string name="invalid_email">אימייל לא חוקי</string>
+    <string name="registerd_successfully">הרשמה בוצעה בהצלחה</string>
+    <string name="registr_faild">הרשמה נכשלה</string>
+    <string name="seen">Seen</string>
+    <string name="deliverd">Delivered</string>
+    <string name="check_out_new_activity_on">כנס בכדי לראות פוסט חדש ב</string>
+    <string name="invalid_input_please_choose">אנה בחר לפחות משהו אחד מהרשימה</string>
+    <string name="location_pemission_nedded">הרשאות מיקום נדרשות</string>
+    <string name="new_message_from">הודעה חדשה מ</string>
+    <string name="failed">נכשל</string>
+
+    <string name="last_seet_at"> נראה לאחרונה:</string>
+    <string name="online">מחובר</string>
+    <string name="are_you_sure">אתה בטוח שברצונך למחוק את הפוסט?</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string-array name="gender_array">
+        <item>זכר</item>
+        <item>נקבה</item>
+        <item>אחר</item>
+    </string-array>
 </resources>

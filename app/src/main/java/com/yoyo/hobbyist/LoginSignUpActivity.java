@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -125,8 +126,11 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     }
 
     @Override
-    public void afterSignInUserUpdate(final FirebaseUser user) {
+    public void afterSignInUserUpdate(final FirebaseUser user, Button login_fragment_btn,LottieAnimationView mLottieTv) {
         if (user.getDisplayName().equals("null")) {
+            mLottieTv.cancelAnimation();
+            login_fragment_btn.setVisibility(View.VISIBLE);
+            mLottieTv.setVisibility(View.GONE);
             callUpdateUser();
         } else {
             mFireBaseUser = user;
@@ -219,8 +223,8 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     public void callPermissions(final Intent intent) {
         String[] string = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Permissions.Options options = new Permissions.Options()
-                .setRationaleDialogTitle("Info")
-                .setSettingsDialogTitle("Warning");
+                .setRationaleDialogTitle(getString(R.string.info) )
+                .setSettingsDialogTitle(getString(R.string.warning) );
         PermissionHandler permissionHandler = new PermissionHandler() {
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
@@ -233,7 +237,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 startActivityForResult(intent, 1);
             }
         };
-        Permissions.check(this, string, "you must give those permissions to take a photo", options, permissionHandler);
+        Permissions.check(this, string, R.string.must_give_photo_pemission, options, permissionHandler);
 
 
     }

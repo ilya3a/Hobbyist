@@ -12,7 +12,7 @@
         android:layout_height="50dp"
         android:src="@drawable/ic_avatar_man"
         app:civ_border_color="#000"
-        app:civ_border_width="2dp"/>
+        app:civ_border_width="0.8dp"/>
 
     <TextView
         android:id="@+id/user_name"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/profile_image"
-        android:text="userName"
+        android:text="@string/test"
         android:textSize="18sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -54,7 +54,7 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/profile_image"
         android:maxLines="1"
-        android:text="last message"
+        android:text="@string/time_test"
         android:textColor="@color/grey" />
 
     <RelativeLayout

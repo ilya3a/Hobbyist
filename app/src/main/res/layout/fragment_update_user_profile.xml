@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Create User Profile"
+                android:text="@string/create_user_profile"
                 android:textColor="@color/cardview_light_background"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:hint="First name"
+                    android:hint="@string/first_name"
                     android:textColorHint="#fff">
 
                     <EditText
@@ -66,7 +66,7 @@
                     android:layout_margin="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:hint="Last name"
+                    android:hint="@string/last_name"
                     android:textColorHint="#fff">
 
                     <EditText
@@ -91,7 +91,7 @@
                     android:layout_weight="1"
                     android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
                     android:inputType="none"
-                    android:text="Birthday"
+                    android:text="@string/birthday"
                     android:textColor="#fff" />
 
                 <Spinner
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_marginTop="5dp"
-                android:hint="City name"
+                android:hint="@string/city"
                 android:textColorHint="#fff">
 
                 <EditText
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:layout_marginTop="10dp"
-                android:text="Chose all your hobbys"
+                android:text="@string/chose_all_your_hobbys"
                 android:textColor="#ffff"
                 android:textSize="20sp" />
 
@@ -167,7 +167,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="add"
+                    android:text="@string/add"
                     app:icon="@drawable/ic_add_black_24dp" />
             </LinearLayout>
 
@@ -193,7 +193,7 @@
                     style="@style/AppTheme.RoundedCornerMaterialButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Accept"
+                    android:text="@string/accept"
                     android:textAllCaps="false" />
             </LinearLayout>
         </LinearLayout>

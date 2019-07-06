@@ -3,15 +3,10 @@ package com.yoyo.hobbyist.Fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -68,27 +63,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.android.volley.VolleyLog.TAG;
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.HOUR_OF_DAY;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-
 public class CreatePostFragment extends DialogFragment {
 
-    private OnFragmentInteractionListener mListener;
+    private CreatePostFragmentLisener createPostFragmentLisener;
 
     private AutoCompleteTextView mAutoCompleteTextView;
     private EditText mPostDescriptionEt;
@@ -241,7 +224,7 @@ public class CreatePostFragment extends DialogFragment {
                                                        }
                                                          */
 
-                                                       String textToSend = "Check out new Activity on " + userPost.getHobby();
+                                                       String textToSend = getString(R.string.check_out_new_activity_on) + userPost.getHobby();
                                                        try {
                                                            final JSONObject rootObject = new JSONObject();
                                                            rootObject.put("to", "/topics/" + userPost.getHobby().replace(" ", ""));
@@ -291,12 +274,12 @@ public class CreatePostFragment extends DialogFragment {
                                                        CreatePostFragment.this.dismiss();
                                                    } else {
 
-                                                       Toast.makeText(getContext(), "Please check internet connection", Toast.LENGTH_SHORT).show();
+                                                       Toast.makeText(getContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
                                                    }
 
                                                } else {
 
-                                                   Toast.makeText(getContext(), " Invalid input, Please choose 1 item from list", Toast.LENGTH_SHORT).show();
+                                                   Toast.makeText(getContext(), getString(R.string.invalid_input_please_choose), Toast.LENGTH_SHORT).show();
 
                                                }
                                            }
@@ -359,22 +342,22 @@ public class CreatePostFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof CreatePostFragmentLisener) {
+            createPostFragmentLisener = (CreatePostFragmentLisener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnPostForMapListener");
+                    + " must implement CreatePostFragmentLisener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        createPostFragmentLisener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    public interface CreatePostFragmentLisener {
+        void postCreated();
 
     }
 
@@ -407,7 +390,7 @@ public class CreatePostFragment extends DialogFragment {
     }
 
     private void callPermissions() {
-        Permissions.check(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, "Location permissions are required", new PermissionHandler() {
+        Permissions.check(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, R.string.location_pemission_nedded, new PermissionHandler() {
             @Override
             public void onGranted() {
                 mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
