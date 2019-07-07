@@ -81,6 +81,9 @@ public class UserProfile implements Serializable {
         this.userToken = userToken;
     }
 
+    public UserProfile() {
+    }
+
     public long getId() {
         return id;
     }

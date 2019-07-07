@@ -63,6 +63,7 @@ import com.himanshurawat.imageworker.ImageWorker;
 
 import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.nex3z.flowlayout.FlowLayout;
+import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
@@ -414,7 +415,7 @@ public class ProfilePageFragment extends Fragment {
                                 mPostsCount.setText("0");
                             }
                             ArrayList<UserPost> test = new ArrayList<>();
-                            test=mUserProfile.getmUserPostList();
+                            test=mUserProfile.getUserPostList();
                             mExitFab.setVisibility(View.VISIBLE);
                             updateflow();
                             updateProfileOnfireBase();

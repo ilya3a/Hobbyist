@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         tabItem4 = findViewById( R.id.menu );
         mPager = findViewById( R.id.pager );
 
-        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount(),DataStore.getInstance(this).getUser().getHobbylist() );
+        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount(),DataStore.getInstance(this).getUser().getHobbyList() );
         mPager.setAdapter( mAdapter );
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override

@@ -91,7 +91,9 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mStorageRef = FirebaseStorage.getInstance().getReference( "images/" + currentTime + ".jpg" );
         isPhotoExists = true;
         //Uri uri = Uri.fromFile(mFile);
-        Uri uri = Uri.fromFile( new File( filePath ) );
+        Uri uri = Uri.fromFile( new File( filePath ));
+        mPhotoCiv.setImageURI(uri);
+
         final ProgressDialog dialog = ProgressDialog.show( getContext(), "",
                 getString( R.string.uploading_please_wait ), true );
         dialog.show();
@@ -103,7 +105,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                     public void onSuccess(Uri uri) {
                         mPictureUrl = uri.toString();
                         dialog.cancel();
-                        mPhotoCiv.setImageBitmap( BitmapFactory.decodeFile( filePath ) );
+//                        mPhotoCiv.setImageBitmap( BitmapFactory.decodeFile( filePath ) );
                     }
                 } );
 
@@ -337,9 +339,11 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                     continue_flag = false;
                     Toast.makeText( getContext(), getString( R.string.add_at_least_one_hobby ), Toast.LENGTH_SHORT ).show();
                 }
-                if (continue_flag) {
-                    UserProfile userProfile = new UserProfile( mNameEtWrapper.getEditText().getText().toString(), mCityNameEtWrapper.getEditText().getText().toString(),
-                            mLastNameEtWrapper.getEditText().getText().toString(), mAge, mPictureUrl, mGender, hobbyList, userPosts, mUid );
+//                if (continue_flag) {
+//                    UserProfile userProfile = new UserProfile( mNameEtWrapper.getEditText().getText().toString(), mCityNameEtWrapper.getEditText().getText().toString(),
+//                            mLastNameEtWrapper.getEditText().getText().toString(), mAge, mPictureUrl, mGender, hobbyList, userPosts, mUid );
+
+                    UserProfile userProfile = new UserProfile( mNameEtWrapper.getEditText().getText().toString(),mLastNameEtWrapper.getEditText().getText().toString(),mAge,"",mCityNameEtWrapper.getEditText().getText().toString(),mGender,hobbyList,userPosts,mUid);
 
 //                    userProfile.setName(mNameEtWrapper.getEditText().getText().toString())
 //                            .setCityName(mCityNameEtWrapper.getEditText().getText().toString())
@@ -360,8 +364,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                     DataStore.getInstance( getContext() ).saveUser( userProfile );
                     updateUserProfileFragmentListener.afterUpdateUserUpdate( true, hobbys.toArray( new String[hobbys.size()] ) );
                 }
-            }
-        } );
+            });
 
 
         return rootView;
