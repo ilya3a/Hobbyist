@@ -2,8 +2,6 @@ package com.yoyo.hobbyist.Adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.CardView;
@@ -13,17 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
-import com.yoyo.hobbyist.Notifications.Data;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder> {
 
@@ -104,7 +99,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
                                 userPosts.remove(i);
                                 setUserPosts(userPosts);
                                 UserProfile userProfile = DataStore.getInstance(mContext).getUser();
-                                userProfile.setmUserPostList(userPosts);
+                                userProfile.setUserPostList(userPosts);
                                 DataStore.getInstance(mContext).saveUser(userProfile);
                                 recyclerCallBack.postOnEraseItemClicked();
 

@@ -198,7 +198,7 @@ public class CreatePostFragment extends DialogFragment {
                                                        mDatabaseReference.child("usersPost").child(userPost.getHobby()).child(userToken).push().setValue(userPost);
                                                        if (userProfile.getUserPostList() == null) {
                                                            ArrayList<UserPost> arrayList = new ArrayList<>();
-                                                           userProfile.setmUserPostList(arrayList);
+                                                           userProfile.setUserPostList(arrayList);
                                                        }
                                                        userProfile.getUserPostList().add(userPost);
                                                        DataStore.getInstance(getContext()).saveUser(userProfile);
