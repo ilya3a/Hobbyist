@@ -8,33 +8,34 @@ import com.yoyo.hobbyist.DataModels.UserPost;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Converters implements Serializable {
     @TypeConverter
-    public static List<UserPost> userPostsFromString(String value) {
-        Type listType = new TypeToken<List<UserPost>>() {
+    public static ArrayList<UserPost> userPostsFromString(String value) {
+        Type listType = new TypeToken<ArrayList<UserPost>>() {
         }.getType();
         return new Gson().fromJson( value, listType );
     }
 
     @TypeConverter
-    public static String userPostsFromList(List<UserPost> list) {
+    public static String userPostsFromList(ArrayList<UserPost> list) {
         Gson gson = new Gson();
         String json = gson.toJson( list );
         return json;
     }
 
     @TypeConverter
-    public static List<String> hobbyFromString(String value) {
+    public static ArrayList<String> hobbyFromString(String value) {
         Type listType = new TypeToken<List<UserPost>>() {
         }.getType();
         return new Gson().fromJson( value, listType );
     }
 
     @TypeConverter
-    public static String hobbyFromList(List<String> list) {
+    public static String hobbyFromList(ArrayList<String> list) {
         Gson gson = new Gson();
         String json = gson.toJson( list );
         return json;

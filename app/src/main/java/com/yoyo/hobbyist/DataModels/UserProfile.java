@@ -20,7 +20,7 @@ public class UserProfile implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private long Id;
+    private long id;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -82,11 +82,11 @@ public class UserProfile implements Serializable {
     }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long mId) {
-        this.Id = mId;
+        this.id = mId;
     }
 
     public String getName() {

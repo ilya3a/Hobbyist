@@ -9,7 +9,7 @@ public class UserPost {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private long Id;
+    private long id;
 
     @ColumnInfo(name = "user_profile_pic_url")
     String userProfilePicUrl;
@@ -57,116 +57,99 @@ public class UserPost {
         this.gender = gender;
     }
 
-
     public long getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(long Id) {
-        this.Id = Id;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public UserPost setGender(String gender) {
-        this.gender = gender;
-        return this;
-    }
-
-    public UserPost() {
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUserProfilePicUrl() {
         return userProfilePicUrl;
     }
 
-    public UserPost setUserProfilePicUrl(String userProfilePicUrl) {
+    public void setUserProfilePicUrl(String userProfilePicUrl) {
         this.userProfilePicUrl = userProfilePicUrl;
-        return this;
-
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public UserPost setUserName(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
-        return this;
     }
 
     public String getCityName() {
         return cityName;
     }
 
-    public UserPost setCityName(String cityName) {
+    public void setCityName(String cityName) {
         this.cityName = cityName;
-        return this;
     }
 
     public boolean isOnline() {
         return isOnline;
     }
 
-    public UserPost setOnline(boolean online) {
+    public void setOnline(boolean online) {
         isOnline = online;
-        return this;
     }
 
     public String getDate() {
         return date;
     }
 
-    public UserPost setDate(String date) {
+    public void setDate(String date) {
         this.date = date;
-        return this;
     }
 
     public String getHobby() {
         return hobby;
-
     }
 
-    public UserPost setHobby(String hobby) {
+    public void setHobby(String hobby) {
         this.hobby = hobby;
-        return this;
     }
 
     public String getUserToken() {
         return userToken;
     }
 
-    public UserPost setUserToken(String userToken) {
+    public void setUserToken(String userToken) {
         this.userToken = userToken;
-        return this;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getPostDescription() {
         return postDescription;
     }
 
-    public UserPost setPostDescription(String postDescription) {
+    public void setPostDescription(String postDescription) {
         this.postDescription = postDescription;
-        return this;
     }
 
     public double getLatitude() {
         return latitude;
     }
 
-    public UserPost setLatitude(double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
-        return this;
     }
 
     public double getLongitude() {
         return longitude;
     }
 
-    public UserPost setLongitude(double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
-        return this;
     }
 }
