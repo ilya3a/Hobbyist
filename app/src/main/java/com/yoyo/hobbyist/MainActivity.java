@@ -2,11 +2,14 @@ package com.yoyo.hobbyist;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -49,6 +52,7 @@ import com.yoyo.hobbyist.Fragments.PostFragmentForMap;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.Fragments.SearchListFragment;
+import com.yoyo.hobbyist.Utilis.AlarmReceiver;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
@@ -69,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     final String SEARCHLIST_FRAGMENT_TAG = "searchlist_fragment_tag";
     TabLayout mTabLayout;
     ViewPager mPager;
+
+
+
     PagerAdapter mAdapter;
     TabItem tabItem1;
     TabItem tabItem2;
@@ -85,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     FirebaseMessaging topicMessegingAlert = FirebaseMessaging.getInstance();
     final String CREATE_POST_FRAGMENT_TAG = "create_post_fragment_tag";
 
+    AlarmManager alarmManager;
+    Handler notifHandler = new Handler();
+    Boolean doAlarmManager=true;
     @Override
     public void logOut() {
         mFireBaseAuth.signOut();
@@ -123,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void notifCheckChange(boolean isChecked) {
         DataStore.getInstance( this ).setNotifOk( isChecked );
         if (isChecked) {
+            doAlarmManager=true;
             mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
                 for (String sub : mUserProfile.getHobbyList()) {
@@ -131,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 }
             }
         } else {
+            doAlarmManager=false;
             mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
                 for (String sub : mUserProfile.getHobbyList()) {
@@ -154,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
 
         if (DataStore.getInstance( this ).isNotifOk()) {
@@ -191,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         tabItem4 = findViewById( R.id.menu );
         mPager = findViewById( R.id.pager );
 
-        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount(),DataStore.getInstance(this).getUser().getmHobbylist() );
+        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount(),DataStore.getInstance(this).getUser().getHobbylist() );
         mPager.setAdapter( mAdapter );
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -244,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         mFab.setNestedScrollingEnabled( false );
                     }
-
                 }
             }
 
@@ -351,16 +363,15 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mFireBaseAuth.addAuthStateListener( mAuthStateListener );
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
         mFireBaseAuth.removeAuthStateListener( mAuthStateListener );
+        if(doAlarmManager) {
+            long dayMillis = 1000 * 60 * 60 * 12;
+            setIntervalNotif(dayMillis);
+        }
     }
 
     @Override
@@ -457,6 +468,26 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onPause() {
         super.onPause();
         status( getString( R.string.last_seet_at ) + UtilFuncs.getCurrentDate() );
+    }
+    private void setIntervalNotif(final long interval) {
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            intent.putExtra("interval", interval);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmManager.cancel(pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, pendingIntent);
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mFireBaseAuth.addAuthStateListener(mAuthStateListener);
+        Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(pendingIntent);
+        notifHandler.removeCallbacksAndMessages(null);
+
     }
 
 }

@@ -194,6 +194,7 @@ public class ProfilePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
+
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto = rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
@@ -215,12 +216,6 @@ public class ProfilePageFragment extends Fragment {
         mHobbysTv = new ArrayList<>();
         mEditHobbysLayot = rootView.findViewById(R.id.add_hobbys_layout);
         mNotificationSw = rootView.findViewById(R.id.notif_sw);
-        mNotificationSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                profileFragmentListener.notifCheckChange(isChecked);
-            }
-        });
         mExitFab = rootView.findViewById(R.id.fab_logout);
         mGenderEt = rootView.findViewById(R.id.gender_et);
         mFireBaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -231,7 +226,14 @@ public class ProfilePageFragment extends Fragment {
         mBlurryImageView = rootView.findViewById(R.id.blur_test);
         mName = rootView.findViewById(R.id.name_change_edittext);
         mLastName = rootView.findViewById(R.id.last_name_change_edittext);
+        mNotificationSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                profileFragmentListener.notifCheckChange(isChecked);
+            }
+        });
 
+        mNotificationSw.setChecked(DataStore.getInstance(getContext()).isNotifOk());
         mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getUserPostList().size() + "");
 
         mHobbysList = mUserProfile.getHobbyList();
@@ -385,12 +387,12 @@ public class ProfilePageFragment extends Fragment {
                             if (mHobbysList.isEmpty()) {
                                 mHobbysList = mUserProfile.getHobbyList();
                             }
-                            profileFragmentListener.notifCheckChange(false);
+                            //profileFragmentListener.notifCheckChange(false);
                             mUserProfile.setHobbyList(mHobbysList);
                             Integer temp = mHobbysList.size();
                             mHobbysCount.setText(temp.toString());
                             mProfilePhoto.setEnabled(false);
-                            profileFragmentListener.notifCheckChange(true);
+                            //profileFragmentListener.notifCheckChange(true);
 
                             if (mName.getText().toString().equals("") || mLastName.getText().toString().equals("")) {
 
@@ -411,6 +413,8 @@ public class ProfilePageFragment extends Fragment {
                             } else {
                                 mPostsCount.setText("0");
                             }
+                            ArrayList<UserPost> test = new ArrayList<>();
+                            test=mUserProfile.getmUserPostList();
                             mExitFab.setVisibility(View.VISIBLE);
                             updateflow();
                             updateProfileOnfireBase();
@@ -575,6 +579,8 @@ public class ProfilePageFragment extends Fragment {
 
     public void UpdateUser() {
 //        mUserProfile = DataStore.getInstance(getContext()).getUser();
+        //did not work properly
+        //mUserProfile = DataStore.getInstance(getContext()).getUser();
     }
 }
 
