@@ -6,6 +6,8 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "posts_table")
 public class UserPost {
+    public UserPost() {
+    }
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

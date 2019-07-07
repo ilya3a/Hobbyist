@@ -224,12 +224,12 @@ public class CreatePostFragment extends DialogFragment {
                                                        }
                                                          */
 
-                                                       String textToSend = getString(R.string.check_out_new_activity_on) + userPost.getHobby();
+                                                       String textToSend = getString(R.string.check_out_new_activity_on) +" " +userPost.getHobby();
                                                        try {
                                                            final JSONObject rootObject = new JSONObject();
                                                            rootObject.put("to", "/topics/" + userPost.getHobby().replace(" ", ""));
                                                            rootObject.put("notification", new JSONObject().put("title", textToSend));
-                                                           rootObject.put("notification", new JSONObject().put("body", "postlist"));
+                                                           rootObject.put("notification", new JSONObject().put("body", textToSend));
 
 
 //                                                           rootObject.put("data", new JSONObject().put("message", textToSend));
