@@ -56,7 +56,7 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
     private static final String LIST_FRAGMENT_TAG = "list";
 
     private static final String ARG_PARAM2 = "param2";
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 12f;
 
 
     private GoogleMap mMap;
