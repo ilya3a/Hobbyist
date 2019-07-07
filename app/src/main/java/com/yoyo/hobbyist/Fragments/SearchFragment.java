@@ -113,8 +113,8 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
     @Override
     public void onResume() {
         super.onResume();
-
-//        getChildFragmentManager().beginTransaction().add( R.id.search_fragment_child_container, mDashboardFragment, LIST_FRAGMENT_TAG ).commit();
+        mSearchListFragment = new SearchListFragment();
+        getChildFragmentManager().beginTransaction().add( R.id.search_fragment_child_container, mSearchListFragment, LIST_FRAGMENT_TAG ).commit();
     }
 
     @Override
@@ -135,8 +135,8 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
         View rootView = inflater.inflate( R.layout.search_fragment, container, false );
         mFragmentManager = getChildFragmentManager();
         mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById( R.id.map );
-        mSearchListFragment = new SearchListFragment();
-        mFragmentManager.beginTransaction().hide( mMapFragment ).add( R.id.search_fragment_child_container, mSearchListFragment, LIST_FRAGMENT_TAG ).commit();
+
+        mFragmentManager.beginTransaction().hide( mMapFragment ).commit();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
