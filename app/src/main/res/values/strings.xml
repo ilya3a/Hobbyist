@@ -84,7 +84,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="we_miss_you">We miss you!</string>
-    <string name="checkout">To catch up with all your friend and hobbys</string>
-    <string name="click_here"> Click here!</string>
+    <string name="checkout">To catch up with all your friend and hobbys Click here!</string>
+    <string name="click_here"></string>
 
 </resources>

@@ -204,6 +204,7 @@ public class ProfilePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
+
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto = rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
@@ -241,6 +242,8 @@ public class ProfilePageFragment extends Fragment {
                 profileFragmentListener.notifCheckChange(isChecked);
             }
         });
+
+        mNotificationSw.setChecked(DataStore.getInstance(getContext()).isNotifOk());
         mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getmUserPostList().size() + "");
 
         mHobbysList = mUserProfile.getmHobbylist();
@@ -393,12 +396,12 @@ public class ProfilePageFragment extends Fragment {
                             if (mHobbysList.isEmpty()) {
                                 mHobbysList = mUserProfile.getmHobbylist();
                             }
-                            profileFragmentListener.notifCheckChange(false);
+                            //profileFragmentListener.notifCheckChange(false);
                             mUserProfile.setmHobbylist(mHobbysList);
                             Integer temp = mHobbysList.size();
                             mHobbysCount.setText(temp.toString());
                             mProfilePhoto.setEnabled(false);
-                            profileFragmentListener.notifCheckChange(true);
+                            //profileFragmentListener.notifCheckChange(true);
 
                             if (mName.getText().toString().equals("") || mLastName.getText().toString().equals("")) {
 

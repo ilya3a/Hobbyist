@@ -74,8 +74,8 @@
     <string name="yes">כן</string>
     <string name="no">לא</string>
     <string name="we_miss_you">אנחנו מתגעגעים אליך!</string>
-    <string name="checkout">כדי להתעדכן עם החברים והתחביבים </string>
-    <string name="click_here"> לחץ כאן!</string>
+    <string name="checkout">כדי להתעדכן עם החברים והתחביבים לחץ כאן! </string>
+    <string name="click_here"></string>
     <string-array name="gender_array">
         <item>זכר</item>
         <item>נקבה</item>
