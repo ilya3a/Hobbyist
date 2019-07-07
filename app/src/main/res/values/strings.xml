@@ -83,5 +83,8 @@
     <string name="are_you_sure">Are you sure you want do delete the post?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="we_miss_you">We miss you!</string>
+    <string name="checkout">To catch up with all your friend and hobbys</string>
+    <string name="click_here"> Click here!</string>
 
 </resources>

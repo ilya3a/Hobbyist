@@ -73,6 +73,9 @@
     <string name="are_you_sure">אתה בטוח שברצונך למחוק את הפוסט?</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
+    <string name="we_miss_you">אנחנו מתגעגעים אליך!</string>
+    <string name="checkout">כדי להתעדכן עם החברים והתחביבים </string>
+    <string name="click_here"> לחץ כאן!</string>
     <string-array name="gender_array">
         <item>זכר</item>
         <item>נקבה</item>

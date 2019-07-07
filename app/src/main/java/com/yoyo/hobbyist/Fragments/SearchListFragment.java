@@ -90,8 +90,8 @@ public class SearchListFragment extends Fragment {
         } );
 
         getPostsFromUsers();
-        mPostsList = DataStore.getInstance(getContext()).getPostList();
-        recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+        //mPostsList = DataStore.getInstance(getContext()).getPostList();
+        //recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
 
         return rootView;
     }
@@ -213,13 +213,13 @@ public class SearchListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.setUserPosts(DataStore.getInstance(getContext()).getPostList());
-                recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
-            }
-        },300);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mAdapter.setUserPosts(DataStore.getInstance(getContext()).getPostList());
+//                recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+//            }
+//        },300);
 
     }
 

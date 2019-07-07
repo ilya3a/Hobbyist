@@ -225,12 +225,6 @@ public class ProfilePageFragment extends Fragment {
         mHobbysTv = new ArrayList<>();
         mEditHobbysLayot = rootView.findViewById(R.id.add_hobbys_layout);
         mNotificationSw = rootView.findViewById(R.id.notif_sw);
-        mNotificationSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                profileFragmentListener.notifCheckChange(isChecked);
-            }
-        });
         mExitFab = rootView.findViewById(R.id.fab_logout);
         mGenderEt = rootView.findViewById(R.id.gender_et);
         mFireBaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -241,7 +235,12 @@ public class ProfilePageFragment extends Fragment {
         mBlurryImageView = rootView.findViewById(R.id.blur_test);
         mName = rootView.findViewById(R.id.name_change_edittext);
         mLastName = rootView.findViewById(R.id.last_name_change_edittext);
-
+        mNotificationSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                profileFragmentListener.notifCheckChange(isChecked);
+            }
+        });
         mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getmUserPostList().size() + "");
 
         mHobbysList = mUserProfile.getmHobbylist();
@@ -373,6 +372,7 @@ public class ProfilePageFragment extends Fragment {
                             mEditCity.setVisibility(View.VISIBLE);
                             mExitFab.setVisibility(View.GONE);
                         } else {
+                            mUserProfile = DataStore.getInstance(getContext()).getUser();
                             editMode = false;
                             mFab.setImageResource(R.drawable.ic_edit_black_24dp);
                             mCity.setBackgroundColor(Color.TRANSPARENT);
@@ -419,6 +419,8 @@ public class ProfilePageFragment extends Fragment {
                             } else {
                                 mPostsCount.setText("0");
                             }
+                            ArrayList<UserPost> test = new ArrayList<>();
+                            test=mUserProfile.getmUserPostList();
                             mExitFab.setVisibility(View.VISIBLE);
                             updateflow();
                             updateProfileOnfireBase();
@@ -582,7 +584,8 @@ public class ProfilePageFragment extends Fragment {
     }
 
     public void UpdateUser() {
-        mUserProfile = DataStore.getInstance(getContext()).getUser();
+        //did not work properly
+        //mUserProfile = DataStore.getInstance(getContext()).getUser();
     }
 }
 
