@@ -195,7 +195,6 @@ public class ProfilePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
-
         final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
         mProfilePhoto = rootView.findViewById(R.id.profilePhoto_iv);
         mProfilePhoto.setEnabled(false);
@@ -235,7 +234,11 @@ public class ProfilePageFragment extends Fragment {
         });
 
         mNotificationSw.setChecked(DataStore.getInstance(getContext()).isNotifOk());
-        mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getUserPostList().size() + "");
+        if (DataStore.getInstance(getContext()).getUser().getUserPostList() == null) {
+            mPostsCount.setText("0");
+        } else {
+            mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getUserPostList().size() + "");
+        }
 
         mHobbysList = mUserProfile.getHobbyList();
         mGenderEt.setText(mUserProfile.getGender());
@@ -415,14 +418,14 @@ public class ProfilePageFragment extends Fragment {
                                 mPostsCount.setText("0");
                             }
                             ArrayList<UserPost> test = new ArrayList<>();
-                            test=mUserProfile.getUserPostList();
+                            test = mUserProfile.getUserPostList();
                             mExitFab.setVisibility(View.VISIBLE);
                             updateflow();
                             updateProfileOnfireBase();
                         }
                     }
-                }else {
-                    Snackbar.make(rootView.findViewById(R.id.profile_cooardinator),R.string.no_internet_connection,Snackbar.LENGTH_SHORT).setAction(R.string.retry, new View.OnClickListener() {
+                } else {
+                    Snackbar.make(rootView.findViewById(R.id.profile_cooardinator), R.string.no_internet_connection, Snackbar.LENGTH_SHORT).setAction(R.string.retry, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mFab.callOnClick();
