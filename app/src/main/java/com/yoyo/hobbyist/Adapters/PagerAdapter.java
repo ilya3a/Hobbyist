@@ -5,18 +5,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.yoyo.hobbyist.Fragments.ChatsFragment;
-import com.yoyo.hobbyist.Fragments.DashboardFragment;
 import com.yoyo.hobbyist.Fragments.SearchFragment;
 import com.yoyo.hobbyist.Fragments.ProfilePageFragment;
+
+import java.util.ArrayList;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private int mNumOfTabs;
-Fragment[] fragments = {new DashboardFragment(),new SearchFragment(),new ChatsFragment(),new ProfilePageFragment()};
+    ArrayList<String> subscriptions;
 
-    public PagerAdapter(FragmentManager fm, int numOfTabs) {
+
+    public PagerAdapter(FragmentManager fm, int numOfTabs, ArrayList<String> subscriptions) {
         super( fm );
         this.mNumOfTabs = numOfTabs;
+        this.subscriptions = subscriptions;
+
 
     }
 
@@ -24,12 +28,10 @@ Fragment[] fragments = {new DashboardFragment(),new SearchFragment(),new ChatsFr
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                return fragments[0];
-            case 1:
                 return new SearchFragment();
+            case 1:
+                return new ChatsFragment();
             case 2:
-                return fragments[2];
-            case 3:
                 return new ProfilePageFragment();
             default:
                 return null;

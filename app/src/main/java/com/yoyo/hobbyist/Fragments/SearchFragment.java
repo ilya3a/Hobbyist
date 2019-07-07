@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -70,6 +71,7 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
     FragmentManager mFragmentManager;
     SupportMapFragment mMapFragment;
     SearchListFragment mSearchListFragment;
+    RelativeLayout mapHolderLayout;
 
 
     FirebaseDatabase mFirebaseDatabase;
@@ -135,9 +137,11 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
         View rootView = inflater.inflate( R.layout.search_fragment, container, false );
         mFragmentManager = getChildFragmentManager();
         mMapFragment = (SupportMapFragment) mFragmentManager.findFragmentById( R.id.map );
+        mapHolderLayout = rootView.findViewById(R.id.map_fragment_holder);
+        mapHolderLayout.setVisibility(View.GONE);
 
-        mFragmentManager.beginTransaction().hide( mMapFragment ).commit();
-
+//        mFragmentManager.beginTransaction().hide( mMapFragment ).commit();
+mapHolderLayout.setFocusable(false);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
@@ -151,12 +155,16 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
                     case 0:
                         mTabLayout.getTabAt(0).setIcon(R.drawable.ic_list_posts_selected);
                         mTabLayout.getTabAt(1).setIcon(R.drawable.ic_map_not_selected);
-                        mFragmentManager.beginTransaction().hide( mMapFragment ).show( mSearchListFragment ).commit();
+//                        mFragmentManager.beginTransaction().hide( mMapFragment ).show( mSearchListFragment ).commit();
+                        getChildFragmentManager().beginTransaction().add( R.id.search_fragment_child_container, mSearchListFragment, LIST_FRAGMENT_TAG ).commit();
+                        mapHolderLayout.setVisibility(View.GONE);
                         break;
                     case 1:
                         mTabLayout.getTabAt(0).setIcon(R.drawable.ic_list_posts_not_selected);
                         mTabLayout.getTabAt(1).setIcon(R.drawable.ic_map_selected);
-                        mFragmentManager.beginTransaction().hide( mSearchListFragment ).show( mMapFragment ).commit();
+//                        mFragmentManager.beginTransaction().hide( mSearchListFragment ).show( mMapFragment ).commit();
+                        mFragmentManager.beginTransaction().remove( mSearchListFragment ).commit();
+                        mapHolderLayout.setVisibility(View.VISIBLE);
                         break;
                 }
 

@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     @Override
     public void postOnEraseItemClicked() {
-        Fragment fragment = mAdapter.getItem( 3 );
+        Fragment fragment = mAdapter.getItem( 2 );
         ((ProfilePageFragment) fragment).UpdateUser();
     }
 
@@ -186,15 +185,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
         mTabLayout = findViewById( R.id.tab_layout );
 
-        tabItem1 = findViewById( R.id.dashboard );
+//        tabItem1 = findViewById( R.id.dashboard );
         tabItem2 = findViewById( R.id.search );
         tabItem3 = findViewById( R.id.chat );
         tabItem4 = findViewById( R.id.menu );
         mPager = findViewById( R.id.pager );
 
-        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.
-
-                getTabCount() );
+        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.getTabCount(),DataStore.getInstance(this).getUser().getmHobbylist() );
         mPager.setAdapter( mAdapter );
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -216,9 +213,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //                    mSwipeLeftLottie.setVisibility( View.GONE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon_selected );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+//                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_chat_icon );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_menu_icon );
                     mFab.setVisibility( View.VISIBLE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         mFab.setNestedScrollingEnabled( false );
@@ -226,25 +223,25 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
                 } else if (itemPos == 1) {
+////                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
+////                    mSwipeRightLottie.setVisibility( View.VISIBLE );
+//                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
+//                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon_selected );
+//                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
+//                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+//                    mFab.setVisibility( View.VISIBLE );
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        mFab.setNestedScrollingEnabled( true );
+//                    }
+//
+//
+//                } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon_selected );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
-                    mFab.setVisibility( View.VISIBLE );
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mFab.setNestedScrollingEnabled( true );
-                    }
-
-
-                } else if (itemPos == 2) {
-//                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
-//                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+//                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_chat_icon_selected );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_menu_icon );
                     mFab.setVisibility( View.VISIBLE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         mFab.setNestedScrollingEnabled( false );
@@ -253,9 +250,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.GONE );
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
-                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon_selected );
+//                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_chat_icon );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_menu_icon_selected );
                     mFab.setVisibility( View.GONE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         mFab.setNestedScrollingEnabled( false );
@@ -365,10 +362,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         getAndOpenUserProfile( userId );
     }
 
-    interface MainActivityDashboardFragmentDataPass {
-        void setData(String data);
 
-    }
 
     @Override
     protected void onStart() {
@@ -387,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (resultCode != RESULT_CANCELED) {
             if (requestCode == CAMERA_REQUEST) {
                 String filePath = data.getStringExtra( ImageSelectActivity.RESULT_FILE_PATH );
-                Fragment fragment = mAdapter.getItem( 3 );
+                Fragment fragment = mAdapter.getItem( 2 );
                 ((ProfilePageFragment) fragment).updateUserImage( filePath );
             }
         }

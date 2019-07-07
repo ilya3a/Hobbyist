@@ -280,6 +280,7 @@ public class ProfilePageFragment extends Fragment {
         mFireBaseDatabaseReference.child("appHobbys").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> hobbysFromServer = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     int i = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -373,6 +374,7 @@ public class ProfilePageFragment extends Fragment {
                             mEditCity.setVisibility(View.VISIBLE);
                             mExitFab.setVisibility(View.GONE);
                         } else {
+                            mUserProfile = DataStore.getInstance(getContext()).getUser();
                             editMode = false;
                             mFab.setImageResource(R.drawable.ic_edit_black_24dp);
                             mCity.setBackgroundColor(Color.TRANSPARENT);
@@ -582,7 +584,7 @@ public class ProfilePageFragment extends Fragment {
     }
 
     public void UpdateUser() {
-        mUserProfile = DataStore.getInstance(getContext()).getUser();
+//        mUserProfile = DataStore.getInstance(getContext()).getUser();
     }
 }
 

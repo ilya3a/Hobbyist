@@ -179,6 +179,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
         mDatabaseReference.child("appHobbys").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> temp = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     int i = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -186,6 +187,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                             String hobby = (String) snapshot.getValue();
                             if (hobby.replace(" ", "").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
                                 hobbys.add(hobby);
+                                temp.add(hobby);
                             }
                             i++;
                         } catch (ClassCastException ex) {
@@ -193,7 +195,7 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         }
                     }
 //                    mDatabaseReference.child("appHobbys").setValue(hobbys);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, hobbys);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, temp);
                     mAutoCompleteTextView.setAdapter(adapter);
                 }
             }

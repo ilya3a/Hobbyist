@@ -27,7 +27,7 @@ import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
-import com.yoyo.hobbyist.ViewModel.DataViewModel;
+//import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,14 +63,14 @@ public class SearchListFragment extends Fragment {
         super.onCreate( savedInstanceState );
         if (getArguments() != null) {
             editMode = getArguments().getBoolean( EDIT_MODE );
-            DataViewModel postViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
-            postViewModel.getPostsList().observe( this, new Observer<List<UserPost>>() {
-                @Override
-                public void onChanged(@Nullable List<UserPost> postsList) {
-                    mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, getContext(),editMode );
-                    recyclerView.setAdapter( mAdapter );
-                }
-            } );
+//            DataViewModel postViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
+//            postViewModel.getPostsList().observe( this, new Observer<List<UserPost>>() {
+//                @Override
+//                public void onChanged(@Nullable List<UserPost> postsList) {
+//                    mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, getContext(),editMode );
+//                    recyclerView.setAdapter( mAdapter );
+//                }
+//            } );
         }
     }
 
@@ -90,8 +90,8 @@ public class SearchListFragment extends Fragment {
 
 
         getPostsFromUsers();
-        mPostsList = DataStore.getInstance(getContext()).getPostList();
-        recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+//        mPostsList = DataStore.getInstance(getContext()).getPostList();
+//        recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
 
         return rootView;
     }
@@ -213,13 +213,13 @@ public class SearchListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.setUserPosts(DataStore.getInstance(getContext()).getPostList());
-                recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
-            }
-        },300);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mAdapter.setUserPosts(DataStore.getInstance(getContext()).getPostList());
+//                recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+//            }
+//        },300);
 
     }
 

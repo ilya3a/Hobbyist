@@ -62,7 +62,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
 
         final UserPost post = userPosts.get(i);
 
@@ -101,7 +101,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                userPosts.remove(i);
+                                userPosts.remove(viewHolder.getAdapterPosition());
                                 setUserPosts(userPosts);
                                 UserProfile userProfile = DataStore.getInstance(mContext).getUser().setmUserPostList(userPosts);
                                 DataStore.getInstance(mContext).saveUser(userProfile);

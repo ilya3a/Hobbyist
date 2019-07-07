@@ -24,7 +24,7 @@ import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
-import com.yoyo.hobbyist.ViewModel.DataViewModel;
+//import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
