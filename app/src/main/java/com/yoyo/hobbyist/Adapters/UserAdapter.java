@@ -76,22 +76,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
 
-        viewHolder.userName.setText(userProfile.getmName());
-        if (!userProfile.getmPictureUrl().equals("")) {
-            Glide.with(mContext).load(userProfile.getmPictureUrl()).thumbnail(0.4f).into(viewHolder.profileImage);
+        viewHolder.userName.setText(userProfile.getName());
+        if (!userProfile.getPictureUrl().equals("")) {
+            Glide.with(mContext).load(userProfile.getPictureUrl()).thumbnail(0.4f).into(viewHolder.profileImage);
         }
-        if (!userProfile.getmGender().equals("Male") && userProfile.getmPictureUrl().equals("")) {
+        if (!userProfile.getGender().equals("Male") && userProfile.getPictureUrl().equals("")) {
             Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.profileImage);
         }
         if (isChat){
-            lastMsg(userProfile.getmUserToken(),viewHolder.lastMsg,viewHolder.timeOfLastMsg,viewHolder.numOfUnread,viewHolder.unreadHolder);
+            lastMsg(userProfile.getUserToken(),viewHolder.lastMsg,viewHolder.timeOfLastMsg,viewHolder.numOfUnread,viewHolder.unreadHolder);
         }
         else {
             viewHolder.lastMsg.setVisibility(View.GONE);
         }
 
         if (isChat) {
-            if (userProfile.getmStatus().equals(mContext.getString(R.string.online))) {
+            if (userProfile.getStatus().equals(mContext.getString(R.string.online))) {
                 viewHolder.imgOn.setVisibility(View.VISIBLE);
                 viewHolder.imgOff.setVisibility(View.GONE);
             } else {
@@ -105,7 +105,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         viewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerCallBack.ChatFragmentOnItemClicked(userProfile.getmUserToken());
+                recyclerCallBack.ChatFragmentOnItemClicked(userProfile.getUserToken());
             }
         });
 

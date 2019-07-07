@@ -253,13 +253,13 @@ public class SearchFragment extends Fragment implements GoogleMap.OnInfoWindowCl
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     UserProfile userProfile = snapshot.getValue( UserProfile.class );
-                    if ((!userProfile.getmUserToken().equals( currentUser.getmUserToken() ) && userProfile.getmUserPostList() != null)) {
-                        tempPosts.addAll( userProfile.getmUserPostList() );
+                    if ((!userProfile.getUserToken().equals( currentUser.getUserToken() ) && userProfile.getUserPostList() != null)) {
+                        tempPosts.addAll( userProfile.getUserPostList() );
                     }
                 }
 
                 for (UserPost post : tempPosts) {
-                    if (currentUser.getmHobbylist().contains( post.getHobby() )) {
+                    if (currentUser.getHobbyList().contains( post.getHobby() )) {
                         postsToShowForUser.add( post );
                         LatLng location = new LatLng( post.getLatitude(), post.getLongitude() );
                         mMap.addMarker( new MarkerOptions().position( location ).title( post.getHobby() ) );

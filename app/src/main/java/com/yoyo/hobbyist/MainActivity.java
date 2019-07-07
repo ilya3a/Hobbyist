@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (isChecked) {
             mUserProfile = DataStore.getInstance(this).getUser();
             if (mUserProfile != null) {
-                for (String sub : mUserProfile.getmHobbylist()) {
+                for (String sub : mUserProfile.getHobbyList()) {
                     topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
 
                 }
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         } else {
             mUserProfile = DataStore.getInstance(this).getUser();
             if (mUserProfile != null) {
-                for (String sub : mUserProfile.getmHobbylist()) {
+                for (String sub : mUserProfile.getHobbyList()) {
                     topicMessegingAlert.unsubscribeFromTopic(sub.replace(" ", ""));
 
                 }
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (DataStore.getInstance(this).isNotifOk()) {
             mUserProfile = DataStore.getInstance(this).getUser();
             if (mUserProfile != null) {
-                for (String sub : mUserProfile.getmHobbylist()) {
+                for (String sub : mUserProfile.getHobbyList()) {
                     topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
 
                 }
@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     private void status(String status) {
         mUserProfile = DataStore.getInstance(this).getUser();
         if (mUserProfile != null) {
-            mUserProfile.setmStatus(status);
+            mUserProfile.setStatus(status);
             DataStore.getInstance(this).saveUser(mUserProfile);
             UtilFuncs.saveUserToFireBase(mUserProfile);
         }

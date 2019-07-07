@@ -27,7 +27,7 @@ import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
-import com.yoyo.hobbyist.ViewModel.PostViewModel;
+import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,25 +73,16 @@ public class SearchListFragment extends Fragment {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-        relativeLayout = rootView.findViewById(R.id.first);
+        relativeLayout = rootView.findViewById( R.id.first );
         recyclerView = rootView.findViewById( R.id.dash_recycler );
         recyclerView.setHasFixedSize( true );
 
 
-        mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext(),editMode );
-
-        PostViewModel postViewModel = ViewModelProviders.of( this ).get( PostViewModel.class );
-        postViewModel.getPosts().observe( this, new Observer<List<UserPost>>() {
-            @Override
-            public void onChanged(@Nullable List<UserPost> postsList) {
-                mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, getContext(),editMode );
-                recyclerView.setAdapter( mAdapter );
-            }
-        } );
+        mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext(), editMode );
 
         getPostsFromUsers();
-        mPostsList = DataStore.getInstance(getContext()).getPostList();
-        recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+        mPostsList = DataStore.getInstance( getContext() ).getPostList();
+        recyclerView.setAdapter( new PostsRecyclerViewAdapter( DataStore.getInstance( getContext() ).getPostList(), getContext(), false ) );
 
         return rootView;
     }
@@ -99,13 +90,13 @@ public class SearchListFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction( uri );
         }
     }
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+        super.onAttach( context );
     }
 
     @Override
@@ -122,11 +113,11 @@ public class SearchListFragment extends Fragment {
     public void getUserProfilesByHobbies(final String[] hobbies) {
 
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers");
+        DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
         Query usersQuery = mDatabaseReference.orderByKey();
 
 
-        usersQuery.addValueEventListener(new ValueEventListener() {
+        usersQuery.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -134,12 +125,12 @@ public class SearchListFragment extends Fragment {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    UserProfile profile = snapshot.getValue(UserProfile.class);
+                    UserProfile profile = snapshot.getValue( UserProfile.class );
 
-                    if (profile.getmHobbylist() != null) {
+                    if (profile.getHobbyList() != null) {
                         for (String hobby : hobbies) {
-                            if (profile.getmHobbylist().contains(hobby)) {
-                                userProfiles.add(profile);
+                            if (profile.getHobbyList().contains( hobby )) {
+                                userProfiles.add( profile );
                                 break;
                             }
                         }
@@ -153,51 +144,51 @@ public class SearchListFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        } );
 
 
     }
 
     public void getPostsFromUsers() {
-        final UserProfile currentUser = DataStore.getInstance(getContext()).getUser();
+        final UserProfile currentUser = DataStore.getInstance( getContext() ).getUser();
         if (editMode) {
             ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
-            postsToShowForUser=currentUser.getmUserPostList();
-            mAdapter.setUserPosts(postsToShowForUser);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(mAdapter);
+            postsToShowForUser = currentUser.getUserPostList();
+            mAdapter.setUserPosts( postsToShowForUser );
+            recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
+            recyclerView.setAdapter( mAdapter );
         } else {
             final ArrayList<UserPost> tempPosts = new ArrayList<>();
             final ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mDatabaseReference = mFirebaseDatabase.getReference().child("appUsers");
-            mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
+            mDatabaseReference.addListenerForSingleValueEvent( new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        UserProfile userProfile = snapshot.getValue(UserProfile.class);
-                        if ((!userProfile.getmUserToken().equals(currentUser.getmUserToken()) && userProfile.getmUserPostList() != null)) {
-                            tempPosts.addAll(userProfile.getmUserPostList());
+                        UserProfile userProfile = snapshot.getValue( UserProfile.class );
+                        if ((!userProfile.getUserToken().equals( currentUser.getUserToken() ) && userProfile.getUserPostList() != null)) {
+                            tempPosts.addAll( userProfile.getUserPostList() );
                         }
                     }
 
                     for (UserPost post : tempPosts) {
-                        if (currentUser.getmHobbylist().contains(post.getHobby())) {
-                            postsToShowForUser.add(post);
+                        if (currentUser.getHobbyList().contains( post.getHobby() )) {
+                            postsToShowForUser.add( post );
 
                         }
                     }
 
                     // todo: set adapter
 
-                    DataStore.getInstance(getContext()).saveUserPostList(postsToShowForUser);
+                    DataStore.getInstance( getContext() ).saveUserPostList( postsToShowForUser );
                     mPostsList = postsToShowForUser;
-                    mAdapter.setUserPosts(postsToShowForUser);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    recyclerView.setAdapter(mAdapter);
-                    if (postsToShowForUser.size()==0){
+                    mAdapter.setUserPosts( postsToShowForUser );
+                    recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
+                    recyclerView.setAdapter( mAdapter );
+                    if (postsToShowForUser.size() == 0) {
 
-                        relativeLayout.setVisibility(View.VISIBLE);
+                        relativeLayout.setVisibility( View.VISIBLE );
 
                     }
                 }
@@ -206,20 +197,20 @@ public class SearchListFragment extends Fragment {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
+            } );
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed( new Runnable() {
             @Override
             public void run() {
-                mAdapter.setUserPosts(DataStore.getInstance(getContext()).getPostList());
-                recyclerView.setAdapter(new PostsRecyclerViewAdapter(DataStore.getInstance(getContext()).getPostList(),getContext(),false));
+                mAdapter.setUserPosts( DataStore.getInstance( getContext() ).getPostList() );
+                recyclerView.setAdapter( new PostsRecyclerViewAdapter( DataStore.getInstance( getContext() ).getPostList(), getContext(), false ) );
             }
-        },300);
+        }, 300 );
 
     }
 

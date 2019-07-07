@@ -100,7 +100,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
         if (mFireBaseUser != null && !mFireBaseUser.getDisplayName().equals("null") && mExistingUser != null) {
 
-            goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
+            goToMainActivity(mExistingUser.getHobbyList().toArray(new String[mExistingUser.getHobbyList().size()]));
         } else {
             mFireBaseAuth.signOut();
             mFireBaseUser = mFireBaseAuth.getCurrentUser();
@@ -253,7 +253,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 mExistingUser = dataSnapshot.getValue(UserProfile.class);
                 mDataStore = DataStore.getInstance(getApplicationContext());
                 mDataStore.saveUser(mExistingUser);
-                goToMainActivity(mExistingUser.getmHobbylist().toArray(new String[mExistingUser.getmHobbylist().size()]));
+                goToMainActivity(mExistingUser.getHobbyList().toArray(new String[mExistingUser.getHobbyList().size()]));
 
             }
 

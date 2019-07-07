@@ -122,7 +122,7 @@ public class MessageFragment extends Fragment {
 
         UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
         if(notify){
-            sendNotification(reciver,userProfile.getmName()+" "+userProfile.getmLastName(), message);
+            sendNotification(reciver,userProfile.getName()+" "+userProfile.getLastName(), message);
         }
         notify=false;
 
@@ -181,7 +181,7 @@ public class MessageFragment extends Fragment {
                             chat.getReciver().equals(userId) && chat.getSender().equals(myId)) {
                         mChats.add(chat);
                     }
-                    messageAdapter = new MessageAdapter(mChats, getContext(), imageUrl , mBuddyUserProfile.getmGender());
+                    messageAdapter = new MessageAdapter(mChats, getContext(), imageUrl , mBuddyUserProfile.getGender());
                     recyclerView.setAdapter(messageAdapter);
                 }
             }
@@ -243,16 +243,16 @@ public class MessageFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mBuddyUserProfile = dataSnapshot.getValue(UserProfile.class);
-                mUserNameTV.setText(mBuddyUserProfile.getmName() + " " + mBuddyUserProfile.getmLastName());
-                mLastseenTV.setText(mBuddyUserProfile.getmStatus());
-                if (!mBuddyUserProfile.getmPictureUrl().equals("")) {
-                    Glide.with(getContext()).load(mBuddyUserProfile.getmPictureUrl()).into(mUserPicIV);
+                mUserNameTV.setText(mBuddyUserProfile.getName() + " " + mBuddyUserProfile.getLastName());
+                mLastseenTV.setText(mBuddyUserProfile.getStatus());
+                if (!mBuddyUserProfile.getPictureUrl().equals("")) {
+                    Glide.with(getContext()).load(mBuddyUserProfile.getPictureUrl()).into(mUserPicIV);
                 }
-                if (!mBuddyUserProfile.getmGender().equalsIgnoreCase("male") && mBuddyUserProfile.getmPictureUrl().equals("")){
+                if (!mBuddyUserProfile.getGender().equalsIgnoreCase("male") && mBuddyUserProfile.getPictureUrl().equals("")){
                     Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(mUserPicIV);
 
                 }
-                readMessages(firebaseUser.getUid(), mUserId, mBuddyUserProfile.getmPictureUrl());
+                readMessages(firebaseUser.getUid(), mUserId, mBuddyUserProfile.getPictureUrl());
             }
 
             @Override

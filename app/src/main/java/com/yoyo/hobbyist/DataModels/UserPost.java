@@ -1,19 +1,46 @@
 package com.yoyo.hobbyist.DataModels;
 
-import java.io.Serializable;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
+@Entity(tableName = "posts_table")
 public class UserPost {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private long Id;
+
+    @ColumnInfo(name = "user_profile_pic_url")
     String userProfilePicUrl;
+
+    @ColumnInfo(name = "user_name")
     String userName;
+    @ColumnInfo(name = "city_name")
     String cityName;
+
+    @ColumnInfo(name = "is_online")
     boolean isOnline;
+
+    @ColumnInfo(name = "date")
     String date;
+
+    @ColumnInfo(name = "hobby")
     String hobby;
+
+    @ColumnInfo(name = "user_token")
     String userToken;
+
+    @ColumnInfo(name = "gender")
     String gender;
+
+    @ColumnInfo(name = "posr_description")
     String postDescription;
+
+    @ColumnInfo(name = "latitude")
     double latitude;
+
+    @ColumnInfo(name = "longitude")
     double longitude;
 
     public UserPost(String userProfilePicUrl, String userName, String cityName, boolean isOnline, String date, String hobby, String userToken, String postDescription, double latitude, double longitude, String gender) {
@@ -28,6 +55,15 @@ public class UserPost {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gender = gender;
+    }
+
+
+    public long getId() {
+        return Id;
+    }
+
+    public void setId(long Id) {
+        this.Id = Id;
     }
 
     public String getGender() {

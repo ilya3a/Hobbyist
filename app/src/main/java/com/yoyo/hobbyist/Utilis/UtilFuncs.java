@@ -32,7 +32,7 @@ public class UtilFuncs {
         }
     }
     public static void saveUserToFireBase(UserProfile userProfile){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("appUsers").child(userProfile.getmUserToken());
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("appUsers").child(userProfile.getUserToken());
         reference.setValue(userProfile);
     }
     public static String getCurrentDate(){
