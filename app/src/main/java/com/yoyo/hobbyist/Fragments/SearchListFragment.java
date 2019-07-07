@@ -27,7 +27,7 @@ import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
-import com.yoyo.hobbyist.ViewModel.PostViewModel;
+import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +63,14 @@ public class SearchListFragment extends Fragment {
         super.onCreate( savedInstanceState );
         if (getArguments() != null) {
             editMode = getArguments().getBoolean( EDIT_MODE );
+            DataViewModel postViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
+            postViewModel.getPostsList().observe( this, new Observer<List<UserPost>>() {
+                @Override
+                public void onChanged(@Nullable List<UserPost> postsList) {
+                    mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, getContext(),editMode );
+                    recyclerView.setAdapter( mAdapter );
+                }
+            } );
         }
     }
 
@@ -77,17 +85,9 @@ public class SearchListFragment extends Fragment {
         recyclerView = rootView.findViewById( R.id.dash_recycler );
         recyclerView.setHasFixedSize( true );
 
-
         mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext(),editMode );
 
-        PostViewModel postViewModel = ViewModelProviders.of( this ).get( PostViewModel.class );
-        postViewModel.getPosts().observe( this, new Observer<List<UserPost>>() {
-            @Override
-            public void onChanged(@Nullable List<UserPost> postsList) {
-                mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) postsList, getContext(),editMode );
-                recyclerView.setAdapter( mAdapter );
-            }
-        } );
+
 
         getPostsFromUsers();
         mPostsList = DataStore.getInstance(getContext()).getPostList();

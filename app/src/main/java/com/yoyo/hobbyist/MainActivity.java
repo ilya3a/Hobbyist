@@ -89,21 +89,21 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     public void logOut() {
         mFireBaseAuth.signOut();
-        Intent intent = new Intent(this, LoginSignUpActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent( this, LoginSignUpActivity.class );
+        startActivity( intent );
         finish();
     }
 
     @Override
     public void postOnEraseItemClicked() {
-        Fragment fragment = mAdapter.getItem(3);
+        Fragment fragment = mAdapter.getItem( 3 );
         ((ProfilePageFragment) fragment).UpdateUser();
     }
 
     @Override
     public void editPostsClickd() {
-        SearchListFragment searchListFragment = SearchListFragment.newInstance(true);
-        mFragmentManager.beginTransaction().add(R.id.main_layout, searchListFragment, SEARCHLIST_FRAGMENT_TAG).addToBackStack(null).commit();
+        SearchListFragment searchListFragment = SearchListFragment.newInstance( true );
+        mFragmentManager.beginTransaction().add( R.id.main_layout, searchListFragment, SEARCHLIST_FRAGMENT_TAG ).addToBackStack( null ).commit();
         //MessageFragment messageFragment = MessageFragment.newInstance(userId);
         //fragment for chat getting user id
         //mFragmentManager.beginTransaction().add(R.id.main_layout,messageFragment,MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
@@ -113,29 +113,29 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void onBackPressed() {
         super.onBackPressed();
         Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS );
+        window.addFlags( WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS );
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.tab_color));
+            window.setStatusBarColor( ContextCompat.getColor( this, R.color.tab_color ) );
         }
     }
 
     @Override
     public void notifCheckChange(boolean isChecked) {
-        DataStore.getInstance(this).setNotifOk(isChecked);
+        DataStore.getInstance( this ).setNotifOk( isChecked );
         if (isChecked) {
-            mUserProfile = DataStore.getInstance(this).getUser();
+            mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
                 for (String sub : mUserProfile.getmHobbylist()) {
-                    topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
+                    topicMessegingAlert.subscribeToTopic( sub.replace( " ", "" ) );
 
                 }
             }
         } else {
-            mUserProfile = DataStore.getInstance(this).getUser();
+            mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
                 for (String sub : mUserProfile.getmHobbylist()) {
-                    topicMessegingAlert.unsubscribeFromTopic(sub.replace(" ", ""));
+                    topicMessegingAlert.unsubscribeFromTopic( sub.replace( " ", "" ) );
 
                 }
             }
@@ -145,23 +145,23 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     @Override
     public void openChatFromProfile(String userId) {
-        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
-        mFragmentManager.beginTransaction().add(R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+        mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_main );
 
 
-        if (DataStore.getInstance(this).isNotifOk()) {
-            mUserProfile = DataStore.getInstance(this).getUser();
+        if (DataStore.getInstance( this ).isNotifOk()) {
+            mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
                 for (String sub : mUserProfile.getmHobbylist()) {
-                    topicMessegingAlert.subscribeToTopic(sub.replace(" ", ""));
+                    topicMessegingAlert.subscribeToTopic( sub.replace( " ", "" ) );
 
                 }
             }
@@ -171,31 +171,31 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         mFragmentManager = getSupportFragmentManager();
         mFireBaseAuth = FirebaseAuth.getInstance();
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
-        mFab = findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
+        mFab = findViewById( R.id.fab );
+        mFab.setOnClickListener( new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
 
                 mFragmentManager = getSupportFragmentManager();
                 DialogFragment dialogFragment = new CreatePostFragment();
-                dialogFragment.show(mFragmentManager, CREATE_POST_FRAGMENT_TAG);
+                dialogFragment.show( mFragmentManager, CREATE_POST_FRAGMENT_TAG );
             }
-        });
+        } );
 
 
-        mTabLayout = findViewById(R.id.tab_layout);
+        mTabLayout = findViewById( R.id.tab_layout );
 
-        tabItem1 = findViewById(R.id.dashboard);
-        tabItem2 = findViewById(R.id.search);
-        tabItem3 = findViewById(R.id.chat);
-        tabItem4 = findViewById(R.id.menu);
-        mPager = findViewById(R.id.pager);
+        tabItem1 = findViewById( R.id.dashboard );
+        tabItem2 = findViewById( R.id.search );
+        tabItem3 = findViewById( R.id.chat );
+        tabItem4 = findViewById( R.id.menu );
+        mPager = findViewById( R.id.pager );
 
-        mAdapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.
+        mAdapter = new PagerAdapter( getSupportFragmentManager(), mTabLayout.
 
-                getTabCount());
-        mPager.setAdapter(mAdapter);
+                getTabCount() );
+        mPager.setAdapter( mAdapter );
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -204,61 +204,61 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         }
 
         ;
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @SuppressLint("RestrictedApi")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int itemPos = tab.getPosition();
-                mPager.setCurrentItem(itemPos);
+                mPager.setCurrentItem( itemPos );
 
 
                 if (itemPos == 0) {
 //                    mSwipeLeftLottie.setVisibility( View.GONE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon_selected);
-                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
-                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
-                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
-                    mFab.setVisibility(View.VISIBLE);
+                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon_selected );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
+                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mFab.setVisibility( View.VISIBLE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mFab.setNestedScrollingEnabled(false);
+                        mFab.setNestedScrollingEnabled( false );
                     }
 
 
                 } else if (itemPos == 1) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
-                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon_selected);
-                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
-                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
-                    mFab.setVisibility(View.VISIBLE);
+                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon_selected );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
+                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mFab.setVisibility( View.VISIBLE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mFab.setNestedScrollingEnabled(true);
+                        mFab.setNestedScrollingEnabled( true );
                     }
 
 
                 } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
-                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
-                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon_selected);
-                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon);
-                    mFab.setVisibility(View.VISIBLE);
+                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon_selected );
+                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
+                    mFab.setVisibility( View.VISIBLE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mFab.setNestedScrollingEnabled(false);
+                        mFab.setNestedScrollingEnabled( false );
                     }
                 } else {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.GONE );
-                    mTabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard_icon);
-                    mTabLayout.getTabAt(1).setIcon(R.drawable.ic_loupe_icon);
-                    mTabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_icon);
-                    mTabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_icon_selected);
-                    mFab.setVisibility(View.GONE);
+                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
+                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon );
+                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
+                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon_selected );
+                    mFab.setVisibility( View.GONE );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mFab.setNestedScrollingEnabled(false);
+                        mFab.setNestedScrollingEnabled( false );
                     }
 
                 }
@@ -274,13 +274,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        } );
 
-        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        if (!(getIntent().getStringExtra("msg") == null)) {
-            onChatBtnClicked(getIntent().getStringExtra("id"));
+        mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
+        if (!(getIntent().getStringExtra( "msg" ) == null)) {
+            onChatBtnClicked( getIntent().getStringExtra( "id" ) );
         }
-        Toast.makeText(this, getIntent().getStringExtra("id"), Toast.LENGTH_SHORT).show();
+        Toast.makeText( this, getIntent().getStringExtra( "id" ), Toast.LENGTH_SHORT ).show();
     }
 
     @Override
@@ -296,72 +296,73 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     public void updateImage(Intent intent, View view) {
         if (Build.VERSION.SDK_INT >= 23) {
-            callPermissions(intent);
+            callPermissions( intent );
         } else {
-            startActivityForResult(intent, CAMERA_REQUEST);
+            startActivityForResult( intent, CAMERA_REQUEST );
         }
     }
 
 
     @Override
     public void ChatFragmentOnItemClicked(String userId) {
-        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
-        mFragmentManager.beginTransaction().add(R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+        mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
     }
 
     @Override
     public void postOnPhotoItemClicked(String userId) {
-        getAndOpenUserProfile(userId);
+        getAndOpenUserProfile( userId );
     }
 
     @Override
     public void postOnChatItemClicked(String userId) {
-        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
-        mFragmentManager.beginTransaction().add(R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+        mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
     }
 
 
     @Override
     public void onMarkerInfoClicked(UserPost userPost) {
 
-        mPostFragmentForMap = new PostFragmentForMap(userPost.getUserProfilePicUrl(), userPost.getUserName(), userPost.getCityName(),
-                userPost.getPostDescription(), userPost.getHobby(), userPost.getDate(), userPost.getGender());
+        mPostFragmentForMap = new PostFragmentForMap( userPost.getUserProfilePicUrl(), userPost.getUserName(), userPost.getCityName(),
+                userPost.getPostDescription(), userPost.getHobby(), userPost.getDate(), userPost.getGender(), userPost.getUserToken() );
 
-        PostFragmentForMap postFragmentForMap = (PostFragmentForMap) mFragmentManager.findFragmentByTag(POST_FRAGMENT_FOR_MAP);
+        PostFragmentForMap postFragmentForMap = (PostFragmentForMap) mFragmentManager.findFragmentByTag( POST_FRAGMENT_FOR_MAP );
 
         if (postFragmentForMap == null) {
-            mFragmentManager.beginTransaction().add(R.id.post_info_container, mPostFragmentForMap, POST_FRAGMENT_FOR_MAP).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().add( R.id.post_info_container, mPostFragmentForMap, POST_FRAGMENT_FOR_MAP ).addToBackStack( "map" ).commit();
         } else {
 
-            mFragmentManager.beginTransaction().remove(postFragmentForMap).commit();
-            mFragmentManager.beginTransaction().add(R.id.post_info_container, mPostFragmentForMap, POST_FRAGMENT_FOR_MAP).addToBackStack(null).commit();
+            mFragmentManager.beginTransaction().remove( postFragmentForMap ).commit();
+            mFragmentManager.popBackStack( "map", FragmentManager.POP_BACK_STACK_INCLUSIVE );
+            mFragmentManager.beginTransaction().add( R.id.post_info_container, mPostFragmentForMap, POST_FRAGMENT_FOR_MAP ).addToBackStack( "map" ).commit();
         }
 
     }
 
     @Override
     public void onSwishedTab() {
-        if (mFragmentManager.findFragmentByTag(POST_FRAGMENT_FOR_MAP) != null) {
-            mFragmentManager.beginTransaction().remove(mPostFragmentForMap).commit();
+        if (mFragmentManager.findFragmentByTag( POST_FRAGMENT_FOR_MAP ) != null) {
+            mFragmentManager.beginTransaction().remove( mPostFragmentForMap ).commit();
             for (int i = 0; i < mFragmentManager.getBackStackEntryCount(); ++i) {
-                mFragmentManager.popBackStack();
+                mFragmentManager.popBackStack( "map", FragmentManager.POP_BACK_STACK_INCLUSIVE );
             }
         }
     }
 
     @Override
     public void onChatBtnClicked(String userId) {
-        MessageFragment messageFragment = MessageFragment.newInstance(userId);
+        MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
-        mFragmentManager.beginTransaction().add(R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+        mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
 
     }
 
     @Override
     public void onProfileClickd(String userId) {
-        getAndOpenUserProfile(userId);
+        getAndOpenUserProfile( userId );
     }
 
     interface MainActivityDashboardFragmentDataPass {
@@ -372,22 +373,22 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     protected void onStart() {
         super.onStart();
-        mFireBaseAuth.addAuthStateListener(mAuthStateListener);
+        mFireBaseAuth.addAuthStateListener( mAuthStateListener );
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mFireBaseAuth.removeAuthStateListener(mAuthStateListener);
+        mFireBaseAuth.removeAuthStateListener( mAuthStateListener );
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode != RESULT_CANCELED) {
             if (requestCode == CAMERA_REQUEST) {
-                String filePath = data.getStringExtra(ImageSelectActivity.RESULT_FILE_PATH);
-                Fragment fragment = mAdapter.getItem(3);
-                ((ProfilePageFragment) fragment).updateUserImage(filePath);
+                String filePath = data.getStringExtra( ImageSelectActivity.RESULT_FILE_PATH );
+                Fragment fragment = mAdapter.getItem( 3 );
+                ((ProfilePageFragment) fragment).updateUserImage( filePath );
             }
         }
 
@@ -397,21 +398,21 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void callPermissions(final Intent intent) {
         String[] string = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Permissions.Options options = new Permissions.Options()
-                .setRationaleDialogTitle("Info")
-                .setSettingsDialogTitle("Warning");
+                .setRationaleDialogTitle( "Info" )
+                .setSettingsDialogTitle( "Warning" );
         PermissionHandler permissionHandler = new PermissionHandler() {
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
-                callPermissions(intent);
+                super.onDenied( context, deniedPermissions );
+                callPermissions( intent );
             }
 
             @Override
             public void onGranted() {
-                startActivityForResult(intent, 1);
+                startActivityForResult( intent, 1 );
             }
         };
-        Permissions.check(this, string, getString(R.string.must_give_photo_pemission), options, permissionHandler);
+        Permissions.check( this, string, getString( R.string.must_give_photo_pemission ), options, permissionHandler );
 
 
     }
@@ -419,28 +420,28 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void getAndOpenUserProfile(final String mUserId) {
         final Gson mGson = new Gson();
         FirebaseDatabase mFirebaseDatabase2 = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child("appUsers").child(mUserId);
+        DatabaseReference mDatabaseReference2 = mFirebaseDatabase2.getReference().child( "appUsers" ).child( mUserId );
         Query usersQuery = mDatabaseReference2.orderByKey();
 
-        usersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        usersQuery.addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUserProfile = dataSnapshot.getValue(UserProfile.class);
-                String userString = mGson.toJson(mUserProfile);
-                ProfilePageFragment profilePageFragment = ProfilePageFragment.newInstance(userString);
-                mFragmentManager.beginTransaction().add(R.id.main_layout, profilePageFragment, PROFILE_PAGE_FRAGMENT_TAG).addToBackStack(null).commit();
+                mUserProfile = dataSnapshot.getValue( UserProfile.class );
+                String userString = mGson.toJson( mUserProfile );
+                ProfilePageFragment profilePageFragment = ProfilePageFragment.newInstance( userString );
+                mFragmentManager.beginTransaction().add( R.id.main_layout, profilePageFragment, PROFILE_PAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
-        });
+        } );
 
     }
 
     private void callLocationPermissions() {
-        Permissions.check(this, Manifest.permission.ACCESS_FINE_LOCATION, null, new PermissionHandler() {
+        Permissions.check( this, Manifest.permission.ACCESS_FINE_LOCATION, null, new PermissionHandler() {
             @Override
             public void onGranted() {
 
@@ -448,33 +449,33 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
+                super.onDenied( context, deniedPermissions );
                 callLocationPermissions();
             }
 
-        });
+        } );
     }
 
     private void status(String status) {
-        mUserProfile = DataStore.getInstance(this).getUser();
+        mUserProfile = DataStore.getInstance( this ).getUser();
         if (mUserProfile != null) {
-            mUserProfile.setmStatus(status);
-            DataStore.getInstance(this).saveUser(mUserProfile);
-            UtilFuncs.saveUserToFireBase(mUserProfile);
+            mUserProfile.setmStatus( status );
+            DataStore.getInstance( this ).saveUser( mUserProfile );
+            UtilFuncs.saveUserToFireBase( mUserProfile );
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        status(getString(R.string.online));
+        status( getString( R.string.online ) );
         callLocationPermissions();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        status(getString(R.string.last_seet_at) + UtilFuncs.getCurrentDate());
+        status( getString( R.string.last_seet_at ) + UtilFuncs.getCurrentDate() );
     }
 
 }
