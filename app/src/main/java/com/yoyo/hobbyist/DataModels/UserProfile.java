@@ -38,7 +38,7 @@ public class UserProfile implements Serializable {
     private String month;
 
     @ColumnInfo(name = "day")
-    private String mday;
+    private String day;
 
     @ColumnInfo(name = "age")
     private String age;
@@ -56,7 +56,7 @@ public class UserProfile implements Serializable {
     private String gender;
 
     @ColumnInfo(name = "status")
-    private String mStatus;
+    private String status;
 
     @TypeConverters(Converters.class)
     @ColumnInfo(name = "hobby_list")
@@ -64,12 +64,13 @@ public class UserProfile implements Serializable {
 
     @TypeConverters(Converters.class)
     @ColumnInfo(name = "user_post_list")
-    private ArrayList<UserPost> mUserPostList;
+    private ArrayList<UserPost> userPostList;
 
     @ColumnInfo(name = "user_token")
     private String userToken;
 
-    public UserProfile(String name, String lastName, String age, String pictureUrl, String cityName, String gender, ArrayList<String> hobbyList, ArrayList<UserPost> mUserPostList, String userToken) {
+
+    public UserProfile(String name, String lastName, String age, String pictureUrl, String cityName, String gender, ArrayList<String> hobbyList, ArrayList<UserPost> userPostList, String userToken) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -77,7 +78,7 @@ public class UserProfile implements Serializable {
         this.cityName = cityName;
         this.gender = gender;
         this.hobbyList = hobbyList;
-        this.mUserPostList = mUserPostList;
+        this.userPostList = userPostList;
         this.userToken = userToken;
     }
 
@@ -133,11 +134,11 @@ public class UserProfile implements Serializable {
     }
 
     public String getDay() {
-        return mday;
+        return day;
     }
 
-    public void setDay(String mDay) {
-        this.mday = mDay;
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getAge() {
@@ -181,11 +182,11 @@ public class UserProfile implements Serializable {
     }
 
     public String getStatus() {
-        return mStatus;
+        return status;
     }
 
-    public void setStatus(String mStatus) {
-        this.mStatus = mStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ArrayList<String> getHobbyList() {
@@ -197,11 +198,11 @@ public class UserProfile implements Serializable {
     }
 
     public ArrayList<UserPost> getUserPostList() {
-        return mUserPostList;
+        return userPostList;
     }
 
-    public void setmUserPostList(ArrayList<UserPost> mUserPostList) {
-        this.mUserPostList = mUserPostList;
+    public void setUserPostList(ArrayList<UserPost> userPostList) {
+        this.userPostList = userPostList;
     }
 
     public String getUserToken() {

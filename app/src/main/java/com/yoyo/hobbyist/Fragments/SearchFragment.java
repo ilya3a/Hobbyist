@@ -261,6 +261,7 @@ mapHolderLayout.setFocusable(false);
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     UserProfile userProfile = snapshot.getValue( UserProfile.class );
+
                     if ((!userProfile.getUserToken().equals( currentUser.getUserToken() ) && userProfile.getUserPostList() != null)) {
                         tempPosts.addAll( userProfile.getUserPostList() );
                     }

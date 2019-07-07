@@ -85,6 +85,16 @@ public class SearchListFragment extends Fragment {
 //        mPostsList = DataStore.getInstance( getContext() ).getPostList();
 //        recyclerView.setAdapter( new PostsRecyclerViewAdapter( DataStore.getInstance( getContext() ).getPostList(), getContext(), false ) );
 
+        DataViewModel dataViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
+        dataViewModel.getAllPosts().observe( this, new Observer<List<UserPost>>() {
+            @Override
+            public void onChanged(@Nullable List<UserPost> userPosts) {
+                mAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter( mAdapter );
+                mAdapter.setUserPosts( (ArrayList<UserPost>) userPosts );
+            }
+        } );
+
         return rootView;
     }
 
