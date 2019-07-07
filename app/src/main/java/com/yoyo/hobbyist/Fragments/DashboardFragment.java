@@ -24,7 +24,7 @@ import com.yoyo.hobbyist.Adapters.PostsRecyclerViewAdapter;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
-//import com.yoyo.hobbyist.ViewModel.DataViewModel;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +71,7 @@ public class DashboardFragment extends Fragment {
         final RecyclerView recyclerView = rootView.findViewById( R.id.dash_recycler );
         recyclerView.setHasFixedSize( true );
         mAdapter = new PostsRecyclerViewAdapter( userPosts, context,false );
+
 
         PostsRecyclerViewAdapter adapter = new PostsRecyclerViewAdapter(userPosts, getContext(),false);
         recyclerView.setHasFixedSize(true);
@@ -125,9 +126,9 @@ public class DashboardFragment extends Fragment {
 
                     UserProfile profile = snapshot.getValue(UserProfile.class);
 
-                    if (profile.getmHobbylist() != null) {
+                    if (profile.getHobbyList() != null) {
                         for (String hobby : hobbies) {
-                            if (profile.getmHobbylist().contains(hobby)) {
+                            if (profile.getHobbyList().contains(hobby)) {
                                 userProfiles.add(profile);
                                 break;
                             }

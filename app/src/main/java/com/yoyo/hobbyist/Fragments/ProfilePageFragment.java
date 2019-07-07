@@ -1,7 +1,6 @@
 package com.yoyo.hobbyist.Fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +18,6 @@ import android.support.design.button.MaterialButton;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,12 +63,10 @@ import com.himanshurawat.imageworker.ImageWorker;
 
 import com.labo.kaji.fragmentanimations.MoveAnimation;
 import com.nex3z.flowlayout.FlowLayout;
-import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.InternetConnection;
-import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -84,9 +77,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.mayanknagwanshi.imagepicker.ImageSelectActivity;
 import jp.wasabeef.blurry.Blurry;
-
-
-import static android.support.v4.graphics.TypefaceCompatUtil.getTempFile;
 
 
 public class ProfilePageFragment extends Fragment {
@@ -172,7 +162,7 @@ public class ProfilePageFragment extends Fragment {
                         mProfilePhoto.setImageBitmap(BitmapFactory.decodeFile(filePath));
 //                        mProfilePhoto.setRotation(-90);
                         Blurry.with(getContext()).capture(mProfilePhoto).into(mBlurryImageView);
-                        mUserProfile.setmPictureUrl(mPictureUrl);
+                        mUserProfile.setPictureUrl(mPictureUrl);
                         updateProfileOnfireBase();
                     }
                 });
@@ -242,10 +232,10 @@ public class ProfilePageFragment extends Fragment {
         mName = rootView.findViewById(R.id.name_change_edittext);
         mLastName = rootView.findViewById(R.id.last_name_change_edittext);
 
-        mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getmUserPostList().size() + "");
+        mPostsCount.setText(DataStore.getInstance(getContext()).getUser().getUserPostList().size() + "");
 
-        mHobbysList = mUserProfile.getmHobbylist();
-        mGenderEt.setText(mUserProfile.getmGender());
+        mHobbysList = mUserProfile.getHobbyList();
+        mGenderEt.setText(mUserProfile.getGender());
 
         if (onlyShowProfile) {
             LinearLayout mNotificationLayout = rootView.findViewById(R.id.notification_layout);
@@ -307,10 +297,10 @@ public class ProfilePageFragment extends Fragment {
 
 
         mHobbysCount.setText(String.valueOf(mHobbysList.size()));
-        mAge.setText(mUserProfile.getmAge());
-        mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList() == null ? 0 : mUserProfile.getmUserPostList().size()));
-        mCity.setText(mUserProfile.getmCityName());
-        mNameTv.setText(mUserProfile.getmName() + "       " + mUserProfile.getmLastName());
+        mAge.setText(mUserProfile.getAge());
+        mPostsCount.setText(String.valueOf(mUserProfile.getUserPostList() == null ? 0 : mUserProfile.getUserPostList().size()));
+        mCity.setText(mUserProfile.getCityName());
+        mNameTv.setText(mUserProfile.getName() + "       " + mUserProfile.getLastName());
         updateflow();
 
 
@@ -346,7 +336,7 @@ public class ProfilePageFragment extends Fragment {
             public void onClick(View v) {
                 if (InternetConnection.isNetworkAvailable(getContext())) {
                     if (onlyShowProfile) {
-                        profileFragmentListener.openChatFromProfile(mUserProfile.getmUserToken());
+                        profileFragmentListener.openChatFromProfile(mUserProfile.getUserToken());
                     } else {
                         if (editMode.equals(false)) {
                             editMode = true;
@@ -359,13 +349,13 @@ public class ProfilePageFragment extends Fragment {
                                 tv.setAnimation(shake);
                                 tv.startAnimation(shake);
                             }
-                            if (!(mUserProfile.getmUserPostList() == null)) {
+                            if (!(mUserProfile.getUserPostList() == null)) {
                                 mEditPosts.setVisibility(View.VISIBLE);
                             }
                             mEditHobbysLayot.setVisibility(View.VISIBLE);
                             mProfilePhoto.setEnabled(true);
-                            mName.setText(mUserProfile.getmName());
-                            mLastName.setText(mUserProfile.getmLastName());
+                            mName.setText(mUserProfile.getName());
+                            mLastName.setText(mUserProfile.getLastName());
                             mName.setVisibility(View.VISIBLE);
                             mLastName.setVisibility(View.VISIBLE);
                             mNameTv.setVisibility(View.GONE);
@@ -388,15 +378,15 @@ public class ProfilePageFragment extends Fragment {
                             mEditHobbysLayot.setVisibility(View.GONE);
 
                             if (!mCity.getText().toString().equals("")) {
-                                mUserProfile.setmCityName(mCity.getText().toString());
+                                mUserProfile.setCityName(mCity.getText().toString());
                             } else {
-                                mCity.setText(mUserProfile.getmCityName());
+                                mCity.setText(mUserProfile.getCityName());
                             }
                             if (mHobbysList.isEmpty()) {
-                                mHobbysList = mUserProfile.getmHobbylist();
+                                mHobbysList = mUserProfile.getHobbyList();
                             }
                             profileFragmentListener.notifCheckChange(false);
-                            mUserProfile.setmHobbylist(mHobbysList);
+                            mUserProfile.setHobbyList(mHobbysList);
                             Integer temp = mHobbysList.size();
                             mHobbysCount.setText(temp.toString());
                             mProfilePhoto.setEnabled(false);
@@ -407,8 +397,8 @@ public class ProfilePageFragment extends Fragment {
                             } else {
                                 nameHasChanged = true;
                                 mNameTv.setText(mName.getText().toString() + "   " + mLastName.getText().toString());
-                                mUserProfile.setmName(mName.getText().toString());
-                                mUserProfile.setmLastName(mLastName.getText().toString());
+                                mUserProfile.setName(mName.getText().toString());
+                                mUserProfile.setLastName(mLastName.getText().toString());
                             }
                             mName.setVisibility(View.GONE);
                             mLastName.setVisibility(View.GONE);
@@ -416,8 +406,8 @@ public class ProfilePageFragment extends Fragment {
                             mEditProfile.setVisibility(View.GONE);
                             mEditPosts.setVisibility(View.GONE);
                             mEditCity.setVisibility(View.GONE);
-                            if (!((mUserProfile.getmUserPostList()) == null)) {
-                                mPostsCount.setText(String.valueOf(mUserProfile.getmUserPostList().size()));
+                            if (!((mUserProfile.getUserPostList()) == null)) {
+                                mPostsCount.setText(String.valueOf(mUserProfile.getUserPostList().size()));
                             } else {
                                 mPostsCount.setText("0");
                             }
@@ -450,7 +440,7 @@ public class ProfilePageFragment extends Fragment {
             }
         });
 
-        if (mUserProfile.getmPictureUrl().equals("") && !mUserProfile.getmGender().equals("Male")) {
+        if (mUserProfile.getPictureUrl().equals("") && !mUserProfile.getGender().equals("Male")) {
 
             Glide.with(getContext()).load(R.drawable.ic_avatar_woman).addListener(new RequestListener<Drawable>() {
                 @Override
@@ -466,8 +456,8 @@ public class ProfilePageFragment extends Fragment {
                 }
             }).into(mProfilePhoto);
         }
-        if (!mUserProfile.getmPictureUrl().equals("")) {
-            Glide.with(getContext()).load(mUserProfile.getmPictureUrl()).thumbnail(0.3f).addListener(new RequestListener<Drawable>() {
+        if (!mUserProfile.getPictureUrl().equals("")) {
+            Glide.with(getContext()).load(mUserProfile.getPictureUrl()).thumbnail(0.3f).addListener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     return false;
@@ -522,7 +512,7 @@ public class ProfilePageFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     mHobbysList.remove(v.getTag());
-                    mUserProfile.setmHobbylist(mHobbysList);
+                    mUserProfile.setHobbyList(mHobbysList);
                     flowLayout.removeView(v);
                 }
             });
@@ -534,7 +524,7 @@ public class ProfilePageFragment extends Fragment {
     }
 
     void updateProfileOnfireBase() {
-        mFireBaseDatabaseReference.child("appUsers").child(mUserProfile.getmUserToken()).setValue(mUserProfile);
+        mFireBaseDatabaseReference.child("appUsers").child(mUserProfile.getUserToken()).setValue(mUserProfile);
         mFireBaseUser.updateProfile(new UserProfileChangeRequest.Builder().build());
         DataStore.getInstance(getContext()).saveUser(mUserProfile);
         if (nameHasChanged) {

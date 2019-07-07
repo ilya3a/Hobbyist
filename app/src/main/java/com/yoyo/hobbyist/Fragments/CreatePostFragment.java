@@ -153,14 +153,14 @@ public class CreatePostFragment extends DialogFragment {
 
         final UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
 
-        mPictureUrl = userProfile.getmPictureUrl();
-        mUserName = userProfile.getmName();
-        mCityName = userProfile.getmCityName();
+        mPictureUrl = userProfile.getPictureUrl();
+        mUserName = userProfile.getName();
+        mCityName = userProfile.getCityName();
         if (getContext() != null) {
             if (!mPictureUrl.equals("")) {
                 Glide.with(getContext()).load(mPictureUrl).thumbnail(0.4f).into(mProfilePicture);
             }
-            if (!userProfile.getmGender().equals("Male") && mPictureUrl.equals("")) {
+            if (!userProfile.getGender().equals("Male") && mPictureUrl.equals("")) {
                 Glide.with(getContext()).load(R.drawable.ic_avatar_woman).into(mProfilePicture);
             }
         }
@@ -193,14 +193,14 @@ public class CreatePostFragment extends DialogFragment {
 
 
                                                        UserPost userPost = new UserPost(mPictureUrl, mUserName, mCityName, true, currentDate, mAutoCompleteTextView.getText().toString(),
-                                                               userToken, mPostDescriptionEt.getText().toString(), mLatitude, mLongitude, userProfile.getmGender());
+                                                               userToken, mPostDescriptionEt.getText().toString(), mLatitude, mLongitude, userProfile.getGender());
 
                                                        mDatabaseReference.child("usersPost").child(userPost.getHobby()).child(userToken).push().setValue(userPost);
-                                                       if (userProfile.getmUserPostList() == null) {
+                                                       if (userProfile.getUserPostList() == null) {
                                                            ArrayList<UserPost> arrayList = new ArrayList<>();
                                                            userProfile.setmUserPostList(arrayList);
                                                        }
-                                                       userProfile.getmUserPostList().add(userPost);
+                                                       userProfile.getUserPostList().add(userPost);
                                                        DataStore.getInstance(getContext()).saveUser(userProfile);
                                                        updateUserProfileOnFireBase(userProfile);
                                                        DataStore.getInstance(getContext()).saveUserPost(userPost);

@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (isChecked) {
             mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
-                for (String sub : mUserProfile.getmHobbylist()) {
+                for (String sub : mUserProfile.getHobbyList()) {
                     topicMessegingAlert.subscribeToTopic( sub.replace( " ", "" ) );
 
                 }
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         } else {
             mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
-                for (String sub : mUserProfile.getmHobbylist()) {
+                for (String sub : mUserProfile.getHobbyList()) {
                     topicMessegingAlert.unsubscribeFromTopic( sub.replace( " ", "" ) );
 
                 }
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (DataStore.getInstance( this ).isNotifOk()) {
             mUserProfile = DataStore.getInstance( this ).getUser();
             if (mUserProfile != null) {
-                for (String sub : mUserProfile.getmHobbylist()) {
+                for (String sub : mUserProfile.getHobbyList()) {
                     topicMessegingAlert.subscribeToTopic( sub.replace( " ", "" ) );
 
                 }
@@ -223,19 +223,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
                 } else if (itemPos == 1) {
-////                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
-////                    mSwipeRightLottie.setVisibility( View.VISIBLE );
-//                    mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
-//                    mTabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_loupe_icon_selected );
-//                    mTabLayout.getTabAt( 2 ).setIcon( R.drawable.ic_chat_icon );
-//                    mTabLayout.getTabAt( 3 ).setIcon( R.drawable.ic_menu_icon );
-//                    mFab.setVisibility( View.VISIBLE );
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        mFab.setNestedScrollingEnabled( true );
-//                    }
-//
-//
-//                } else if (itemPos == 2) {
 //                    mSwipeLeftLottie.setVisibility( View.VISIBLE );
 //                    mSwipeRightLottie.setVisibility( View.VISIBLE );
                     mTabLayout.getTabAt( 0 ).setIcon( R.drawable.ic_dashboard_icon );
@@ -453,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     private void status(String status) {
         mUserProfile = DataStore.getInstance( this ).getUser();
         if (mUserProfile != null) {
-            mUserProfile.setmStatus( status );
+            mUserProfile.setStatus( status );
             DataStore.getInstance( this ).saveUser( mUserProfile );
             UtilFuncs.saveUserToFireBase( mUserProfile );
         }

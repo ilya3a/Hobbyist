@@ -102,7 +102,7 @@ public class ChatsFragment extends Fragment {
                 userProfiles.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     UserProfile user = snapshot.getValue(UserProfile.class);
-                    if (usersList.contains(user.getmUserToken())) {
+                    if (usersList.contains(user.getUserToken())) {
                         userProfiles.add(user);
                     }
                 }

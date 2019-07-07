@@ -103,7 +103,8 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
                             case DialogInterface.BUTTON_POSITIVE:
                                 userPosts.remove(viewHolder.getAdapterPosition());
                                 setUserPosts(userPosts);
-                                UserProfile userProfile = DataStore.getInstance(mContext).getUser().setmUserPostList(userPosts);
+                                UserProfile userProfile = DataStore.getInstance(mContext).getUser();
+                                userProfile.setmUserPostList(userPosts);
                                 DataStore.getInstance(mContext).saveUser(userProfile);
                                 recyclerCallBack.postOnEraseItemClicked();
 
