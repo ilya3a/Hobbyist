@@ -155,7 +155,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                     getUserProfile();
                 }
             };
-            handler.postDelayed(runnable, 3100);
+            handler.postDelayed(runnable, 5*1000);
         }
     }
 
