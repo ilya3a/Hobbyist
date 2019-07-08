@@ -76,9 +76,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
 
-        viewHolder.userName.setText(userProfile.getName());
+        viewHolder.userName.setText(userProfile.getName() +" " + userProfile.getLastName());
         if (!userProfile.getPictureUrl().equals("")) {
-            Glide.with(mContext).load(userProfile.getPictureUrl()).thumbnail(0.4f).into(viewHolder.profileImage);
+            Glide.with(mContext).load(userProfile.getPictureUrl()).thumbnail(0.2f).into(viewHolder.profileImage);
         }
         if (!userProfile.getGender().equals("Male") && userProfile.getPictureUrl().equals("")) {
             Glide.with(mContext).load(R.drawable.ic_avatar_woman).into(viewHolder.profileImage);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
+    ProfilePageFragment profilePageFragment = new ProfilePageFragment();
     private int mNumOfTabs;
     ArrayList<String> subscriptions;
 
@@ -32,7 +33,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new ChatsFragment();
             case 2:
-                return new ProfilePageFragment();
+                return profilePageFragment;
             default:
                 return null;
         }

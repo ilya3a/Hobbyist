@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (!(getIntent().getStringExtra( "msg" ) == null)) {
             onChatBtnClicked( getIntent().getStringExtra( "id" ) );
         }
-        Toast.makeText( this, getIntent().getStringExtra( "id" ), Toast.LENGTH_SHORT ).show();
+//        Toast.makeText( this, getIntent().getStringExtra( "id" ), Toast.LENGTH_SHORT ).show();
     }
 
     @Override

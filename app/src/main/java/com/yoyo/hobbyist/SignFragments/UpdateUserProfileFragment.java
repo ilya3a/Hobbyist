@@ -234,6 +234,13 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         textView.setGravity( View.TEXT_ALIGNMENT_CENTER );
                         textView.setTextSize( 18 );
                         textView.setBackground( getResources().getDrawable( R.drawable.label_bg2 ) );
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                flowLayout.removeView(v);
+                                hobbyList.remove(((TextView)v).getText().toString());
+                            }
+                        });
                         flowLayout.addView( textView );
                         mAutoCompleteTextView.setText( "" );
                         hobbyList.add( hobby );
@@ -330,8 +337,9 @@ public class UpdateUserProfileFragment extends Fragment implements DatePickerDia
                         }
                     }
                 }
-                if (mDateOfBirthEt.getText().toString().equals( R.string.birthday )) {
+                if (!mDateOfBirthEt.getText().toString().matches("^(0?[1-9]|[0-2][0-9]|(3)[0-1])(\\/)(((0)?[1-9])|((1)[0-2]))(\\/)\\d{4}$")) {
                     continue_flag = false;
+                    mDateOfBirthEt.setText(getString(R.string.birthday));
                     Snackbar.make( rootView, R.string.pick_a_Birthday, Snackbar.LENGTH_SHORT ).setActionTextColor( Color.WHITE ).show();
                 }
                 if (hobbyList.isEmpty()) {

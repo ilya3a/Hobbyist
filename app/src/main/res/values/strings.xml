@@ -52,7 +52,7 @@
     <string name="re_enter_password">Re-enter Password</string>
     <string name="city">City</string>
     <string name="chose_all_your_hobbys">Chose all your hobbys:</string>
-    <string name="pick_a_Birthday">Pick a Birthday</string>
+    <string name="pick_a_Birthday">Cant validate birthday</string>
     <string name="add_at_least_one_hobby">add at least one hobby</string>
     <string name="cant_find_the_hobby">Cant find the hobby</string>
     <string name="you_already_choose_this_hobby">You already choose this hobby</string>

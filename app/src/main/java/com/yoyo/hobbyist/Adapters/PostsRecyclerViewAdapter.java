@@ -19,6 +19,9 @@ import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder> {
 
@@ -32,7 +35,20 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     RecyclerCallBack recyclerCallBack;
 
     public void setUserPosts(ArrayList<UserPost> userPosts) {
-        this.userPosts = userPosts;
+        Collections.sort(userPosts, new Comparator<UserPost>() {
+            @Override
+            public int compare(UserPost o1, UserPost o2) {
+                return (int)((Double.valueOf(o1.getDate().replaceAll(":", "").replaceAll("/","").replaceAll(" ","")))
+                        -(Double.valueOf(o2.getDate().replaceAll(":", "").replaceAll("/","").replaceAll(" ",""))));
+            }
+        });
+        ArrayList<UserPost> revArrayList = new ArrayList<>();
+        for (int i = userPosts.size() - 1; i >= 0; i--) {
+
+            // Append the elements in reverse order
+            revArrayList.add(userPosts.get(i));
+        }
+        this.userPosts = revArrayList;
         notifyDataSetChanged();
     }
 

@@ -157,7 +157,7 @@ public class CreatePostFragment extends DialogFragment {
         final UserProfile userProfile = DataStore.getInstance(getContext()).getUser();
 
         mPictureUrl = userProfile.getPictureUrl();
-        mUserName = userProfile.getName();
+        mUserName = userProfile.getName() + " "+userProfile.getLastName();
         mCityName = userProfile.getCityName();
         if (getContext() != null) {
             if (!mPictureUrl.equals("")) {

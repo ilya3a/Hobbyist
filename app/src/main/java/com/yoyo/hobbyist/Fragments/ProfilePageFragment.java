@@ -276,7 +276,7 @@ public class ProfilePageFragment extends Fragment {
         mFireBaseDatabaseReference.child("appHobbys").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> hobbysFromServer = new ArrayList<>();
+                ArrayList<String> temp = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     int i = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -284,13 +284,15 @@ public class ProfilePageFragment extends Fragment {
                             String hobby = (String) snapshot.getValue();
                             if (hobby.replace(" ", "").matches("[a-zA-Z0-9-_.~%]{1,900}")) {
                                 hobbysFromServer.add(hobby);
+                                temp.add(hobby);
+
                             }
                             i++;
                         } catch (ClassCastException ex) {
                             Log.d("ilya", i + "");
                         }
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, hobbysFromServer);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, temp);
                     mAutoCompleteTextView.setAdapter(adapter);
                 }
             }
