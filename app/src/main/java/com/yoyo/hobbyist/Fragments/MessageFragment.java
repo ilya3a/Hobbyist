@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import com.yoyo.hobbyist.Notifications.Sender;
 import com.yoyo.hobbyist.Notifications.Token;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
+import com.yoyo.hobbyist.Utilis.InternetConnection;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.util.ArrayList;
@@ -226,7 +229,7 @@ public class MessageFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-
+        final RelativeLayout relativeLayout=rootView.findViewById(R.id.activity_main);
 
         apiService= Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -272,14 +275,19 @@ public class MessageFragment extends Fragment {
         mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notify=true;
-                String msg = mTextToSendEt.getText().toString();
-                if (!msg.equals("")) {
-                    sendMessage(firebaseUser.getUid(), mUserId, msg);
-                } else {
+                if (InternetConnection.isNetworkAvailable(getContext())) {
+                    notify = true;
+                    String msg = mTextToSendEt.getText().toString();
+                    if (!msg.equals("")) {
+                        sendMessage(firebaseUser.getUid(), mUserId, msg);
+                    } else {
 
+                    }
+                    mTextToSendEt.setText("");
                 }
-                mTextToSendEt.setText("");
+                else {
+                    Snackbar.make(relativeLayout, getString(R.string.no_internet_connection), Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
 

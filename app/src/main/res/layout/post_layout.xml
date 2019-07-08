@@ -117,29 +117,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/post_publish_time"
-                android:layout_toEndOf="@+id/post_profile_name">
+                android:layout_toEndOf="@+id/post_profile_image"
+                android:layout_marginStart="20dp">
 
-                <TextView
-                    android:id="@+id/headline_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="Who into "
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/hobby_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
-                        android:text="@string/test"
+                        android:text="@string/test_long"
+                        android:maxLines="1"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 

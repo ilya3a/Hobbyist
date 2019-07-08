@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -68,6 +69,7 @@ import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.InternetConnection;
+import com.yoyo.hobbyist.Utilis.UtilFuncs;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -268,8 +270,16 @@ public class ProfilePageFragment extends Fragment {
         mExitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileFragmentListener.logOut();
-                DataStore.getInstance(getContext()).clearAllData();
+                Handler handler =new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        profileFragmentListener.logOut();
+                        DataStore.getInstance(getContext()).clearAllData();
+                    }
+                },500);
+                status( getString( R.string.last_seet_at ) + UtilFuncs.getCurrentDate() );
+
             }
         });
 
@@ -587,6 +597,12 @@ public class ProfilePageFragment extends Fragment {
 //        mUserProfile = DataStore.getInstance(getContext()).getUser();
         //did not work properly
         //mUserProfile = DataStore.getInstance(getContext()).getUser();
+    }
+    private void status(String status) {
+        if (mUserProfile != null) {
+            mUserProfile.setStatus( status );
+            updateProfileOnfireBase();
+        }
     }
 }
 
