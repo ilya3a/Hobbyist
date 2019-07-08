@@ -2,6 +2,7 @@ package com.yoyo.hobbyist.DataBase;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
 import com.yoyo.hobbyist.DataModels.UserPost;
@@ -22,31 +23,31 @@ public class UserPostRepository implements UserPostData {
 
     }
 
-    @Override
     public LiveData<List<UserPost>> getAllPosts() {
         return userPostDao.getAllPosts();
     }
 
-    @Override
     public void insert(UserPost... userPosts) {
         new InsertUserPostAsyncTask( userPostDao ).execute( userPosts );
     }
 
-    @Override
     public void delete(UserPost userPost) {
-        new DeleteUserPostAsyncTask( userPost ).execute( userPost );
+        new DeleteUserPostAsyncTask( userPostDao ).execute( userPost );
     }
 
-    @Override
+
+    public void deleteAllPosts() {
+        new DeleteAllUserPostAsyncTask( userPostDao ).execute( );
+    }
+
     public void update(UserPost userPost) {
         new UpdateUserPostAsyncTask( userPostDao ).execute( userPost );
     }
 
-    @Override
+
     public Flowable<UserPost> getPostByToken(String token) {
         return userPostDao.getPostByToken( token );
     }
-
 
 
     private static class InsertUserPostAsyncTask extends AsyncTask<UserPost, Void, Void> {
@@ -68,8 +69,8 @@ public class UserPostRepository implements UserPostData {
 
         private UserPostDao userPostDao;
 
-        private DeleteUserPostAsyncTask(UserPost userPost) {
-            this.userPostDao =userPostDao ;
+        private DeleteUserPostAsyncTask(UserPostDao userPostDao) {
+            this.userPostDao = userPostDao;
         }
 
         @Override
@@ -79,12 +80,27 @@ public class UserPostRepository implements UserPostData {
         }
     }
 
+    private static class DeleteAllUserPostAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private UserPostDao userPostDao;
+
+        private DeleteAllUserPostAsyncTask(UserPostDao userPostDao) {
+            this.userPostDao = userPostDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            userPostDao.deleteAllPosts();
+            return null;
+        }
+    }
+
     private static class UpdateUserPostAsyncTask extends AsyncTask<UserPost, Void, Void> {
 
         private UserPostDao userPostDao;
 
         private UpdateUserPostAsyncTask(UserPostDao userPostDao) {
-           this.userPostDao = userPostDao;
+            this.userPostDao = userPostDao;
         }
 
         @Override

@@ -58,6 +58,7 @@ import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.Utilis.InternetConnection;
 import com.yoyo.hobbyist.Utilis.UtilFuncs;
+import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,6 +74,7 @@ public class CreatePostFragment extends DialogFragment {
 
     private CreatePostFragmentLisener createPostFragmentLisener;
 
+    DataViewModel dataViewModel;
     private AutoCompleteTextView mAutoCompleteTextView;
     private EditText mPostDescriptionEt;
     private TextView mUserNameTV;
@@ -113,6 +115,7 @@ public class CreatePostFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_create_post, container, false);
+        dataViewModel = new DataViewModel( getActivity().getApplication() );
         callPermissions();
         requestLocationUpdates();
         mFireBaseAuth = FirebaseAuth.getInstance();
@@ -202,8 +205,14 @@ public class CreatePostFragment extends DialogFragment {
                                                        }
                                                        userProfile.getUserPostList().add(userPost);
                                                        DataStore.getInstance(getContext()).saveUser(userProfile);
+
+
+                                                       for (UserPost userPost1 :   userProfile.getUserPostList()){
+                                                           dataViewModel.insert( userPost1 );
+                                                       }
                                                        updateUserProfileOnFireBase(userProfile);
                                                        DataStore.getInstance(getContext()).saveUserPost(userPost);
+
 
                                                        /*
                                                         *   post message to all subscribed users

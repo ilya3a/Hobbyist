@@ -3,6 +3,7 @@ package com.yoyo.hobbyist.ViewModel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 
 //import com.yoyo.hobbyist.DataBase.UserPostRepository;
 //import com.yoyo.hobbyist.DataBase.UserProfileRepository;
@@ -13,12 +14,13 @@ import com.yoyo.hobbyist.DataBase.UserPostRepository;
 import com.yoyo.hobbyist.DataBase.UserProfileRepository;
 import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
+import com.yoyo.hobbyist.Utilis.DataStore;
 
 import java.util.List;
 
 public class DataViewModel extends AndroidViewModel {
 
-        private UserPostRepository userPostRepository;
+    private UserPostRepository userPostRepository;
     private UserProfileRepository userProfileRepository;
 
     private LiveData<List<UserPost>> allPosts;
@@ -48,8 +50,20 @@ public class DataViewModel extends AndroidViewModel {
         userPostRepository.delete( userPost );
     }
 
+//    public void deleteAllPosts() {
+//        for (UserPost userPost : DataStore.getInstance( getApplication() ).getPostList()) {
+//            userPostRepository.delete( userPost );
+//        }
+//    }
+
+//    public void deleteAll(){userPostRepository.getAllPosts();}
+
     public void delete(UserProfile userProfile) {
         userProfileRepository.delete( userProfile );
+    }
+
+    public void deleteAllPosts() {
+        userPostRepository.deleteAllPosts();
     }
 
 

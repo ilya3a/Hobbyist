@@ -1,6 +1,7 @@
 package com.yoyo.hobbyist.DataBase;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -9,6 +10,7 @@ import android.arch.persistence.room.Update;
 
 import com.yoyo.hobbyist.DataModels.UserPost;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -21,6 +23,9 @@ public interface UserPostDao {
 
     @Query("SELECT * FROM posts_table WHERE user_token=:token")
     Flowable<UserPost> getPostByToken(String token);
+
+    @Query("DELETE  FROM posts_table")
+    void deleteAllPosts();
 
     @Insert
     void insert(UserPost... userPosts);

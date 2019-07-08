@@ -86,7 +86,7 @@ public class DataStore {
     }
     public ArrayList<UserPost> getPostList() {
 
-        String userPosts = mSharedPref.getString("posts", "");
+        String userPosts = mSharedPref.getString("posts", null);
         return mGson.fromJson(userPosts,new TypeToken<ArrayList<UserPost>>(){}.getType());
     }
     public boolean isNotifOk(){

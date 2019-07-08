@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,15 +27,17 @@ import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
 import com.yoyo.hobbyist.ViewModel.DataViewModel;
-//import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//import com.yoyo.hobbyist.ViewModel.DataViewModel;
+
 public class SearchListFragment extends Fragment {
 
     static String EDIT_MODE = "edit_mode_bollean";
-    Context context;
+
+    DataViewModel dataViewModel;
     PostsRecyclerViewAdapter mAdapter;
     RecyclerView recyclerView;
     ArrayList<UserPost> userPosts = new ArrayList<>();
@@ -71,7 +72,7 @@ public class SearchListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate( R.layout.dashboard_fragment, container, false );
-
+        dataViewModel = new DataViewModel( getActivity().getApplication() );
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
         relativeLayout = rootView.findViewById( R.id.first );
@@ -79,24 +80,86 @@ public class SearchListFragment extends Fragment {
         recyclerView.setHasFixedSize( true );
 
         mAdapter = new PostsRecyclerViewAdapter( userPosts, getContext(), editMode );
+        recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
 
-
-
-        getPostsFromUsers();
 //        mPostsList = DataStore.getInstance( getContext() ).getPostList();
 //        recyclerView.setAdapter( new PostsRecyclerViewAdapter( DataStore.getInstance( getContext() ).getPostList(), getContext(), false ) );
 
-        DataViewModel dataViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
+        dataViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
         dataViewModel.getAllPosts().observe( this, new Observer<List<UserPost>>() {
             @Override
             public void onChanged(@Nullable List<UserPost> userPosts) {
-                mAdapter.notifyDataSetChanged();
+//                mAdapter = new PostsRecyclerViewAdapter( (ArrayList<UserPost>) userPosts, getContext(), editMode );
+//                getPostsFromUsers();
                 recyclerView.setAdapter( mAdapter );
                 mAdapter.setUserPosts( (ArrayList<UserPost>) userPosts );
+
+            dataViewModel.deleteAllPosts();
             }
         } );
+        ArrayList<UserPost> tempPostsToShowForUser = new ArrayList<>();
+        if (DataStore.getInstance( getContext() ).getPostList() != null) {
+            tempPostsToShowForUser = DataStore.getInstance( getContext() ).getPostList();
+//            for (UserPost userPost : tempPostsToShowForUser) {
+//                dataViewModel.delete( userPost );
+//            }
+        }
+
+        for (UserPost userPost1 : tempPostsToShowForUser) {
+            dataViewModel.insert( userPost1 );
+
+        }
+
 
         return rootView;
+    }
+
+    public void getPostsFromUsers() {
+        final UserProfile currentUser = DataStore.getInstance( getContext() ).getUser();
+        if (editMode) {
+            ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
+            postsToShowForUser = currentUser.getUserPostList();
+            mAdapter.setUserPosts( postsToShowForUser );
+            recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
+            recyclerView.setAdapter( mAdapter );
+        } else {
+            final ArrayList<UserPost> tempPosts = new ArrayList<>();
+            final ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
+            mDatabaseReference.addListenerForSingleValueEvent( new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        UserProfile userProfile = snapshot.getValue( UserProfile.class );
+                        if ((!userProfile.getUserToken().equals( currentUser.getUserToken() ) && userProfile.getUserPostList() != null)) {
+                            tempPosts.addAll( userProfile.getUserPostList() );
+                        }
+                    }
+//
+                    for (UserPost post : tempPosts) {
+                        if (currentUser.getHobbyList().contains( post.getHobby() )) {
+                            postsToShowForUser.add( post );
+                        }
+                    }
+//
+                    DataStore.getInstance( getContext() ).saveUserPostList( postsToShowForUser );
+                    mPostsList = postsToShowForUser;
+                    mAdapter.setUserPosts( postsToShowForUser );
+                    recyclerView.setAdapter( mAdapter );
+                    if (postsToShowForUser.size() == 0) {
+
+                        relativeLayout.setVisibility( View.VISIBLE );
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            } );
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -161,57 +224,7 @@ public class SearchListFragment extends Fragment {
 
     }
 
-    public void getPostsFromUsers() {
-        final UserProfile currentUser = DataStore.getInstance( getContext() ).getUser();
-        if (editMode) {
-            ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
-            postsToShowForUser = currentUser.getUserPostList();
-            mAdapter.setUserPosts( postsToShowForUser );
-            recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
-            recyclerView.setAdapter( mAdapter );
-        } else {
-            final ArrayList<UserPost> tempPosts = new ArrayList<>();
-            final ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
-            mDatabaseReference.addListenerForSingleValueEvent( new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        UserProfile userProfile = snapshot.getValue( UserProfile.class );
-                        if ((!userProfile.getUserToken().equals( currentUser.getUserToken() ) && userProfile.getUserPostList() != null)) {
-                            tempPosts.addAll( userProfile.getUserPostList() );
-                        }
-                    }
 
-                    for (UserPost post : tempPosts) {
-                        if (currentUser.getHobbyList().contains( post.getHobby() )) {
-                            postsToShowForUser.add( post );
-
-                        }
-                    }
-
-                    // todo: set adapter
-
-                    DataStore.getInstance( getContext() ).saveUserPostList( postsToShowForUser );
-                    mPostsList = postsToShowForUser;
-                    mAdapter.setUserPosts( postsToShowForUser );
-                    recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
-                    recyclerView.setAdapter( mAdapter );
-                    if (postsToShowForUser.size() == 0) {
-
-                        relativeLayout.setVisibility( View.VISIBLE );
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            } );
-        }
-    }
 
     @Override
     public void onStart() {
