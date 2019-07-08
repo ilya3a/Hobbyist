@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/kombina">
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_coordinator_layout"
         android:layout_width="match_parent"
@@ -75,4 +80,5 @@
             app:rippleColor="@color/cardview_dark_background"
             app:layout_behavior=".Behavior.ScrollFabBehavior"/>
     </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 </RelativeLayout>

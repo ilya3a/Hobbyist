@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        findViewById(R.id.kombina).setVisibility(View.VISIBLE);
         Window window = this.getWindow();
         window.clearFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS );
         window.addFlags( WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS );
@@ -304,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
         mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
+        findViewById(R.id.kombina).setVisibility(View.GONE);
     }
 
     @Override
@@ -316,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
         mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
+        findViewById(R.id.kombina).setVisibility(View.GONE);
     }
 
 
@@ -353,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         MessageFragment messageFragment = MessageFragment.newInstance( userId );
         //fragment for chat getting user id
         mFragmentManager.beginTransaction().add( R.id.main_layout, messageFragment, MESSAGE_FRAGMENT_TAG ).addToBackStack( null ).commit();
+        findViewById(R.id.kombina).setVisibility(View.GONE);
 
     }
 
@@ -464,11 +468,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         callLocationPermissions();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        status( getString( R.string.last_seet_at ) + UtilFuncs.getCurrentDate() );
-    }
+
     private void setIntervalNotif(final long interval) {
             Intent intent = new Intent(this, AlarmReceiver.class);
             intent.putExtra("interval", interval);

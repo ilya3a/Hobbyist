@@ -126,7 +126,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     }
 
     @Override
-    public void afterSignInUserUpdate(final FirebaseUser user, Button login_fragment_btn,LottieAnimationView mLottieTv) {
+    public void afterSignInUserUpdate(final FirebaseUser user, Button login_fragment_btn, LottieAnimationView mLottieTv) {
         if (user.getDisplayName().equals("null")) {
             mLottieTv.cancelAnimation();
             login_fragment_btn.setVisibility(View.VISIBLE);
@@ -223,8 +223,8 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     public void callPermissions(final Intent intent) {
         String[] string = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Permissions.Options options = new Permissions.Options()
-                .setRationaleDialogTitle(getString(R.string.info) )
-                .setSettingsDialogTitle(getString(R.string.warning) );
+                .setRationaleDialogTitle(getString(R.string.info))
+                .setSettingsDialogTitle(getString(R.string.warning));
         PermissionHandler permissionHandler = new PermissionHandler() {
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
@@ -253,7 +253,12 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
                 mExistingUser = dataSnapshot.getValue(UserProfile.class);
                 mDataStore = DataStore.getInstance(getApplicationContext());
                 mDataStore.saveUser(mExistingUser);
-                goToMainActivity(mExistingUser.getHobbyList().toArray(new String[mExistingUser.getHobbyList().size()]));
+                if (mExistingUser.getHobbyList() != null) {
+                    goToMainActivity(mExistingUser.getHobbyList().toArray(new String[mExistingUser.getHobbyList().size()]));
+                } else {
+                    String[] s = {""};
+                    goToMainActivity(s);
+                }
 
             }
 
