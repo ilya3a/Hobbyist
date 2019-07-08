@@ -76,6 +76,7 @@
     <string name="we_miss_you">אנחנו מתגעגעים אליך!</string>
     <string name="checkout">כדי להתעדכן עם החברים והתחביבים לחץ כאן! </string>
     <string name="click_here"></string>
+    <string name="pick_your_hobby_s_and_start_connecting">בחר את התחביבים שלך ותתחיל להתחבר</string>
     <string-array name="gender_array">
         <item>זכר</item>
         <item>נקבה</item>

@@ -62,7 +62,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
     FragmentManager mFragmentManager;
     //SigninFragment mLoginFragment;
     SignUpFragment mSignUpFragment;
-    LottieAnimationView mLottieAnimationView;
+    LottieAnimationView mLottieAnimationView,mBigLottie;
     NewSignInScreenFragment mNewSignInScreenFragment;
     UpdateUserProfileFragment mUpdateUserProfileFragment;
 
@@ -89,7 +89,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
         mEmail = mSp.getString("userEmail", "noEmail");
         mPassword = mSp.getString("userPassword", "noPassword");
         mFireBaseUser = mFireBaseAuth.getCurrentUser();
+        mBigLottie=findViewById(R.id.lottie_animation_big);
 
+        mBigLottie.playAnimation();
         mExistingUser = DataStore.getInstance(this).getUser();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -102,19 +104,26 @@ public class LoginSignUpActivity extends AppCompatActivity implements SignUpFrag
 
             goToMainActivity(mExistingUser.getHobbyList().toArray(new String[mExistingUser.getHobbyList().size()]));
         } else {
-            mFireBaseAuth.signOut();
-            mFireBaseUser = mFireBaseAuth.getCurrentUser();
-            mUpdateUserProfileFragment = new UpdateUserProfileFragment();
-            mLottieAnimationView = findViewById(R.id.lottie_animation);
-            mLottieAnimationView.setAnimation(R.raw.animation_test);
+            Handler handler=new Handler();
+            handler.postDelayed( new Runnable() {
+                @Override
+                public void run() {
+                    mFireBaseAuth.signOut();
+                    mFireBaseUser = mFireBaseAuth.getCurrentUser();
+                    mUpdateUserProfileFragment = new UpdateUserProfileFragment();
+                    mLottieAnimationView = findViewById(R.id.lottie_animation);
+                    mLottieAnimationView.setAnimation(R.raw.animation_test);
+                    mFragmentManager = getSupportFragmentManager();
+                    //mLoginFragment = new SigninFragment();
+                    mSignUpFragment = new SignUpFragment();
+                    mBigLottie.cancelAnimation();
+                    mNewSignInScreenFragment = new NewSignInScreenFragment();
+                    //add the new mainlogin
+                    mFragmentManager.beginTransaction().add(R.id.main_container, mNewSignInScreenFragment, NEW_LOGIN_FRAGMENT_TAG)
+                            .commit();
+                }
+            },3000);
 
-            mFragmentManager = getSupportFragmentManager();
-            //mLoginFragment = new SigninFragment();
-            mSignUpFragment = new SignUpFragment();
-            mNewSignInScreenFragment = new NewSignInScreenFragment();
-            //add the new mainlogin
-            mFragmentManager.beginTransaction().add(R.id.main_container, mNewSignInScreenFragment, NEW_LOGIN_FRAGMENT_TAG)
-                    .commit();
         }
     }
 
