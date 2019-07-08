@@ -63,6 +63,11 @@ public class DataStore {
         mEditor.putString("posts", postString);
         mEditor.apply();
     }
+    public ArrayList<UserPost> getPostList() {
+
+        String userPosts = mSharedPref.getString("posts", null);
+        return mGson.fromJson(userPosts,new TypeToken<ArrayList<UserPost>>(){}.getType());
+    }
 
     public void clearAllData() {
         mEditor.clear();
@@ -84,11 +89,7 @@ public class DataStore {
         String userPost = mSharedPref.getString(SHARED_KEY_NEW_POST, "");
         return mGson.fromJson(userPost, UserPost.class);
     }
-    public ArrayList<UserPost> getPostList() {
 
-        String userPosts = mSharedPref.getString("posts", null);
-        return mGson.fromJson(userPosts,new TypeToken<ArrayList<UserPost>>(){}.getType());
-    }
     public boolean isNotifOk(){
         return  mSharedPref.getBoolean("notif", true);
     }

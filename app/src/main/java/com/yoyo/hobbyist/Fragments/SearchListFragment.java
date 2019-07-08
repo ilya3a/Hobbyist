@@ -29,6 +29,7 @@ import com.yoyo.hobbyist.DataModels.UserPost;
 import com.yoyo.hobbyist.DataModels.UserProfile;
 import com.yoyo.hobbyist.R;
 import com.yoyo.hobbyist.Utilis.DataStore;
+import com.yoyo.hobbyist.Utilis.InternetConnection;
 import com.yoyo.hobbyist.ViewModel.DataViewModel;
 //import com.yoyo.hobbyist.ViewModel.DataViewModel;
 
@@ -50,6 +51,7 @@ public class SearchListFragment extends Fragment {
     RelativeLayout relativeLayout;
     DataViewModel dataViewModel;
     SwipeRefreshLayout swipeRefreshLayout;
+    ArrayList<UserPost> postsToShowForUser;
 
     public SearchListFragment() {
         // Required empty public constructor
@@ -75,7 +77,7 @@ public class SearchListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate( R.layout.dashboard_fragment, container, false );
-        DataViewModel dataViewModel;
+        //DataViewModel dataViewModel;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
         relativeLayout = rootView.findViewById( R.id.first );
@@ -87,7 +89,7 @@ public class SearchListFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getPostsFromUsers();
+                check();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -98,14 +100,7 @@ public class SearchListFragment extends Fragment {
             }
         });
 
-        getPostsFromUsers();
-        dataViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
-        dataViewModel.getAllPosts().observe( this, new Observer<List<UserPost>>() {
-            @Override
-            public void onChanged(@Nullable List<UserPost> userPosts) {
-                mAdapter.notifyDataSetChanged();
-            }
-        } );
+       check();
 
         return rootView;
     }
@@ -120,12 +115,15 @@ public class SearchListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach( context );
+        postsToShowForUser=DataStore.getInstance(getContext()).getPostList();
+        postsToShowForUser.size();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        DataStore.getInstance( getContext() ).saveUserPostList(postsToShowForUser);
     }
 
     public interface OnFragmentInteractionListener {
@@ -175,19 +173,34 @@ public class SearchListFragment extends Fragment {
     public void getPostsFromUsers() {
         final UserProfile currentUser = DataStore.getInstance( getContext() ).getUser();
         if (editMode) {
-            ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
-            postsToShowForUser = currentUser.getUserPostList();
-            mAdapter.setUserPosts( postsToShowForUser );
+            ArrayList<UserPost> postsToShowForUserEditMode = new ArrayList<>();
+            postsToShowForUserEditMode = currentUser.getUserPostList();
+            mAdapter.setUserPosts( postsToShowForUserEditMode );
             recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
             recyclerView.setAdapter( mAdapter );
         } else {
             final ArrayList<UserPost> tempPosts = new ArrayList<>();
-            final ArrayList<UserPost> postsToShowForUser = new ArrayList<>();
+            if (postsToShowForUser==null || InternetConnection.isNetworkAvailable(getContext())) {
+                postsToShowForUser = new ArrayList<>();
+            }
+            else {
+                mPostsList = postsToShowForUser;
+                mAdapter.setUserPosts( postsToShowForUser );
+
+                recyclerView.setLayoutManager( new LinearLayoutManager( getContext() ) );
+                recyclerView.setAdapter( mAdapter );
+                if (postsToShowForUser.size() == 0) {
+
+                    relativeLayout.setVisibility( View.VISIBLE );
+
+                }
+            }
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mDatabaseReference = mFirebaseDatabase.getReference().child( "appUsers" );
             mDatabaseReference.addListenerForSingleValueEvent( new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    postsToShowForUser.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         UserProfile userProfile = snapshot.getValue( UserProfile.class );
                         if ((!userProfile.getUserToken().equals( currentUser.getUserToken() ) && userProfile.getUserPostList() != null)) {
@@ -242,5 +255,15 @@ public class SearchListFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
+    }
+    private void check() {
+        getPostsFromUsers();
+        dataViewModel = ViewModelProviders.of( this ).get( DataViewModel.class );
+        dataViewModel.getAllPosts().observe( this, new Observer<List<UserPost>>() {
+            @Override
+            public void onChanged(@Nullable List<UserPost> userPosts) {
+                mAdapter.notifyDataSetChanged();
+            }
+        } );
     }
 }
