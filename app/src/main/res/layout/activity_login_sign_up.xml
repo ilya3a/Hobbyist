@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LoginSignUpActivity"
-    android:id="@+id/login_signup_coordinatorLayout">
+    android:id="@+id/login_signup_coordinatorLayout"
+    android:background="#3490dc">
     <RelativeLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
@@ -18,7 +20,35 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp" />
-
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/ic_logo_round"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_animation_big"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv"
+            android:layout_marginBottom="15dp"
+            android:visibility="visible"
+            app:lottie_rawRes="@raw/crowdswap3"
+            app:lottie_loop="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_your_hobby_s_and_start_connecting"
+            android:textSize="20sp"
+            android:fontFamily="@font/acme_regular"
+            android:lines="1"
+            android:textColor="@color/white_color"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
