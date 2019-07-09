@@ -116,7 +116,7 @@ public class SearchListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach( context );
         postsToShowForUser=DataStore.getInstance(getContext()).getPostList();
-        postsToShowForUser.size();
+
     }
 
     @Override

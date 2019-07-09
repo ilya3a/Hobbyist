@@ -372,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     protected void onStop() {
         super.onStop();
         mFireBaseAuth.removeAuthStateListener( mAuthStateListener );
+        status(R.string.last_seet_at+UtilFuncs.getCurrentDate());
         if(doAlarmManager) {
             long dayMillis = 1000 * 60 * 60 * 12;
             setIntervalNotif(dayMillis);
